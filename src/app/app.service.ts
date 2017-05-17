@@ -5,7 +5,7 @@ import {HttpClient} from './http-client';
 
 @Injectable()
 export class AppService {
-    private apiUrl = './v1/';  // URL to web api
+    private apiUrl = './api/v1/';  // URL to web api
 
     constructor(private http: HttpClient) {
     }
