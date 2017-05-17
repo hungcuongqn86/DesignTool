@@ -1,0 +1,157 @@
+.product-selector {
+    border-bottom: none;
+    min-height: inherit;
+}
+
+.product-selector ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.product-selector .item-options .item-option {
+    padding: 10px 0 14px 9px;
+    border: 1px solid transparent;
+    border-left-color: #d8dddf;
+    border-right-color: #d8dddf;
+    cursor: pointer;
+    background: #fff;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+
+.product-selector .item-options.active {
+    display: block;
+}
+
+.product-selector .item-options .item-option.active {
+    border-color: #39ace6 !important;
+    background-color: #e1f3fb;
+}
+
+.product-selector .item-options .item-option:first-child {
+    border-top-color: #d8dddf;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.product-selector .item-options .item-option:last-child {
+    border-bottom-color: #d8dddf;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.product-selector .item-options .item-option:hover {
+    background: #f5f9ff;
+}
+
+.product-selector .item-options .item-option .item-name {
+    margin: 0 0 .6em;
+    line-height: 1em;
+    font-family: Mr Eaves XL Modern, Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.item-overview {
+    margin-top: 4px;
+    zoom: 1;
+}
+
+.product-selector .item-options .item-option.active .item-thumb-container {
+    border: 1px solid #d8dae0;
+}
+
+.product-selector .item-options .item-option .item-thumb-loaded {
+    opacity: 1;
+}
+
+.product-selector .item-options .item-option .item-thumb-container {
+    float: left;
+    margin-right: 5px;
+    height: 35px;
+    width: 30px;
+    background: #444;
+    -webkit-transition: opacity .4s ease;
+    transition: opacity .4s ease;
+    text-align: center;
+    border: 1px solid #fff;
+}
+
+.product-selector .item-options .item-option .item-thumb {
+    height: 100%;
+    width: 100%;
+}
+
+.product-selector .item-options .item-option .item-qualities {
+    line-height: 1em;
+    font-size: 12px;
+    margin: 3px 0 0;
+}
+
+.sizes-label {
+    font-size: 10px;
+    margin: 2px 0 0;
+    color: #5c6068;
+}
+
+.product-colors {
+    position: absolute;
+    top: 50%;
+    left: -66px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+.product-colors .tool_tip__definition {
+    display: inline-block;
+    position: relative;
+    opacity: 1;
+    max-width: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 0 hsla(200, 4%, 58%, .8);
+    overflow: visible;
+    padding: 8px;
+    margin-top: 16px;
+    zoom: 1;
+    z-index: auto;
+}
+
+.product-colors .tool_tip__definition .color-column {
+    float: right;
+    padding: 1px;
+    margin: 0;
+}
+
+.product-colors .shirt-color-sample {
+    display: block;
+}
+
+.shirt-color-sample {
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #d8dddf;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 19px;
+    position: relative;
+}
+
+.shirt-color-base, .shirt-color-nocolor, .shirt-color-sample {
+    width: 22px;
+    height: 22px;
+    margin: 0 7px 7px 0;
+    border-radius: 2px;
+    vertical-align: top;
+    display: inline-block;
+    cursor: pointer;
+}
+
+div.productColor, img.ghost-image {
+    position: absolute;
+    width: 530px;
+    height: 630px;
+}

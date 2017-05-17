@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#home">Img-Art</a></li>
+                        <li><a data-toggle="tab" href="#menu1">Text</a></li>
+                        <li><a data-toggle="tab" href="#menu2">Layers</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="home" class="tab-pane fade in active">
+                            <h3>HOME</h3>
+                            <p>Some content.</p>
+                        </div>
+                        <div id="menu1" class="tab-pane fade">
+                            <h3>Menu 1</h3>
+                            <p>Some content in menu 1.</p>
+                        </div>
+                        <div id="menu2" class="tab-pane fade">
+                            <h3>Menu 2</h3>
+                            <p>Some content in menu 2.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="productColor" [ngStyle]="{ 'background-color': oDesign.sColor }"></div>
+                <img class="ghost-image" src="{{oDesign.sFace==='front'? oDesign.sImageFront: oDesign.sImageBack}}">
+            </div>
+            <div class="row">
+                <div class="btn-group">
+                    <button type="button" (click)="setFace('front')" class="btn btn-primary">Front</button>
+                    <button type="button" (click)="setFace('back')" class="btn btn-primary">Back</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form #form="ngForm">
+                        <div class="form-group">
+                            <select [(ngModel)]="fDesign.sBaseType" (change)="selectBaseType()" class="form-control"
+                                    id="sBaseType"
+                                    name="sBaseType" title="Select base type" required>
+                                <optgroup *ngFor='let itemGroup of arrBaseTypes' label="{{itemGroup.name}}">
+                                    <option *ngFor='let item of itemGroup.base_types' value="{{item.id}}">
+                                        {{item.name}}
+                                    </option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </form>
+
+                    <div class="product-selector">
+                        <ul class="options item-options active nav">
+                            <li *ngFor='let itemBase of arrBase' (click)="selectBase(itemBase.id)" class="item-option {{itemBase.id===oDesign.sId? 'active': ''}}">
+                                <p class="item-name">{{itemBase.name}}</p>
+                                <div class="item-overview">
+                                    <div class="item-thumb-container item-thumb-loaded">
+                                        <img class="item-thumb" src="{{itemBase.image.front}}"></div>
+                                    <p class="item-qualities">{{itemBase.desc}}</p>
+                                    <div class="sizes-label">S – XL</div>
+                                </div>
+                                <div *ngIf="itemBase.id===oDesign.sId" class="product-colors">
+                                    <div class="tool_tip__container">
+                                        <div class="tool_tip__definition">
+                                            <ul class="color-column quick-colors">
+                                                <li *ngFor='let itemColor of itemBase.colors'
+                                                    (click)="setColor(itemColor.value)"
+                                                    class="shirt-color-sample js-color"
+                                                    title="{{itemColor.name}}"
+                                                    [ngStyle]="{ 'background-color': itemColor.value }"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

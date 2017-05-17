@@ -1,0 +1,7 @@
+{
+  "/v1/*": {
+    "target": "http://api.30usd.com/psp/api",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

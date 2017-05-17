@@ -1,0 +1,15 @@
+{
+  "COMMON": {
+    "SIGN_OUT": "Logout",
+    "DETAL_LABLE": "Detail",
+    "ADD_LABLE": "Add",
+    "EDIT_LABLE": "Edit",
+    "SAVE": "Save"
+  },
+  "NAVIGATOR": {
+    "DESIGN": "Products & Designs",
+    "PRICING": "Pricing",
+    "LAUNCHING": "Launching",
+    "FULFILLMENT_LOCATION":"Fulfillment location"
+  }
+}
