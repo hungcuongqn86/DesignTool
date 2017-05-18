@@ -12,6 +12,7 @@ import {LaunchingComponent} from './launching/launching.component';
 
 import {DesignService} from './design/design.service';
 
+import {Ng2UploaderModule} from 'ng2-uploader';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 
 /* Routing Module */
@@ -32,6 +33,7 @@ export function createTranslateLoader(http: Http) {
         BrowserModule,
         FormsModule,
         HttpModule,
+        Ng2UploaderModule,
         TranslateModule.forRoot({
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),

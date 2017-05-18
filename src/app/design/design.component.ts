@@ -3,6 +3,8 @@ import {DesignService} from './design.service';
 
 import {Observable} from 'rxjs/Rx';
 
+declare const SVG: any;
+
 @Component({
     selector: 'app-design',
     templateUrl: './design.component.html',
@@ -19,6 +21,15 @@ export class DesignComponent implements OnInit {
 
     ngOnInit() {
         this.getBaseTypes();
+        /*const draw = SVG('drawing').size(500, 130)
+
+        const image = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
+        image.size(100, 100).move(20, 20);*/
+
+        const draw = SVG('drawing').size(500, 130);
+        const rect = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg').size(100, 100);
+
+        rect.draggable();
     }
 
     private getBaseTypes() {

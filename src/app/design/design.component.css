@@ -156,7 +156,11 @@ div.productColor, img.ghost-image {
     height: 630px;
 }
 
-.bottom-margin{
+.bottom-margin {
     height: 70px;
     line-height: 70px;
+}
+
+.file-over {
+    border: dotted 3px red;
 }
