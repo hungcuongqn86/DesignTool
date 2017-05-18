@@ -21,14 +21,22 @@ export class DesignComponent implements OnInit {
 
     ngOnInit() {
         this.getBaseTypes();
-        /*const draw = SVG('drawing').size(500, 130)
+        /*    /!*const draw = SVG('drawing').size(500, 130)
 
-        const image = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
-        image.size(100, 100).move(20, 20);*/
+         const image = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
+         image.size(100, 100).move(20, 20);*!/
+
+         const draw = SVG('drawing').size(500, 130);
+         const rect = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg').size(100, 100);
+         rect.selectize();
+         // rect.selectize().resize();
+         // rect.draggable();*/
 
         const draw = SVG('drawing').size(500, 130);
-        const rect = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg').size(100, 100);
-
+        const rect = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
+        rect.size(100, 100);
+        rect.selectize();
+        rect.resize();
         rect.draggable();
     }
 

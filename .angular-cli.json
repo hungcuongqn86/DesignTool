@@ -21,13 +21,16 @@
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "../node_modules/font-awesome/css/font-awesome.css",
+        "../node_modules/svg.select.js/dist/svg.min.css",
         "styles.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
         "../node_modules/bootstrap/dist/js/bootstrap.js",
         "../node_modules/svg.js/dist/svg.min.js",
-        "../node_modules/svg.draggable.js/dist/svg.draggable.min.js"
+        "../node_modules/svg.draggable.js/dist/svg.draggable.min.js",
+        "../node_modules/svg.select.js/dist/svg.select.min.js",
+        "../node_modules/svg.resize.js/dist/svg.resize.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
