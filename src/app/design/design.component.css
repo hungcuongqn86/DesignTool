@@ -164,3 +164,9 @@ div.productColor, img.ghost-image {
 .file-over {
     border: dotted 3px red;
 }
+
+.svg-surface {
+    position: absolute;
+    width: 500px;
+    height: 600px;
+}

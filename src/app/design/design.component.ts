@@ -15,29 +15,30 @@ export class DesignComponent implements OnInit {
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":""}');
     oDesign: any = JSON.parse('{"sId":"","sFace":"front","sColor":"","sImageFront":"","sImageBack":""}');
+    draw: any;
 
     constructor(private DesignService: DesignService) {
     }
 
     ngOnInit() {
         this.getBaseTypes();
-        /*    /!*const draw = SVG('drawing').size(500, 130)
 
-         const image = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
-         image.size(100, 100).move(20, 20);*!/
+        this.draw = SVG('drawing').size(500, 600);
+        const image = this.draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
+        image.size(100, 100);
+        image.click(function () {
+            this.selectize();
+            image.resize();
+            image.draggable();
+        });
 
-         const draw = SVG('drawing').size(500, 130);
-         const rect = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg').size(100, 100);
-         rect.selectize();
-         // rect.selectize().resize();
-         // rect.draggable();*/
+        this.draw.click(function() {
+            // image.selectize(false);
+        });
 
-        const draw = SVG('drawing').size(500, 130);
-        const rect = draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
-        rect.size(100, 100);
-        rect.selectize();
-        rect.resize();
-        rect.draggable();
+        // const box = draw.viewbox();
+        // const box = draw.viewbox({ x: 0, y: 0, width: 297, height: 210 });
+        // const zoom = box.zoom;
     }
 
     private getBaseTypes() {

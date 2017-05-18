@@ -31,10 +31,6 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <div id="drawing"></div>
-
-
-
             <div class="row">
                 <div class="productColor" [ngStyle]="{ 'background-color': oDesign.sColor }"></div>
                 <img class="ghost-image" src="{{oDesign.sFace==='front'? oDesign.sImageFront: oDesign.sImageBack}}">
@@ -45,6 +41,7 @@
                     <button type="button" (click)="setFace('back')" class="btn btn-primary">Back</button>
                 </div>
             </div>
+            <div id="drawing" class="svg-surface"></div>
         </div>
         <div class="col-sm-3">
             <div class="panel panel-default">
