@@ -155,3 +155,8 @@ div.productColor, img.ghost-image {
     width: 530px;
     height: 630px;
 }
+
+.bottom-margin{
+    height: 70px;
+    line-height: 70px;
+}

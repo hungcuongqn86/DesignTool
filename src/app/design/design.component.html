@@ -11,8 +11,12 @@
 
                     <div class="tab-content">
                         <div id="home" class="tab-pane fade in active">
-                            <h3>HOME</h3>
-                            <p>Some content.</p>
+                            <div class="text-center bottom-margin">
+                                <button type="button" class="btn btn-danger">Import Img</button>
+                            </div>
+                            <div class="text-center bottom-margin">
+                                <button type="button" class="btn btn-danger"> Browse Art</button>
+                            </div>
                         </div>
                         <div id="menu1" class="tab-pane fade">
                             <h3>Menu 1</h3>
@@ -57,7 +61,8 @@
 
                     <div class="product-selector">
                         <ul class="options item-options active nav">
-                            <li *ngFor='let itemBase of arrBase' (click)="selectBase(itemBase.id)" class="item-option {{itemBase.id===oDesign.sId? 'active': ''}}">
+                            <li *ngFor='let itemBase of arrBase' (click)="selectBase(itemBase.id)"
+                                class="item-option {{itemBase.id===oDesign.sId? 'active': ''}}">
                                 <p class="item-name">{{itemBase.name}}</p>
                                 <div class="item-overview">
                                     <div class="item-thumb-container item-thumb-loaded">

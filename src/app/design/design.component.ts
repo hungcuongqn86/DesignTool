@@ -83,6 +83,5 @@ export class DesignComponent implements OnInit {
 
     public setColor(sColor) {
         this.oDesign.sColor = sColor;
-        console.log(this.oDesign);
     }
 }
