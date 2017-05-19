@@ -26,10 +26,16 @@ export class DesignComponent implements OnInit {
         this.draw = SVG('drawing').size(500, 600);
         const image = this.draw.image('https://cdn.img42.com/4b6f5e63ac50c95fe147052d8a4db676.jpeg');
         image.size(100, 100);
+        image.opacity(0.5);
         image.click(function () {
             this.selectize();
             image.resize();
-            image.draggable();
+            image.draggable({
+                minX: 0
+                , minY: 0
+                , maxX: 500
+                , maxY: 530
+            });
         });
 
         this.draw.click(function() {
@@ -54,7 +60,7 @@ export class DesignComponent implements OnInit {
                 }
             },
             error => {
-                console.error('Not base groups');
+                console.error(error.json().message);
                 return Observable.throw(error);
             }
         );
@@ -69,14 +75,14 @@ export class DesignComponent implements OnInit {
             data => {
                 this.arrBase = data;
                 if (this.arrBase.length > 0) {
-                    if (this.oDesign.sId === '') {
+                    // if (this.oDesign.sId === '') {
                         const baseid = this.arrBase[0].id;
                         this.selectBase(baseid);
-                    }
+                    // }
                 }
             },
             error => {
-                console.error('Not base');
+                console.error(error.json().message);
                 return Observable.throw(error);
             }
         );

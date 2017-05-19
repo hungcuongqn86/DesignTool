@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
                 this.locations = data.split(',');
             },
             error => {
-                console.error('Not location');
+                console.error(error.json().message);
                 return Observable.throw(error);
             }
         );

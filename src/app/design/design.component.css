@@ -150,10 +150,25 @@
     cursor: pointer;
 }
 
-div.productColor, img.ghost-image {
+img.ghost-image {
     position: absolute;
     width: 530px;
     height: 630px;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+div.productColor {
+    display: block;
+    position: absolute;
+    width: 530px;
+    height: 630px;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
 }
 
 .bottom-margin {
@@ -166,7 +181,7 @@ div.productColor, img.ghost-image {
 }
 
 .svg-surface {
-    position: absolute;
+    position: relative;
     width: 500px;
     height: 600px;
 }
