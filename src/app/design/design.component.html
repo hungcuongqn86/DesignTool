@@ -12,7 +12,7 @@
                     <div class="tab-content">
                         <div id="home" class="tab-pane fade in active">
                             <div class="text-center bottom-margin">
-                                <button type="button" class="btn btn-danger">Import Img</button>
+                                <button type="button" (click)="addImg()" class="btn btn-danger">Import Img</button>
                             </div>
                             <div class="text-center bottom-margin">
                                 <button type="button" class="btn btn-danger"> Browse Art</button>
@@ -32,9 +32,9 @@
         </div>
         <div class="col-sm-6">
             <div class="row">
-                <div class="productColor" [ngStyle]="{ 'background-color': oDesign.sColor }"></div>
-                <img class="ghost-image" src="{{oDesign.sFace==='front'? oDesign.sImageFront: oDesign.sImageBack}}">
-                <div id="drawing" class="svg-surface"></div>
+                <div class="svg-surface text-center">
+                    <div id="drawing"></div>
+                </div>
             </div>
             <div class="row text-center">
                 <div class="btn-group">
@@ -62,10 +62,10 @@
 
                     <div class="product-selector">
                         <ul class="options item-options active nav">
-                            <li *ngFor='let itemBase of arrBase' (click)="selectBase(itemBase.id)"
+                            <li *ngFor='let itemBase of arrBase'
                                 class="item-option {{itemBase.id===oDesign.sId? 'active': ''}}">
                                 <p class="item-name">{{itemBase.name}}</p>
-                                <div class="item-overview">
+                                <div class="item-overview" (click)="selectBase(itemBase.id)">
                                     <div class="item-thumb-container item-thumb-loaded">
                                         <img class="item-thumb" src="{{itemBase.image.front}}"></div>
                                     <p class="item-qualities">{{itemBase.desc}}</p>
