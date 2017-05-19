@@ -38,8 +38,8 @@
             </div>
             <div class="row text-center">
                 <div class="btn-group">
-                    <button type="button" (click)="setFace('front')" class="btn btn-primary">Front</button>
-                    <button type="button" (click)="setFace('back')" class="btn btn-primary">Back</button>
+                    <button type="button" (click)="setFace('front')" class="btn {{oDesign.sFace==='front'? 'btn-primary': 'btn-default'}}">Front</button>
+                    <button type="button" (click)="setFace('back')" class="btn {{oDesign.sFace==='back'? 'btn-primary': 'btn-default'}}">Back</button>
                 </div>
             </div>
         </div>
