@@ -22,6 +22,7 @@ export class DesignComponent implements OnInit {
     printableConf: any;
     width: number;
     height: number;
+    nested: any;
 
     constructor(private DesignService: DesignService) {
     }
@@ -32,6 +33,7 @@ export class DesignComponent implements OnInit {
         this.productColor = this.draw.rect().fill('#fff');
         this.productImg = this.draw.image();
         this.printable = this.draw.polyline().fill('none').stroke({width: 1});
+        this.nested = this.draw.nested();
     }
 
     private getBaseTypes() {
@@ -112,7 +114,6 @@ export class DesignComponent implements OnInit {
 
     private setPrintable() {
         this.printable.clear();
-        const arrPoint: any = [];
         if (this.oDesign.sFace === 'front') {
             this.printable.plot([[this.printableConf.front_left, this.printableConf.front_top],
                 [this.printableConf.front_left, Number(this.printableConf.front_top) + Number(this.printableConf.front_height)],
@@ -139,23 +140,35 @@ export class DesignComponent implements OnInit {
     }
 
     public addImg() {
-        const image = this.draw.image('https://d1b2zzpxewkr9z.cloudfront.net/vectors/Animals%2FSafari%2FElephant%202.svg');
-        image.size(100, 100);
-        image.opacity(0.5);
-        image.click(function () {
-            this.selectize();
-            image.resize();
-            image.draggable({
-                minX: 0
-                , minY: 0
-                , maxX: 500
-                , maxY: 530
-            });
+        const image = this.nested.image('https://d1b2zzpxewkr9z.cloudfront.net/vectors/Animals%2FSafari%2FElephant%202.svg').opacity(0.5);
+        image.selectize().resize().draggable({
+            minX: 0
+            , minY: 0
+            , maxX: this.width
+            , maxY: this.height
         });
+        if (this.oDesign.sFace === 'front') {
+            image.move(this.printableConf.front_left, this.printableConf.front_top);
+            image.size(this.printableConf.front_width, 100);
+        } else {
+            image.move(this.printableConf.back_left, this.printableConf.back_top);
+            image.size(this.printableConf.back_width, 100);
+        }
+        /*
+         image.click(function () {
+         this.selectize();
+         image.resize();
+         image.draggable({
+         minX: 0
+         , minY: 0
+         , maxX: 530
+         , maxY: 630
+         });
+         });
 
-        this.draw.click(function () {
-            // image.selectize(false);
-        });
+         this.draw.click(function () {
+         // image.selectize(false);
+         });*/
 
         // const box = draw.viewbox();
         // const box = draw.viewbox({ x: 0, y: 0, width: 297, height: 210 });
