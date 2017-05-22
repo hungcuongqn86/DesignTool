@@ -19,12 +19,79 @@
                             </div>
                         </div>
                         <div id="menu1" class="tab-pane fade">
-                            <h3>Menu 1</h3>
-                            <p>Some content in menu 1.</p>
+                            <h3>Text</h3>
+                            <p>Dev...</p>
                         </div>
                         <div id="menu2" class="tab-pane fade">
-                            <h3>Menu 2</h3>
-                            <p>Some content in menu 2.</p>
+                            <div id="dg-layers"
+                                 class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active"
+                                 aria-labelledby="ui-id-1" role="tabpanel" aria-hidden="false" style="display: block;">
+                                <ul id="layers" class="ui-sortable">
+                                    <li class="layer active" data-id="layer-item-front-0">
+                                        <img alt=""
+                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
+                                        <span>Layer 1</span>
+                                        <div class="layer-action pull-right">
+                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to sorting layer">
+                                                <i class="fa fa-arrows"></i>
+                                            </a>-->
+                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to delete layer">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+
+                                    <li class="layer" data-id="layer-item-front-0">
+                                        <img alt=""
+                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
+                                        <span>Layer 2</span>
+                                        <div class="layer-action pull-right">
+                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to sorting layer">
+                                                <i class="fa fa-arrows"></i>
+                                            </a>-->
+                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to delete layer">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+
+                                    <li class="layer" data-id="layer-item-front-0">
+                                        <img alt=""
+                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
+                                        <span>Layer 2</span>
+                                        <div class="layer-action pull-right">
+                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to sorting layer">
+                                                <i class="fa fa-arrows"></i>
+                                            </a>-->
+                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to delete layer">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+
+                                    <li class="layer" data-id="layer-item-front-0">
+                                        <img alt=""
+                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
+                                        <span>Layer 2</span>
+                                        <div class="layer-action pull-right">
+                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to sorting layer">
+                                                <i class="fa fa-arrows"></i>
+                                            </a>-->
+                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
+                                               data-original-title="Click to delete layer">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -38,8 +105,12 @@
             </div>
             <div class="row text-center">
                 <div class="btn-group">
-                    <button type="button" (click)="setFace('front')" class="btn {{oDesign.sFace==='front'? 'btn-primary': 'btn-default'}}">Front</button>
-                    <button type="button" (click)="setFace('back')" class="btn {{oDesign.sFace==='back'? 'btn-primary': 'btn-default'}}">Back</button>
+                    <button type="button" (click)="setFace('front')"
+                            class="btn {{oDesign.sFace==='front'? 'btn-primary': 'btn-default'}}">Front
+                    </button>
+                    <button type="button" (click)="setFace('back')"
+                            class="btn {{oDesign.sFace==='back'? 'btn-primary': 'btn-default'}}">Back
+                    </button>
                 </div>
             </div>
         </div>

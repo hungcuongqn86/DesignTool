@@ -137,6 +137,39 @@
     position: relative;
 }
 
-#drawing {
+#layers {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    float: left;
+    width: 100%;
+}
 
+#layers .layer {
+    margin: 5px 0;
+    border: 1px solid #ddd;
+}
+
+#layers .layer:hover, #layers .active {
+    margin: 5px 0;
+    background-color: rgb(214, 213, 213);
+    border: 1px solid rgb(92, 115, 156);
+}
+
+#layers .layer img {
+    margin-right: 4px;
+    width: 80px;
+    height: 45px;
+}
+
+.layer-action {
+    display: block;
+    height: 45px;
+    line-height: 45px;
+}
+
+.layer-action-item {
+    margin: 5px;
+    cursor: pointer;
 }
