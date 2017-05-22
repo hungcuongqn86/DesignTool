@@ -23,75 +23,31 @@
                             <p>Dev...</p>
                         </div>
                         <div id="menu2" class="tab-pane fade">
-                            <div id="dg-layers"
-                                 class="ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active"
-                                 aria-labelledby="ui-id-1" role="tabpanel" aria-hidden="false" style="display: block;">
-                                <ul id="layers" class="ui-sortable">
-                                    <li class="layer active" data-id="layer-item-front-0">
-                                        <img alt=""
-                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
-                                        <span>Layer 1</span>
-                                        <div class="layer-action pull-right">
-                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to sorting layer">
-                                                <i class="fa fa-arrows"></i>
-                                            </a>-->
-                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to delete layer">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </li>
+                            <ul *ngIf="oDesign.sFace==='front'" class="layers">
+                                <li *ngFor='let itemNested of arrNestedFront'
+                                    class="layer {{selectItem && (itemNested.attr('id')==selectItem.attr('id'))? 'active': ''}}">
+                                    <span (click)="selectLayer(itemNested)"><img alt=""
+                                               src="{{itemNested.src}}">{{itemNested.attr('id')}}</span>
+                                    <div class="layer-action pull-right">
+                                        <a class="layer-action-item" (click)="deleteLayer(itemNested)" title="Press `delete` on keyboard">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
 
-                                    <li class="layer" data-id="layer-item-front-0">
-                                        <img alt=""
-                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
-                                        <span>Layer 2</span>
-                                        <div class="layer-action pull-right">
-                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to sorting layer">
-                                                <i class="fa fa-arrows"></i>
-                                            </a>-->
-                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to delete layer">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-
-                                    <li class="layer" data-id="layer-item-front-0">
-                                        <img alt=""
-                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
-                                        <span>Layer 2</span>
-                                        <div class="layer-action pull-right">
-                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to sorting layer">
-                                                <i class="fa fa-arrows"></i>
-                                            </a>-->
-                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to delete layer">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-
-                                    <li class="layer" data-id="layer-item-front-0">
-                                        <img alt=""
-                                             src="https://s3.amazonaws.com/viral-tees/campaigns/1e89dbf9-bd2f-5c14-11ec-4e7ac51c6a78/assets/bf89c631-d1b5-0034-51ac-d4a86b016af9_trimmed.png">
-                                        <span>Layer 2</span>
-                                        <div class="layer-action pull-right">
-                                            <!--<a class="dg-tooltip" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to sorting layer">
-                                                <i class="fa fa-arrows"></i>
-                                            </a>-->
-                                            <a class="layer-action-item" title="" data-placement="top" data-toggle="tooltip"
-                                               data-original-title="Click to delete layer">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
+                            <ul *ngIf="oDesign.sFace==='back'" class="layers">
+                                <li *ngFor='let itemNested of arrNestedBack'
+                                    class="layer {{selectItem && (itemNested.attr('id')==selectItem.attr('id'))? 'active': ''}}">
+                                    <span (click)="selectLayer(itemNested)"><img alt=""
+                                                                                 src="{{itemNested.src}}">{{itemNested.attr('id')}}</span>
+                                    <div class="layer-action pull-right">
+                                        <a class="layer-action-item" (click)="deleteLayer(itemNested)" title="Press `delete` on keyboard">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

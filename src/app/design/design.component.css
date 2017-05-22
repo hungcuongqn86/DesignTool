@@ -137,7 +137,7 @@
     position: relative;
 }
 
-#layers {
+.layers {
     display: inline-block;
     margin: 0;
     padding: 0;
@@ -146,19 +146,27 @@
     width: 100%;
 }
 
-#layers .layer {
+.layers .layer {
     margin: 5px 0;
     border: 1px solid #ddd;
+    cursor: pointer;
 }
 
-#layers .layer:hover, #layers .active {
+.layers .layer:hover, .layers .active {
     margin: 5px 0;
-    background-color: rgb(214, 213, 213);
-    border: 1px solid rgb(92, 115, 156);
+    background-color: #e1f3fb;
+    border: 1px solid #39ace6;
 }
 
-#layers .layer img {
+.layers .layer span {
+    display: inline-block;
+    width: 90%;
+}
+
+.layers .layer img {
+    border: 1px solid oldlace;
     margin-right: 4px;
+    padding: 3px;
     width: 80px;
     height: 45px;
 }
@@ -172,4 +180,8 @@
 .layer-action-item {
     margin: 5px;
     cursor: pointer;
+}
+
+.layer-action-item:hover {
+    color: red;
 }

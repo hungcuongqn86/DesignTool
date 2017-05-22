@@ -226,6 +226,30 @@ export class DesignComponent implements OnInit {
         }
     }
 
+    public selectLayer(leyer: any) {
+        let opt: any = [];
+        if (this.oDesign.sFace === 'front') {
+            opt = {
+                minX: this.printableConf.front_left
+                , minY: this.printableConf.front_top
+                , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
+                , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
+            };
+        } else {
+            opt = {
+                minX: this.printableConf.back_left
+                , minY: this.printableConf.back_top
+                , maxX: Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
+                , maxY: Number(this.printableConf.back_top) + Number(this.printableConf.back_height)
+            };
+        }
+        this.resetSelect();
+        leyer.selectize().resize({
+            constraint: opt
+        }).draggable(opt);
+        this.selectItem = leyer;
+    }
+
     public deleteImg() {
         if (this.selectItem) {
             this.selectItem.selectize(false, {deepSelect: true}).remove();
@@ -238,6 +262,19 @@ export class DesignComponent implements OnInit {
                 this.arrNestedBack.splice(indexx, 1);
             }
             this.selectItem = null;
+        }
+    }
+
+    public deleteLayer(leyer: any) {
+        this.selectItem = null;
+        leyer.selectize(false, {deepSelect: true}).remove();
+        let indexx: number = this.arrNestedFront.indexOf(leyer);
+        if (indexx >= 0) {
+            this.arrNestedFront.splice(indexx, 1);
+        }
+        indexx = this.arrNestedBack.indexOf(leyer);
+        if (indexx >= 0) {
+            this.arrNestedBack.splice(indexx, 1);
         }
     }
 
