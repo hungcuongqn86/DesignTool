@@ -108,76 +108,29 @@
 .product-colors .tool_tip__definition {
     display: inline-block;
     position: relative;
-    opacity: 1;
-    max-width: none;
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 3px;
-    box-shadow: 0 0 2px 0 hsla(200, 4%, 58%, .8);
     overflow: visible;
     padding: 8px;
     margin-top: 16px;
-    zoom: 1;
-    z-index: auto;
-}
-
-.product-colors .tool_tip__definition .color-column {
-    float: right;
-    padding: 1px;
-    margin: 0;
 }
 
 .product-colors .shirt-color-sample {
     display: block;
-}
-
-.shirt-color-sample {
     border: 2px solid #fff;
     box-shadow: 0 0 0 1px #d8dddf;
-    text-align: center;
-    font-size: 1rem;
-    line-height: 19px;
     position: relative;
-}
-
-.shirt-color-base, .shirt-color-nocolor, .shirt-color-sample {
     width: 22px;
     height: 22px;
-    margin: 0 7px 7px 0;
+    margin: 0 0 5px 0;
     border-radius: 2px;
-    vertical-align: top;
-    display: inline-block;
     cursor: pointer;
-}
-
-img.ghost-image {
-    position: absolute;
-    width: 530px;
-    height: 630px;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-}
-
-div.productColor {
-    display: block;
-    position: absolute;
-    width: 530px;
-    height: 630px;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
 }
 
 .bottom-margin {
     height: 70px;
     line-height: 70px;
-}
-
-.file-over {
-    border: dotted 3px red;
 }
 
 .svg-surface {

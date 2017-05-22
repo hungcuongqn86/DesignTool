@@ -23,17 +23,31 @@ export class DesignComponent implements OnInit {
     width: number;
     height: number;
     nested: any;
+    arrNested: any = [];
 
     constructor(private DesignService: DesignService) {
     }
 
     ngOnInit() {
+        const myobj = this;
         this.getBaseTypes();
         this.draw = SVG('drawing');
         this.productColor = this.draw.rect().fill('#fff');
-        this.productImg = this.draw.image();
-        this.printable = this.draw.polyline().fill('none').stroke({width: 1});
+        this.productImg = this.draw.image().click(function () {
+            myobj.imgClick();
+        });
+        this.printable = this.draw.polyline().fill('none').stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
         this.nested = this.draw.nested();
+    }
+
+    private imgClick() {
+        this.resetSelect();
+    }
+
+    private resetSelect() {
+        for (let i = 0; i < this.arrNested.length; i++) {
+            this.arrNested[i].selectize(false, {deepSelect: true});
+        }
     }
 
     private getBaseTypes() {
@@ -140,38 +154,52 @@ export class DesignComponent implements OnInit {
     }
 
     public addImg() {
-        const image = this.nested.image('https://d1b2zzpxewkr9z.cloudfront.net/vectors/Animals%2FSafari%2FElephant%202.svg').opacity(0.5);
-        image.selectize().resize().draggable({
-            minX: 0
-            , minY: 0
-            , maxX: this.width
-            , maxY: this.height
-        });
+        const myobj = this;
+        const printw = this.printableConf.front_width;
+        const printh = this.printableConf.front_height;
+        const image = this.nested.image('https://d1b2zzpxewkr9z.cloudfront.net/vectors/Animals%2FSafari%2FElephant%202.svg')
+            .loaded(function (loader) {
+                if (printw < loader.width) {
+                    const px = loader.width / printw;
+                    const mheight = loader.height / px;
+                    if (mheight <= printh) {
+                        this.size(printw, mheight);
+                    }
+                } else {
+                    if (printh < loader.height) {
+                        const px = loader.height / printh;
+                        const mwidth = loader.width / px;
+                        if (mwidth <= printw) {
+                            this.size(mwidth, printh);
+                        }
+                    }
+                }
+            });
+
         if (this.oDesign.sFace === 'front') {
             image.move(this.printableConf.front_left, this.printableConf.front_top);
-            image.size(this.printableConf.front_width, 100);
         } else {
             image.move(this.printableConf.back_left, this.printableConf.back_top);
-            image.size(this.printableConf.back_width, 100);
         }
-        /*
-         image.click(function () {
-         this.selectize();
-         image.resize();
-         image.draggable({
-         minX: 0
-         , minY: 0
-         , maxX: 530
-         , maxY: 630
-         });
-         });
 
-         this.draw.click(function () {
-         // image.selectize(false);
-         });*/
+        const opt = {
+            minX: this.printableConf.front_left
+            , minY: this.printableConf.front_top
+            , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
+            , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
+        };
 
-        // const box = draw.viewbox();
-        // const box = draw.viewbox({ x: 0, y: 0, width: 297, height: 210 });
-        // const zoom = box.zoom;
+        image.click(function () {
+            myobj.resetSelect();
+            this.selectize().resize({
+                constraint: opt
+            }).draggable(opt);
+        });
+
+        this.arrNested.push(image);
+
+        this.draw.click(function () {
+            // image.selectize(false);
+        });
     }
 }
