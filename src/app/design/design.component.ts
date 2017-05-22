@@ -4,6 +4,7 @@ import {DesignService} from './design.service';
 import {Observable} from 'rxjs/Rx';
 
 declare const SVG: any;
+declare const key: any;
 
 @Component({
     selector: 'app-design',
@@ -22,8 +23,9 @@ export class DesignComponent implements OnInit {
     printableConf: any;
     width: number;
     height: number;
-    nested: any;
-    arrNested: any = [];
+    arrNestedFront: any = [];
+    arrNestedBack: any = [];
+    selectItem: any;
 
     constructor(private DesignService: DesignService) {
     }
@@ -37,7 +39,9 @@ export class DesignComponent implements OnInit {
             myobj.imgClick();
         });
         this.printable = this.draw.polyline().fill('none').stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
-        this.nested = this.draw.nested();
+        key('delete', function () {
+            myobj.deleteImg();
+        });
     }
 
     private imgClick() {
@@ -45,8 +49,12 @@ export class DesignComponent implements OnInit {
     }
 
     private resetSelect() {
-        for (let i = 0; i < this.arrNested.length; i++) {
-            this.arrNested[i].selectize(false, {deepSelect: true});
+        this.selectItem = null;
+        for (let i = 0; i < this.arrNestedFront.length; i++) {
+            this.arrNestedFront[i].selectize(false, {deepSelect: true});
+        }
+        for (let i = 0; i < this.arrNestedBack.length; i++) {
+            this.arrNestedBack[i].selectize(false, {deepSelect: true});
         }
     }
 
@@ -124,6 +132,8 @@ export class DesignComponent implements OnInit {
             this.productImg.load(this.oDesign.sImageBack);
         }
         this.setPrintable();
+        this.resetSelect();
+        this.setImgFace();
     }
 
     private setPrintable() {
@@ -155,9 +165,16 @@ export class DesignComponent implements OnInit {
 
     public addImg() {
         const myobj = this;
-        const printw = this.printableConf.front_width;
-        const printh = this.printableConf.front_height;
-        const image = this.nested.image('https://d1b2zzpxewkr9z.cloudfront.net/vectors/Animals%2FSafari%2FElephant%202.svg')
+        let printw: number;
+        let printh: number;
+        if (this.oDesign.sFace === 'front') {
+            printw = this.printableConf.front_width;
+            printh = this.printableConf.front_height;
+        } else {
+            printw = this.printableConf.back_width;
+            printh = this.printableConf.back_height;
+        }
+        const image = this.draw.image('https://d1b2zzpxewkr9z.cloudfront.net/vectors/Animals%2FSafari%2FElephant%202.svg')
             .loaded(function (loader) {
                 if (printw < loader.width) {
                     const px = loader.width / printw;
@@ -176,30 +193,69 @@ export class DesignComponent implements OnInit {
                 }
             });
 
+        let opt: any = [];
         if (this.oDesign.sFace === 'front') {
             image.move(this.printableConf.front_left, this.printableConf.front_top);
+            opt = {
+                minX: this.printableConf.front_left
+                , minY: this.printableConf.front_top
+                , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
+                , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
+            };
         } else {
             image.move(this.printableConf.back_left, this.printableConf.back_top);
+            opt = {
+                minX: this.printableConf.back_left
+                , minY: this.printableConf.back_top
+                , maxX: Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
+                , maxY: Number(this.printableConf.back_top) + Number(this.printableConf.back_height)
+            };
         }
-
-        const opt = {
-            minX: this.printableConf.front_left
-            , minY: this.printableConf.front_top
-            , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
-            , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
-        };
 
         image.click(function () {
             myobj.resetSelect();
             this.selectize().resize({
                 constraint: opt
             }).draggable(opt);
+            myobj.selectItem = this;
         });
+        if (this.oDesign.sFace === 'front') {
+            this.arrNestedFront.push(image);
+        } else {
+            this.arrNestedBack.push(image);
+        }
+    }
 
-        this.arrNested.push(image);
+    public deleteImg() {
+        if (this.selectItem) {
+            this.selectItem.selectize(false, {deepSelect: true}).remove();
+            let indexx: number = this.arrNestedFront.indexOf(this.selectItem);
+            if (indexx >= 0) {
+                this.arrNestedFront.splice(indexx, 1);
+            }
+            indexx = this.arrNestedBack.indexOf(this.selectItem);
+            if (indexx >= 0) {
+                this.arrNestedBack.splice(indexx, 1);
+            }
+            this.selectItem = null;
+        }
+    }
 
-        this.draw.click(function () {
-            // image.selectize(false);
-        });
+    private setImgFace() {
+        if (this.oDesign.sFace === 'front') {
+            for (let i = 0; i < this.arrNestedFront.length; i++) {
+                this.arrNestedFront[i].show();
+            }
+            for (let i = 0; i < this.arrNestedBack.length; i++) {
+                this.arrNestedBack[i].hide();
+            }
+        } else {
+            for (let i = 0; i < this.arrNestedFront.length; i++) {
+                this.arrNestedFront[i].hide();
+            }
+            for (let i = 0; i < this.arrNestedBack.length; i++) {
+                this.arrNestedBack[i].show();
+            }
+        }
     }
 }

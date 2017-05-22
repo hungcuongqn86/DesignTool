@@ -30,7 +30,8 @@
         "../node_modules/svg.js/dist/svg.min.js",
         "../node_modules/svg.draggable.js/dist/svg.draggable.min.js",
         "../node_modules/svg.select.js/dist/svg.select.min.js",
-        "../node_modules/svg.resize.js/dist/svg.resize.min.js"
+        "../node_modules/svg.resize.js/dist/svg.resize.min.js",
+        "../node_modules/keymaster/keymaster.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

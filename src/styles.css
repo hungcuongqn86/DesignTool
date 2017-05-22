@@ -3,3 +3,12 @@
 .removeeven {
     pointer-events: none;
 }*/
+
+.svg_select_points_t, .svg_select_points_r, .svg_select_points_b, .svg_select_points_l, .svg_select_points_rot {
+    pointer-events: none;
+    display: none;
+}
+
+.svg_select_points_rt {
+    border: 3px solid red;
+}
