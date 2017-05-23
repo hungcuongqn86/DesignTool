@@ -14,7 +14,7 @@ export interface PromptModel {
 })
 export class ProductComponent extends DialogComponent<PromptModel, string> implements PromptModel, OnInit {
     title;
-    status = 'base';
+    status = 'baseType';
 
     arrBaseTypes: any = [];
     arrBase: any = [];
@@ -32,7 +32,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
         this.DesignService.getBaseTypes().subscribe(
             data => {
                 this.arrBaseTypes = data;
-                console.log(this.arrBaseTypes);
+                this.status = 'baseType';
             },
             error => {
                 console.error(error.json().message);
@@ -45,6 +45,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
         this.DesignService.getBases(sBaseType).subscribe(
             data => {
                 this.arrBase = data;
+                this.status = 'base';
             },
             error => {
                 console.error(error.json().message);
@@ -53,12 +54,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
         );
     }
 
-    public apply() {
-        this.result = 'SUCCESS';
-        this.close();
-    }
-
-    public mdClose() {
+    public selectProductBase(objBase) {
         this.close();
     }
 }

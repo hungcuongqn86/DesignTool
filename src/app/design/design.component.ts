@@ -328,7 +328,7 @@ export class DesignComponent implements OnInit {
 
     public addProduct() {
         this.dialogService.addDialog(ProductComponent, {
-            title: 'Product'
+            title: 'Select product'
         })
             .subscribe((message) => {
                 console.log(111);
