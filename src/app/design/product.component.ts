@@ -17,6 +17,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
     status = 'baseType';
 
     arrBaseTypes: any = [];
+    baseType: any = [];
     arrBase: any = [];
 
     constructor(dialogService: DialogService, private DesignService: DesignService) {
@@ -28,7 +29,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
         this.getBaseTypes();
     }
 
-    private getBaseTypes() {
+    public getBaseTypes() {
         this.DesignService.getBaseTypes().subscribe(
             data => {
                 this.arrBaseTypes = data;
@@ -42,7 +43,8 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
     }
 
     public loadBase(sBaseType) {
-        this.DesignService.getBases(sBaseType).subscribe(
+        this.baseType = sBaseType;
+        this.DesignService.getBases(sBaseType.id).subscribe(
             data => {
                 this.arrBase = data;
                 this.status = 'base';
@@ -55,6 +57,10 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
     }
 
     public selectProductBase(objBase) {
+        this.close();
+    }
+
+    public mdClose() {
         this.close();
     }
 }

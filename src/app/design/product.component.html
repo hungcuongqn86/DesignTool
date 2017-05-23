@@ -2,7 +2,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" (click)="mdClose()">&times;</button>
-            <h4 class="modal-title">{{title}}</h4>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a (click)="getBaseTypes()" href="javascript:void(0)"><i class="fa fa-home"
+                                                                                                     aria-hidden="true"></i></a>
+                </li>
+                <!--<li class="breadcrumb-item"><a href="#">Library</a></li>-->
+                <li *ngIf="baseType.name && baseType.name !=''" class="breadcrumb-item active">{{baseType.name}}</li>
+            </ol>
         </div>
         <div class="modal-body">
             <div *ngIf="status==='baseType'" class="box-body">
@@ -10,7 +16,7 @@
                     <div class="panel-heading">{{itemGroup.name}}</div>
                     <div class="panel-body">
                         <div *ngFor='let item of itemGroup.base_types' class="col-sm-3 text-center">
-                            <div class="producs-base-item" (click)="loadBase(item.id)">
+                            <div class="producs-base-item" (click)="loadBase(item)">
                                 <div class="produc-name">
                                     {{item.name}}
                                 </div>
@@ -26,7 +32,7 @@
 
             <div *ngIf="status==='base'" class="box-body">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Type name</div>
+                    <div class="panel-heading">{{baseType.name}}</div>
                     <div class="panel-body">
                         <div *ngFor='let item of arrBase' class="col-sm-3 text-center">
                             <div class="producs-base-item" (click)="selectProductBase(item.id)">
