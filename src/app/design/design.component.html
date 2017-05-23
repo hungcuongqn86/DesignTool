@@ -12,7 +12,12 @@
                     <div class="tab-content">
                         <div id="home" class="tab-pane fade in active">
                             <div class="text-center bottom-margin">
-                                <button type="button" (click)="addImg()" class="btn btn-danger">Import Img</button>
+                                <form #form1="ngForm">
+                                    <input [(ngModel)]="file.input" #filePicker="ngModel" style="display: none;" type="file" id="filePicker" name="filePicker" class="form-control" (change)="handleFileSelect($event)">
+                                    <label class="btn btn-danger" style='cursor: pointer' for="filePicker">
+                                        Import Img
+                                    </label>
+                                </form>
                             </div>
                             <div class="text-center bottom-margin">
                                 <button type="button" class="btn btn-danger"> Browse Art</button>

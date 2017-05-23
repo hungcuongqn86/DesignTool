@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {NgModel} from '@angular/forms';
 import {DesignService} from './design.service';
 import {ProductComponent} from './product.component';
 import {DialogService} from 'ng2-bootstrap-modal';
@@ -14,6 +15,7 @@ declare const key: any;
     styleUrls: ['./design.component.css']
 })
 export class DesignComponent implements OnInit {
+    @ViewChild('form1') form: NgModel;
     arrBaseTypes: any = [];
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":""}');
@@ -28,6 +30,10 @@ export class DesignComponent implements OnInit {
     arrNestedFront: any = [];
     arrNestedBack: any = [];
     selectItem: any;
+
+    file: any = JSON.parse('{"input":""}');
+    arrFile: any = [];
+    filetype = '';
 
     constructor(private DesignService: DesignService, private dialogService: DialogService) {
     }
@@ -44,6 +50,28 @@ export class DesignComponent implements OnInit {
         key('delete', function () {
             myobj.deleteImg();
         });
+    }
+
+    public handleFileSelect(evt) {
+        const files = evt.target.files;
+        const file = files[0];
+
+        if (files && file) {
+            this.arrFile.push(file);
+            this.filetype = file.type;
+            const reader = new FileReader();
+
+            reader.onload = this._handleReaderLoaded.bind(this);
+
+            reader.readAsBinaryString(file);
+        }
+    }
+
+    private _handleReaderLoaded(readerEvt) {
+        const binaryString = readerEvt.target.result;
+        this.addImg(this.filetype, btoa(binaryString));
+        // console.log(this.form['controls']['filePicker']);
+        this.form['controls']['filePicker'].reset();
     }
 
     private imgClick() {
@@ -165,7 +193,7 @@ export class DesignComponent implements OnInit {
         this.productColor.fill(sColor);
     }
 
-    public addImg() {
+    public addImg(filetype, binaryString: any) {
         const myobj = this;
         let printw: number;
         let printh: number;
@@ -176,7 +204,7 @@ export class DesignComponent implements OnInit {
             printw = this.printableConf.back_width;
             printh = this.printableConf.back_height;
         }
-        const image = this.draw.image('https://d1b2zzpxewkr9z.cloudfront.net/vectors/Animals%2FSafari%2FElephant%202.svg')
+        const image = this.draw.image('data:' + filetype + ';base64,' + binaryString)
             .loaded(function (loader) {
                 if (printw < loader.width) {
                     const px = loader.width / printw;
@@ -300,8 +328,7 @@ export class DesignComponent implements OnInit {
 
     public addProduct() {
         this.dialogService.addDialog(ProductComponent, {
-            title: 'Select a product',
-            question: 'Select ???'
+            title: 'Product'
         })
             .subscribe((message) => {
                 console.log(111);

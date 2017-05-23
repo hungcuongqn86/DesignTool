@@ -6,7 +6,6 @@ import {Observable} from 'rxjs/Rx';
 
 export interface PromptModel {
     title;
-    question;
 }
 
 @Component({
@@ -15,10 +14,10 @@ export interface PromptModel {
 })
 export class ProductComponent extends DialogComponent<PromptModel, string> implements PromptModel, OnInit {
     title;
-    question;
-    message = '';
+    status = 'base';
 
     arrBaseTypes: any = [];
+    arrBase: any = [];
 
     constructor(dialogService: DialogService, private DesignService: DesignService) {
         super(dialogService);
@@ -42,8 +41,20 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
         );
     }
 
+    public loadBase(sBaseType) {
+        this.DesignService.getBases(sBaseType).subscribe(
+            data => {
+                this.arrBase = data;
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
+    }
+
     public apply() {
-        this.result = this.message;
+        this.result = 'SUCCESS';
         this.close();
     }
 

@@ -11,12 +11,12 @@
                         <div class="panel-heading">{{itemGroup.name}}</div>
                         <div class="panel-body">
                             <div *ngFor='let item of itemGroup.base_types' class="col-sm-3 text-center">
-                                <div class="producs-base-item">
+                                <div class="producs-base-item" (click)="loadBase(item.id)">
                                     <div class="produc-name">
                                         {{item.name}}
                                     </div>
                                     <div class="ui fluid image"><img
-                                            src="http://cdn.30usd.com/images/-qvEwT0PXlJX4viQ_front.png">
+                                            src="{{item.image}}">
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
