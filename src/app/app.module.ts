@@ -14,6 +14,8 @@ import {DesignService} from './design/design.service';
 
 import {Ng2UploaderModule} from 'ng2-uploader';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+import {BootstrapModalModule} from 'ng2-bootstrap-modal';
+import {ProductComponent} from './design/product.component';
 
 /* Routing Module */
 import {routing, appRoutingProviders} from './app-routing.module';
@@ -27,7 +29,8 @@ export function createTranslateLoader(http: Http) {
         AppComponent,
         DesignComponent,
         PricingComponent,
-        LaunchingComponent
+        LaunchingComponent,
+        ProductComponent
     ],
     imports: [
         BrowserModule,
@@ -39,6 +42,7 @@ export function createTranslateLoader(http: Http) {
             useFactory: (createTranslateLoader),
             deps: [Http]
         }),
+        BootstrapModalModule,
         routing
     ],
     providers: [
@@ -47,7 +51,9 @@ export function createTranslateLoader(http: Http) {
         AppService,
         DesignService
     ],
-    entryComponents: [],
+    entryComponents: [
+        ProductComponent
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

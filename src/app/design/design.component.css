@@ -186,7 +186,6 @@
     color: red;
 }
 
-
 .add-product-button {
     cursor: pointer;
     padding: 15px 0;
@@ -203,7 +202,7 @@
 
 }
 
-.producs-list img{
+.producs-list img {
     height: 80px;
     float: left;
 }
@@ -225,14 +224,6 @@
     line-height: 30px;
 }
 
-.colors {
-    margin-top: .5rem;
-}
-
-.ColorPicker {
-    margin-bottom: -.5em;
-}
-
 .ColorPicker .color {
     display: inline-block;
 }
@@ -240,17 +231,17 @@
 .ui.circular.label, .ui.circular.labels .label {
     min-width: 2em;
     min-height: 2em;
-    padding: .5em!important;
+    padding: .5em !important;
     line-height: 1em;
     text-align: center;
     border-radius: 500rem;
 }
 
-.ColorPicker.interactive .color>.ui.circular.label {
+.ColorPicker.interactive .color > .ui.circular.label {
     cursor: pointer;
 }
 
-.ColorPicker .color>.ui.circular.label span {
+.ColorPicker .color > .ui.circular.label span {
     margin: 5px;
 }
 
@@ -259,4 +250,41 @@
     float: right;
     font-size: 25px;
     margin-left: 10px;
+}
+
+.modal-dialog {
+    height: 95%;
+    width: 90%;
+}
+
+.modal-content {
+    height: 95%;
+}
+
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    max-height: calc(100% - 120px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 75%;
+}
+
+.producs-base-item {
+    border: 1px solid #ddd;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.producs-base-item:hover {
+    background-color: #1b6d85;
+}
+
+.producs-base-item img {
+    width: 90%;
+    margin: 10px;
+}
+
+.producs-base-item .produc-name {
+    margin: 5px;
+    margin-top: 15px;
 }

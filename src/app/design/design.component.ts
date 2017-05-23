@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DesignService} from './design.service';
+import {ProductComponent} from './product.component';
+import {DialogService} from 'ng2-bootstrap-modal';
 
 import {Observable} from 'rxjs/Rx';
 
@@ -27,7 +29,7 @@ export class DesignComponent implements OnInit {
     arrNestedBack: any = [];
     selectItem: any;
 
-    constructor(private DesignService: DesignService) {
+    constructor(private DesignService: DesignService, private dialogService: DialogService) {
     }
 
     ngOnInit() {
@@ -294,5 +296,15 @@ export class DesignComponent implements OnInit {
                 this.arrNestedBack[i].show();
             }
         }
+    }
+
+    public addProduct() {
+        this.dialogService.addDialog(ProductComponent, {
+            title: 'Select a product',
+            question: 'Select ???'
+        })
+            .subscribe((message) => {
+                console.log(111);
+            });
     }
 }
