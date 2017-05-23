@@ -16,6 +16,7 @@ declare const key: any;
 })
 export class DesignComponent implements OnInit {
     @ViewChild('form1') form: NgModel;
+    arrProduct: any = [];
     arrBaseTypes: any = [];
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":""}');
@@ -330,8 +331,8 @@ export class DesignComponent implements OnInit {
         this.dialogService.addDialog(ProductComponent, {
             title: 'Select product'
         })
-            .subscribe((message) => {
-                console.log(111);
+            .subscribe((product) => {
+                this.arrProduct.push(product);
             });
     }
 }

@@ -85,6 +85,34 @@
                     </div>
                 </div>
             </div>
+
+            <div *ngFor='let product of arrProduct' class="panel panel-default">
+                <div class="panel-body">
+                    <div class="producs-list">
+                        <img alt="" src="{{product.image.front}}">
+                        <div class="prod-inf">
+                            <span>{{product.name}}</span>
+                            <div class="colors">
+                                <div class="ColorPicker interactive">
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span></div>
+                                    </div>
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span></div>
+                                    </div>
+                                    <a class="add-color-icon"><i class="fa fa-plus-circle fa-2" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="producs-action pull-right">
+                            <a class="producs-action-item" title="delete">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="add-product-button text-center" (click)="addProduct()"><i class="fa fa-plus" aria-hidden="true"></i>
                 <span>Add product</span></div>
         </div>

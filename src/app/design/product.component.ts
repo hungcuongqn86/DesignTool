@@ -58,6 +58,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
     }
 
     public selectProductBase(objBase) {
+        this.result = objBase;
         this.close();
     }
 
