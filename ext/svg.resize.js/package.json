@@ -1,0 +1,110 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "svg.resize.js",
+        "scope": null,
+        "escapedName": "svg.resize.js",
+        "name": "svg.resize.js",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "D:\\LEADGENS\\ng2-design-tool"
+    ]
+  ],
+  "_from": "svg.resize.js@latest",
+  "_id": "svg.resize.js@1.4.0",
+  "_inCache": true,
+  "_location": "/svg.resize.js",
+  "_nodeVersion": "4.3.0",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/svg.resize.js-1.4.0.tgz_1473928187328_0.3196836409624666"
+  },
+  "_npmUser": {
+    "name": "fuzzyma",
+    "email": "ulima.ums@googlemail.com"
+  },
+  "_npmVersion": "3.10.7",
+  "_phantomChildren": {
+    "svg.js": "2.6.1"
+  },
+  "_requested": {
+    "raw": "svg.resize.js",
+    "scope": null,
+    "escapedName": "svg.resize.js",
+    "name": "svg.resize.js",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/svg.resize.js/-/svg.resize.js-1.4.0.tgz",
+  "_shasum": "1acc1e4a13c46d4dc30bca95603f6dc6da33567e",
+  "_shrinkwrap": null,
+  "_spec": "svg.resize.js",
+  "_where": "D:\\LEADGENS\\ng2-design-tool",
+  "author": {
+    "name": "Ulrich-Matthias Schäfer"
+  },
+  "bugs": {
+    "url": "https://github.com/Fuzzyma/svg.resize.js/issues"
+  },
+  "contributors": {
+    "name": "Ulrich-Matthias Schäfer"
+  },
+  "dependencies": {
+    "svg.js": "^2.0.2",
+    "svg.select.js": "^1.0.4"
+  },
+  "description": "An extension for svn.js which allows to resize elements which are selected",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-bumper": "^1.0.4",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-cssmin": "^0.12.1",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-watch": "~0.4.0"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "1acc1e4a13c46d4dc30bca95603f6dc6da33567e",
+    "tarball": "https://registry.npmjs.org/svg.resize.js/-/svg.resize.js-1.4.0.tgz"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "files": [
+    "dist/"
+  ],
+  "gitHead": "6cda1ea04b1dec97344a9620ffef3c777f18f313",
+  "homepage": "https://github.com/Fuzzyma/svg.resize.js",
+  "keywords": [
+    "svg.js",
+    "resize",
+    "mouse"
+  ],
+  "license": "MIT",
+  "main": "dist/svg.resize.js",
+  "maintainers": [
+    {
+      "name": "fuzzyma",
+      "email": "ulima.ums@googlemail.com"
+    }
+  ],
+  "name": "svg.resize.js",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fuzzyma/svg.resize.js.git"
+  },
+  "scripts": {},
+  "version": "1.4.0"
+}

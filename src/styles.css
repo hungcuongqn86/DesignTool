@@ -4,7 +4,7 @@
     pointer-events: none;
 }*/
 
-.svg_select_points_lb, .svg_select_points_lt, .svg_select_points_t, .svg_select_points_r, .svg_select_points_b, .svg_select_points_l, .svg_select_points_rot {
+.svg_select_points_lb, .svg_select_points_rb, .svg_select_points_lt, .svg_select_points_t, .svg_select_points_r, .svg_select_points_b, .svg_select_points_l, .svg_select_points_rot {
     pointer-events: none;
     display: none;
 }
