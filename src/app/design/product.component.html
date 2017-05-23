@@ -4,7 +4,7 @@
             <button type="button" class="close" (click)="mdClose()">&times;</button>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a (click)="getBaseTypes()" href="javascript:void(0)"><i class="fa fa-home"
-                                                                                                     aria-hidden="true"></i></a>
+                                                                                                     aria-hidden="true"></i> Base</a>
                 </li>
                 <!--<li class="breadcrumb-item"><a href="#">Library</a></li>-->
                 <li *ngIf="baseType.name && baseType.name !=''" class="breadcrumb-item active">{{baseType.name}}</li>

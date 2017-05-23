@@ -33,6 +33,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
         this.DesignService.getBaseTypes().subscribe(
             data => {
                 this.arrBaseTypes = data;
+                this.baseType = [];
                 this.status = 'baseType';
             },
             error => {
