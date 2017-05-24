@@ -301,18 +301,20 @@ export class DesignComponent implements OnInit {
         const image = this.draw.image('data:' + filetype + ';base64,' + binaryString)
             .loaded(function (loader) {
                 if (printw < loader.width) {
-                    const px = loader.width / printw;
-                    const mheight = loader.height / px;
+                    let mwidth = printw;
+                    let mheight = loader.height * mwidth / loader.width;
                     if (mheight <= printh) {
-                        this.size(printw, mheight);
+                        this.size(mwidth, mheight);
+                    } else {
+                        mheight = printh;
+                        mwidth = loader.width * mheight / loader.height;
+                        this.size(mwidth, mheight);
                     }
                 } else {
                     if (printh < loader.height) {
-                        const px = loader.height / printh;
-                        const mwidth = loader.width / px;
-                        if (mwidth <= printw) {
-                            this.size(mwidth, printh);
-                        }
+                        const mheight = printh;
+                        const mwidth = loader.width * mheight / loader.height;
+                        this.size(mwidth, mheight);
                     }
                 }
             });

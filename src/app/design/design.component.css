@@ -167,7 +167,7 @@
     border: 1px solid oldlace;
     margin-right: 4px;
     padding: 3px;
-    width: 80px;
+    max-width: 80px;
     height: 45px;
 }
 
