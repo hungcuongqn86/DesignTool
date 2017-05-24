@@ -63,10 +63,12 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="producs-list">
-                        <img alt="" src="http://cdn.30usd.com/images/-qvEwT0PXlJX4viQ_front.png">
-                        <div class="prod-inf">
-                            <span>V-Neck Tee</span>
+                    <span style="margin-left: 15px;">V-Neck Tee</span>
+                    <div class="row producs-list">
+                        <div class="col-sm-4">
+                            <img alt="" src="http://cdn.30usd.com/images/-qvEwT0PXlJX4viQ_front.png">
+                        </div>
+                        <div class="col-sm-6 prod-inf">
                             <div class="colors">
                                 <div class="ColorPicker interactive">
                                     <div class="color">
@@ -77,12 +79,29 @@
                                         <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
                                         </div>
                                     </div>
-                                    <a class="add-color-icon"><i class="fa fa-plus-circle fa-2" aria-hidden="true"></i></a>
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="color">
+                                        <a class="add-color-icon"><i style="bottom: 0;position: absolute;"
+                                                                     class="fa fa-plus-circle fa-2"
+                                                                     aria-hidden="true"></i></a>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-                        <div class="producs-action pull-right">
-                            <a class="producs-action-item" title="delete">
+                        <div class="col-sm-2 producs-action">
+                            <a class="producs-action-item pull-right" title="delete">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -92,10 +111,12 @@
 
             <div *ngFor='let product of arrProduct' class="panel panel-default">
                 <div class="panel-body">
-                    <div class="producs-list">
-                        <img alt="" src="{{product.image.front}}">
-                        <div class="prod-inf">
-                            <span>{{product.name}}</span>
+                    <span style="margin-left: 15px;">{{product.name}}</span>
+                    <div class="row producs-list">
+                        <div class="col-sm-4">
+                            <img alt="" src="{{product.image.front}}">
+                        </div>
+                        <div class="col-sm-6 prod-inf">
                             <div class="colors">
                                 <div class="ColorPicker interactive">
                                     <div class="color">
@@ -106,12 +127,29 @@
                                         <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
                                         </div>
                                     </div>
-                                    <a class="add-color-icon"><i class="fa fa-plus-circle fa-2" aria-hidden="true"></i></a>
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="color">
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="color">
+                                        <a class="add-color-icon"><i style="bottom: 0;position: absolute;"
+                                                                     class="fa fa-plus-circle fa-2"
+                                                                     aria-hidden="true"></i></a>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
-                        <div class="producs-action pull-right">
-                            <a class="producs-action-item" title="delete">
+                        <div class="col-sm-2 producs-action">
+                            <a class="producs-action-item pull-right" title="delete">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </a>
                         </div>

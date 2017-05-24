@@ -203,8 +203,7 @@
 }
 
 .producs-list img {
-    height: 80px;
-    float: left;
+    width: 100%;
 }
 
 .producs-action-item {
@@ -218,9 +217,6 @@
 }
 
 .prod-inf {
-    display: inline-block;
-    margin-top: 10px;
-    height: 80px;
     line-height: 30px;
 }
 
@@ -229,11 +225,7 @@
 }
 
 .ui.circular.label, .ui.circular.labels .label {
-    min-width: 2em;
-    min-height: 2em;
     padding: .5em !important;
-    line-height: 1em;
-    text-align: center;
     border-radius: 500rem;
 }
 
@@ -246,10 +238,8 @@
 }
 
 .add-color-icon {
-    display: block;
-    float: right;
     font-size: 25px;
-    margin-left: 10px;
+    cursor: pointer;
 }
 
 .modal-dialog {
