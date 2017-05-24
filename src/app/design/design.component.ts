@@ -147,7 +147,7 @@ export class DesignComponent implements OnInit {
 
         this.setSize();
         this.setFace(this.oDesign.sFace);
-        this.setPrintable();
+        // this.setPrintable();
     }
 
     private setSize() {
@@ -169,7 +169,14 @@ export class DesignComponent implements OnInit {
 
     private setPrintable() {
         this.printable.clear();
+        let opt: any = [];
         if (this.oDesign.sFace === 'front') {
+            opt = {
+                minX: Number(this.printableConf.front_left)
+                , minY: Number(this.printableConf.front_top)
+                , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
+                , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
+            };
             this.printable.plot([[this.printableConf.front_left, this.printableConf.front_top],
                 [this.printableConf.front_left, Number(this.printableConf.front_top) + Number(this.printableConf.front_height)],
                 [Number(this.printableConf.front_left) + Number(this.printableConf.front_width),
@@ -179,6 +186,12 @@ export class DesignComponent implements OnInit {
                 [this.printableConf.front_left, this.printableConf.front_top]
             ]);
         } else {
+            opt = {
+                minX: Number(this.printableConf.back_left)
+                , minY: Number(this.printableConf.back_top)
+                , maxX: Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
+                , maxY: Number(this.printableConf.back_top) + Number(this.printableConf.back_height)
+            };
             this.printable.plot([[this.printableConf.back_left, this.printableConf.back_top],
                 [this.printableConf.back_left, Number(this.printableConf.back_top) + Number(this.printableConf.back_height)],
                 [Number(this.printableConf.back_left) + Number(this.printableConf.back_width),
@@ -187,6 +200,86 @@ export class DesignComponent implements OnInit {
                     , Number(this.printableConf.back_top)],
                 [this.printableConf.back_left, this.printableConf.back_top]
             ]);
+        }
+
+        this.setPosition(opt);
+    }
+
+    private setPosition(opt: any) {
+        const myobj = this;
+        this.selectItem = null;
+        for (let i = 0; i < this.arrNestedFront.length; i++) {
+            const img = this.arrNestedFront[i];
+            const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
+            const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
+            const mx = (img.x() - img.printableConf.minX) * tlX;
+            const my = (img.y() - img.printableConf.minY) * tlY;
+
+            let mW = img.width() * tlX;
+            let mH = 0;
+            if (opt.minX + mx + mW <= opt.maxX) {
+                mH = mW * img.height() / img.width();
+            } else {
+                mW = opt.maxX - (opt.minX + mx);
+                mH = mW * img.height() / img.width();
+            }
+
+            if (opt.minY + my + mH <= opt.maxY) {
+                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+            } else {
+                mH = opt.maxY - (opt.minY + my);
+                mW = mH * img.width() / img.height();
+                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+            }
+
+            img.selectize(false, {deepSelect: true}).draggable(false);
+            img.click(function () {
+                myobj.resetSelect();
+                this.selectize().resize({
+                    constraint: opt
+                }).draggable(opt);
+                myobj.selectItem = this;
+            });
+
+            img.printableConf = opt;
+            this.arrNestedFront[i] = img;
+        }
+
+        for (let i = 0; i < this.arrNestedBack.length; i++) {
+            const img = this.arrNestedBack[i];
+            const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
+            const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
+            const mx = (img.x() - img.printableConf.minX) * tlX;
+            const my = (img.y() - img.printableConf.minY) * tlY;
+
+            let mW = img.width() * tlX;
+            let mH = 0;
+            if (opt.minX + mx + mW <= opt.maxX) {
+                mH = mW * img.height() / img.width();
+            } else {
+                mW = opt.maxX - (opt.minX + mx);
+                mH = mW * img.height() / img.width();
+            }
+
+            if (opt.minY + my + mH <= opt.maxY) {
+                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+            } else {
+                mH = opt.maxY - (opt.minY + my);
+                mW = mH * img.width() / img.height();
+                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+            }
+
+            img.selectize(false, {deepSelect: true}).draggable(false);
+            img.click(function () {
+                myobj.resetSelect();
+                this.selectize().resize({
+                    constraint: opt
+                }).draggable(opt);
+                myobj.selectItem = this;
+            });
+
+            img.printableConf = opt;
+            this.arrNestedBack[i] = img;
         }
     }
 
@@ -228,20 +321,22 @@ export class DesignComponent implements OnInit {
         if (this.oDesign.sFace === 'front') {
             image.move(this.printableConf.front_left, this.printableConf.front_top);
             opt = {
-                minX: this.printableConf.front_left
-                , minY: this.printableConf.front_top
+                minX: Number(this.printableConf.front_left)
+                , minY: Number(this.printableConf.front_top)
                 , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
                 , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
             };
         } else {
             image.move(this.printableConf.back_left, this.printableConf.back_top);
             opt = {
-                minX: this.printableConf.back_left
-                , minY: this.printableConf.back_top
+                minX: Number(this.printableConf.back_left)
+                , minY: Number(this.printableConf.back_top)
                 , maxX: Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
                 , maxY: Number(this.printableConf.back_top) + Number(this.printableConf.back_height)
             };
         }
+
+        image.printableConf = opt;
 
         image.click(function () {
             myobj.resetSelect();
@@ -250,6 +345,12 @@ export class DesignComponent implements OnInit {
             }).draggable(opt);
             myobj.selectItem = this;
         });
+
+        image.on('dragend', function (event) {
+            /*console.log(this.printableConf);
+             console.log(myobj.printable);*/
+        });
+
         if (this.oDesign.sFace === 'front') {
             this.arrNestedFront.push(image);
         } else {

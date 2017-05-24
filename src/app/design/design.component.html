@@ -13,7 +13,9 @@
                         <div id="home" class="tab-pane fade in active">
                             <div class="text-center bottom-margin">
                                 <form #form1="ngForm">
-                                    <input [(ngModel)]="file.input" #filePicker="ngModel" style="display: none;" type="file" id="filePicker" name="filePicker" class="form-control" (change)="handleFileSelect($event)">
+                                    <input [(ngModel)]="file.input" #filePicker="ngModel" style="display: none;"
+                                           type="file" id="filePicker" name="filePicker" class="form-control"
+                                           (change)="handleFileSelect($event)">
                                     <label class="btn btn-danger" style='cursor: pointer' for="filePicker">
                                         Import Img
                                     </label>
@@ -68,10 +70,12 @@
                             <div class="colors">
                                 <div class="ColorPicker interactive">
                                     <div class="color">
-                                        <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span></div>
+                                        <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span>
+                                        </div>
                                     </div>
                                     <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span></div>
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
                                     </div>
                                     <a class="add-color-icon"><i class="fa fa-plus-circle fa-2" aria-hidden="true"></i></a>
                                 </div>
@@ -95,10 +99,12 @@
                             <div class="colors">
                                 <div class="ColorPicker interactive">
                                     <div class="color">
-                                        <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span></div>
+                                        <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span>
+                                        </div>
                                     </div>
                                     <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span></div>
+                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
+                                        </div>
                                     </div>
                                     <a class="add-color-icon"><i class="fa fa-plus-circle fa-2" aria-hidden="true"></i></a>
                                 </div>
@@ -113,7 +119,8 @@
                 </div>
             </div>
 
-            <div class="add-product-button text-center" (click)="addProduct()"><i class="fa fa-plus" aria-hidden="true"></i>
+            <div class="add-product-button text-center" (click)="addProduct()"><i class="fa fa-plus"
+                                                                                  aria-hidden="true"></i>
                 <span>Add product</span></div>
         </div>
         <div class="col-sm-6">
@@ -153,9 +160,10 @@
                     <div class="product-selector">
                         <ul class="options item-options active nav">
                             <li *ngFor='let itemBase of arrBase'
-                                class="item-option {{itemBase.id===oDesign.sId? 'active': ''}}">
+                                class="item-option {{itemBase.id===oDesign.sId? 'active': ''}}"
+                                (click)="selectBase(itemBase.id)">
                                 <p class="item-name">{{itemBase.name}}</p>
-                                <div class="item-overview" (click)="selectBase(itemBase.id)">
+                                <div class="item-overview">
                                     <div class="item-thumb-container item-thumb-loaded">
                                         <img class="item-thumb" src="{{itemBase.image.front}}"></div>
                                     <p class="item-qualities">{{itemBase.desc}}</p>

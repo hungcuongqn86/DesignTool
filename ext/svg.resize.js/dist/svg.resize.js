@@ -211,7 +211,12 @@
                             return;
                         }
 
-                        this.el.move(this.parameters.box.x, this.parameters.box.y).size(this.parameters.box.width + snap[0], this.parameters.box.height + snap[1]);
+                        var scheight = this.parameters.box.height + snap[1];
+                        var swidth = scheight * this.parameters.box.width / this.parameters.box.height;
+
+                        if (this.parameters.box.x + swidth <= this.options.constraint.maxX) {
+                            this.el.move(this.parameters.box.x, this.parameters.box.y).size(swidth, scheight);
+                        }
                     }
                 };
                 break;
