@@ -27,7 +27,7 @@ export class DesignComponent implements OnInit {
     selectItem: any;
     filetype = '';
 
-    constructor(public Product: Product, private Products: Products,
+    constructor(public Product: Product, public Products: Products,
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Products.add(this.Product);
     }

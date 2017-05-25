@@ -48,12 +48,12 @@
                 </div>
             </div>
 
-            <!--<div *ngFor='let product of Products' class="panel panel-default produc-box">
-                <div class="panel-body">
-                    <span style="margin-left: 15px;">{{product.name}}</span>
+            <div *ngFor='let productItem of Products.data' class="panel panel-default produc-box">
+                <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''" class="panel-body">
+                    <span style="margin-left: 15px;">{{productItem.base.name}}</span>
                     <div class="row producs-list">
                         <div class="col-sm-4">
-                            <img alt="" src="{{product.image.front}}">
+                            <img alt="" src="{{productItem.base.image.front}}">
                         </div>
                         <div class="col-sm-6 prod-inf">
                             <div class="colors">
@@ -94,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-            </div>-->
+            </div>
 
             <div class="add-product-button text-center" (click)="addProduct()"><i class="fa fa-plus"
                                                                                   aria-hidden="true"></i>
