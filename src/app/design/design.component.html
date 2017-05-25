@@ -48,9 +48,10 @@
                 </div>
             </div>
 
-            <div *ngFor='let productItem of Products.data' class="panel panel-default produc-box">
-                <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''" class="panel-body">
-                    <span style="margin-left: 15px;">{{productItem.base.name}}</span>
+            <div *ngFor='let productItem of Products.data; let i = index' class="panel panel-default produc-box">
+                <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
+                     class="panel-body {{i==Products.index? 'active': ''}}" (click)="selectProduct(i)">
+                    <span>{{productItem.base.name}}</span>
                     <div class="row producs-list">
                         <div class="col-sm-4">
                             <img alt="" src="{{productItem.base.image.front}}">
@@ -60,18 +61,6 @@
                                 <div class="ColorPicker interactive">
                                     <div class="color">
                                         <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
                                         </div>
                                     </div>
                                     <div class="color">

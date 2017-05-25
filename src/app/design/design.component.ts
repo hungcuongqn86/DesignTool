@@ -293,7 +293,19 @@ export class DesignComponent implements OnInit {
             title: 'Select product'
         })
             .subscribe((product) => {
-                // this.arrProduct.push(product);
+                if (product) {
+                    const newProduct = new Product();
+                    newProduct.base = product;
+                    this.Product = newProduct;
+                    this.Products.add(newProduct);
+                    this.setFace(this.Product.face);
+                }
             });
+    }
+
+    public selectProduct(index) {
+        this.Products.index = index;
+        this.Product = this.Products.data[index];
+        this.setFace(this.Product.face);
     }
 }

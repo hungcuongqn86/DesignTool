@@ -210,7 +210,12 @@
     background-color: #e1f3fb;
 }
 
+.producs-list {
+    margin-top: 8px;
+}
+
 .producs-list img {
+    border: 1px solid #ddd;
     width: 100%;
 }
 
