@@ -33,6 +33,7 @@ export class DesignComponent implements OnInit {
     constructor(public Product: Product, private Products: Products,
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Products.add(this.Product);
+        this.Design = new Design();
     }
 
     ngOnInit() {
@@ -215,7 +216,9 @@ export class DesignComponent implements OnInit {
     }
 
     public setColor(sColor) {
+        this.Product.color = sColor;
         this.productColor.fill(sColor);
+        this.Products.edit(this.Product);
     }
 
     public addImg(filetype, binaryString: any) {
