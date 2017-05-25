@@ -30,27 +30,13 @@
                             <p>Developing</p>
                         </div>
                         <div id="menu2" class="tab-pane fade">
-                            <ul *ngIf="oDesign.sFace==='front'" class="layers">
-                                <li *ngFor='let itemNested of arrNestedFront'
-                                    class="layer {{selectItem && (itemNested.attr('id')==selectItem.attr('id'))? 'active': ''}}">
-                                    <span (click)="selectLayer(itemNested)"><img alt=""
-                                                                                 src="{{itemNested.src}}">{{itemNested.attr('id')}}</span>
+                            <ul class="layers">
+                                <li *ngFor='let itemNested of Product.getDesigns(Product.face)'
+                                    class="layer {{selectItem && (itemNested.img.attr('id')==selectItem.attr('id'))? 'active': ''}}">
+                                    <span (click)="selectLayer(itemNested.img)"><img alt=""
+                                                                                     src="{{itemNested.img.src}}">{{itemNested.img.attr('id')}}</span>
                                     <div class="layer-action pull-right">
-                                        <a class="layer-action-item" (click)="deleteLayer(itemNested)"
-                                           title="Press `delete` on keyboard">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-
-                            <ul *ngIf="oDesign.sFace==='back'" class="layers">
-                                <li *ngFor='let itemNested of arrNestedBack'
-                                    class="layer {{selectItem && (itemNested.attr('id')==selectItem.attr('id'))? 'active': ''}}">
-                                    <span (click)="selectLayer(itemNested)"><img alt=""
-                                                                                 src="{{itemNested.src}}">{{itemNested.attr('id')}}</span>
-                                    <div class="layer-action pull-right">
-                                        <a class="layer-action-item" (click)="deleteLayer(itemNested)"
+                                        <a class="layer-action-item" (click)="deleteLayer(itemNested.img)"
                                            title="Press `delete` on keyboard">
                                             <i class="fa fa-trash"></i>
                                         </a>
@@ -61,55 +47,8 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <span style="margin-left: 15px;">V-Neck Tee</span>
-                    <div class="row producs-list">
-                        <div class="col-sm-4">
-                            <img alt="" src="http://cdn.30usd.com/images/-qvEwT0PXlJX4viQ_front.png">
-                        </div>
-                        <div class="col-sm-6 prod-inf">
-                            <div class="colors">
-                                <div class="ColorPicker interactive">
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <a class="add-color-icon"><i style="bottom: 0;position: absolute;"
-                                                                     class="fa fa-plus-circle fa-2"
-                                                                     aria-hidden="true"></i></a>
-                                    </div>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 producs-action">
-                            <a class="producs-action-item pull-right" title="delete">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div *ngFor='let product of arrProduct' class="panel panel-default">
+            <!--<div *ngFor='let product of Products' class="panel panel-default produc-box">
                 <div class="panel-body">
                     <span style="margin-left: 15px;">{{product.name}}</span>
                     <div class="row producs-list">
@@ -155,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
 
             <div class="add-product-button text-center" (click)="addProduct()"><i class="fa fa-plus"
                                                                                   aria-hidden="true"></i>
@@ -170,10 +109,10 @@
             <div class="row text-center">
                 <div class="btn-group">
                     <button type="button" (click)="setFace('front')"
-                            class="btn {{oDesign.sFace==='front'? 'btn-primary': 'btn-default'}}">Front
+                            class="btn {{Product.face==='front'? 'btn-primary': 'btn-default'}}">Front
                     </button>
                     <button type="button" (click)="setFace('back')"
-                            class="btn {{oDesign.sFace==='back'? 'btn-primary': 'btn-default'}}">Back
+                            class="btn {{Product.face==='back'? 'btn-primary': 'btn-default'}}">Back
                     </button>
                 </div>
             </div>
@@ -198,7 +137,7 @@
                     <div class="product-selector">
                         <ul class="options item-options active nav">
                             <li *ngFor='let itemBase of arrBase'
-                                class="item-option {{itemBase.id===oDesign.sId? 'active': ''}}"
+                                class="item-option {{itemBase.id===Product.base.id? 'active': ''}}"
                                 (click)="selectBase(itemBase.id)">
                                 <p class="item-name">{{itemBase.name}}</p>
                                 <div class="item-overview">
@@ -207,7 +146,7 @@
                                     <p class="item-qualities">{{itemBase.desc}}</p>
                                     <div class="sizes-label">S – XL</div>
                                 </div>
-                                <div *ngIf="itemBase.id===oDesign.sId" class="product-colors">
+                                <div *ngIf="itemBase.id===Product.base.id" class="product-colors">
                                     <div class="tool_tip__container">
                                         <div class="tool_tip__definition">
                                             <ul class="color-column quick-colors">

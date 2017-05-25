@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgModel} from '@angular/forms';
-import {DesignService} from './design.service';
+import {Design, Product, Products, DesignService} from './design.service';
 import {ProductComponent} from './product.component';
 import {DialogService} from 'ng2-bootstrap-modal';
 
@@ -16,27 +16,23 @@ declare const key: any;
 })
 export class DesignComponent implements OnInit {
     @ViewChild('form1') form: NgModel;
-    arrProduct: any = [];
+    Design: Design;
     arrBaseTypes: any = [];
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":""}');
-    oDesign: any = JSON.parse('{"sId":"","sFace":"front","sImageFront":"","sImageBack":""}');
     draw: any;
     productColor: any;
     productImg: any;
     printable: any;
-    printableConf: any;
-    width: number;
-    height: number;
-    arrNestedFront: any = [];
-    arrNestedBack: any = [];
     selectItem: any;
 
     file: any = JSON.parse('{"input":""}');
     arrFile: any = [];
     filetype = '';
 
-    constructor(private DesignService: DesignService, private dialogService: DialogService) {
+    constructor(public Product: Product, private Products: Products,
+                private DesignService: DesignService, private dialogService: DialogService) {
+        this.Products.add(this.Product);
     }
 
     ngOnInit() {
@@ -77,16 +73,6 @@ export class DesignComponent implements OnInit {
 
     private imgClick() {
         this.resetSelect();
-    }
-
-    private resetSelect() {
-        this.selectItem = null;
-        for (let i = 0; i < this.arrNestedFront.length; i++) {
-            this.arrNestedFront[i].selectize(false, {deepSelect: true});
-        }
-        for (let i = 0; i < this.arrNestedBack.length; i++) {
-            this.arrNestedBack[i].selectize(false, {deepSelect: true});
-        }
     }
 
     private getBaseTypes() {
@@ -138,148 +124,93 @@ export class DesignComponent implements OnInit {
     }
 
     private _selectBase(base: any) {
-        this.oDesign.sId = base.id;
-        this.oDesign.sImageFront = base.image.front;
-        this.oDesign.sImageBack = base.image.back;
-        this.printableConf = base.printable;
-        this.width = base.image.width;
-        this.height = base.image.height;
-
+        this.Product.base = base;
+        this.Products.edit(this.Product);
         this.setSize();
-        this.setFace(this.oDesign.sFace);
-        // this.setPrintable();
+        this.setFace(this.Product.face);
     }
 
     private setSize() {
-        this.draw.size(this.width, this.height);
-        this.productColor.size(this.width, this.height);
+        this.draw.size(this.Product.base.image.width, this.Product.base.image.height);
+        this.productColor.size(this.Product.base.image.width, this.Product.base.image.height);
     }
 
     public setFace(face) {
-        this.oDesign.sFace = face;
-        if (this.oDesign.sFace === 'front') {
-            this.productImg.load(this.oDesign.sImageFront);
+        this.Product.face = face;
+        if (face === 'front') {
+            this.productImg.load(this.Product.base.image.front);
         } else {
-            this.productImg.load(this.oDesign.sImageBack);
+            this.productImg.load(this.Product.base.image.back);
         }
         this.setPrintable();
         this.resetSelect();
         this.setImgFace();
+        this.Products.edit(this.Product);
+    }
+
+    private setImgFace() {
+        Object.keys(this.Product.designs).map((index) => {
+            if (this.Product.designs[index].face === this.Product.face) {
+                this.Product.designs[index].img.show();
+            } else {
+                this.Product.designs[index].img.hide();
+            }
+        });
+    }
+
+    private resetSelect() {
+        this.selectItem = null;
+        Object.keys(this.Product.designs).map((index) => {
+            this.Product.designs[index].img.selectize(false, {deepSelect: true});
+        });
     }
 
     private setPrintable() {
         this.printable.clear();
-        let opt: any = [];
-        if (this.oDesign.sFace === 'front') {
-            opt = {
-                minX: Number(this.printableConf.front_left)
-                , minY: Number(this.printableConf.front_top)
-                , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
-                , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
-            };
-            this.printable.plot([[this.printableConf.front_left, this.printableConf.front_top],
-                [this.printableConf.front_left, Number(this.printableConf.front_top) + Number(this.printableConf.front_height)],
-                [Number(this.printableConf.front_left) + Number(this.printableConf.front_width),
-                    Number(this.printableConf.front_top) + Number(this.printableConf.front_height)],
-                [Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
-                    , Number(this.printableConf.front_top)],
-                [this.printableConf.front_left, this.printableConf.front_top]
-            ]);
-        } else {
-            opt = {
-                minX: Number(this.printableConf.back_left)
-                , minY: Number(this.printableConf.back_top)
-                , maxX: Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
-                , maxY: Number(this.printableConf.back_top) + Number(this.printableConf.back_height)
-            };
-            this.printable.plot([[this.printableConf.back_left, this.printableConf.back_top],
-                [this.printableConf.back_left, Number(this.printableConf.back_top) + Number(this.printableConf.back_height)],
-                [Number(this.printableConf.back_left) + Number(this.printableConf.back_width),
-                    Number(this.printableConf.back_top) + Number(this.printableConf.back_height)],
-                [Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
-                    , Number(this.printableConf.back_top)],
-                [this.printableConf.back_left, this.printableConf.back_top]
-            ]);
-        }
-
-        this.setPosition(opt);
+        this.printable.plot(this.Product.getPrintablePoint(this.Product.face));
+        this.setPosition(this.Product.getOpt(this.Product.face));
     }
 
     private setPosition(opt: any) {
         const myobj = this;
         this.selectItem = null;
-        for (let i = 0; i < this.arrNestedFront.length; i++) {
-            const img = this.arrNestedFront[i];
-            const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
-            const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
-            const mx = (img.x() - img.printableConf.minX) * tlX;
-            const my = (img.y() - img.printableConf.minY) * tlY;
+        for (let i = 0; i < this.Product.designs.length; i++) {
+            if (this.Product.designs[i].face === this.Product.face) {
+                const img = this.Product.designs[i].img;
+                const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
+                const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
+                const mx = (img.x() - img.printableConf.minX) * tlX;
+                const my = (img.y() - img.printableConf.minY) * tlY;
 
-            let mW = img.width() * tlX;
-            let mH = 0;
-            if (opt.minX + mx + mW <= opt.maxX) {
-                mH = mW * img.height() / img.width();
-            } else {
-                mW = opt.maxX - (opt.minX + mx);
-                mH = mW * img.height() / img.width();
+                let mW = img.width() * tlX;
+                let mH = 0;
+                if (opt.minX + mx + mW <= opt.maxX) {
+                    mH = mW * img.height() / img.width();
+                } else {
+                    mW = opt.maxX - (opt.minX + mx);
+                    mH = mW * img.height() / img.width();
+                }
+
+                if (opt.minY + my + mH <= opt.maxY) {
+                    img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+                } else {
+                    mH = opt.maxY - (opt.minY + my);
+                    mW = mH * img.width() / img.height();
+                    img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+                }
+
+                img.selectize(false, {deepSelect: true}).draggable(false);
+                img.click(function () {
+                    myobj.resetSelect();
+                    this.selectize().resize({
+                        constraint: opt
+                    }).draggable(opt);
+                    myobj.selectItem = this;
+                });
+
+                img.printableConf = opt;
+                this.Product.designs[i].img = img;
             }
-
-            if (opt.minY + my + mH <= opt.maxY) {
-                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
-            } else {
-                mH = opt.maxY - (opt.minY + my);
-                mW = mH * img.width() / img.height();
-                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
-            }
-
-            img.selectize(false, {deepSelect: true}).draggable(false);
-            img.click(function () {
-                myobj.resetSelect();
-                this.selectize().resize({
-                    constraint: opt
-                }).draggable(opt);
-                myobj.selectItem = this;
-            });
-
-            img.printableConf = opt;
-            this.arrNestedFront[i] = img;
-        }
-
-        for (let i = 0; i < this.arrNestedBack.length; i++) {
-            const img = this.arrNestedBack[i];
-            const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
-            const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
-            const mx = (img.x() - img.printableConf.minX) * tlX;
-            const my = (img.y() - img.printableConf.minY) * tlY;
-
-            let mW = img.width() * tlX;
-            let mH = 0;
-            if (opt.minX + mx + mW <= opt.maxX) {
-                mH = mW * img.height() / img.width();
-            } else {
-                mW = opt.maxX - (opt.minX + mx);
-                mH = mW * img.height() / img.width();
-            }
-
-            if (opt.minY + my + mH <= opt.maxY) {
-                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
-            } else {
-                mH = opt.maxY - (opt.minY + my);
-                mW = mH * img.width() / img.height();
-                img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
-            }
-
-            img.selectize(false, {deepSelect: true}).draggable(false);
-            img.click(function () {
-                myobj.resetSelect();
-                this.selectize().resize({
-                    constraint: opt
-                }).draggable(opt);
-                myobj.selectItem = this;
-            });
-
-            img.printableConf = opt;
-            this.arrNestedBack[i] = img;
         }
     }
 
@@ -289,15 +220,9 @@ export class DesignComponent implements OnInit {
 
     public addImg(filetype, binaryString: any) {
         const myobj = this;
-        let printw: number;
-        let printh: number;
-        if (this.oDesign.sFace === 'front') {
-            printw = this.printableConf.front_width;
-            printh = this.printableConf.front_height;
-        } else {
-            printw = this.printableConf.back_width;
-            printh = this.printableConf.back_height;
-        }
+        const printw = this.Product.getWidth(this.Product.face);
+        const printh = this.Product.getHeight(this.Product.face);
+        const opt = this.Product.getOpt(this.Product.face);
         const image = this.draw.image('data:' + filetype + ';base64,' + binaryString)
             .loaded(function (loader) {
                 if (printw < loader.width) {
@@ -317,29 +242,11 @@ export class DesignComponent implements OnInit {
                         this.size(mwidth, mheight);
                     }
                 }
-            });
+            })
+            .move(this.Product.getLeft(this.Product.face), this.Product.getTop(this.Product.face));
 
-        let opt: any = [];
-        if (this.oDesign.sFace === 'front') {
-            image.move(this.printableConf.front_left, this.printableConf.front_top);
-            opt = {
-                minX: Number(this.printableConf.front_left)
-                , minY: Number(this.printableConf.front_top)
-                , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
-                , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
-            };
-        } else {
-            image.move(this.printableConf.back_left, this.printableConf.back_top);
-            opt = {
-                minX: Number(this.printableConf.back_left)
-                , minY: Number(this.printableConf.back_top)
-                , maxX: Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
-                , maxY: Number(this.printableConf.back_top) + Number(this.printableConf.back_height)
-            };
-        }
 
         image.printableConf = opt;
-
         image.click(function () {
             myobj.resetSelect();
             this.selectize().resize({
@@ -348,35 +255,15 @@ export class DesignComponent implements OnInit {
             myobj.selectItem = this;
         });
 
-        image.on('dragend', function (event) {
-            /*console.log(this.printableConf);
-             console.log(myobj.printable);*/
-        });
-
-        if (this.oDesign.sFace === 'front') {
-            this.arrNestedFront.push(image);
-        } else {
-            this.arrNestedBack.push(image);
-        }
+        this.Design = new Design();
+        this.Design.face = this.Product.face;
+        this.Design.img = image;
+        this.Product.addDesign(this.Design);
+        this.Products.edit(this.Product);
     }
 
     public selectLayer(leyer: any) {
-        let opt: any = [];
-        if (this.oDesign.sFace === 'front') {
-            opt = {
-                minX: this.printableConf.front_left
-                , minY: this.printableConf.front_top
-                , maxX: Number(this.printableConf.front_left) + Number(this.printableConf.front_width)
-                , maxY: Number(this.printableConf.front_top) + Number(this.printableConf.front_height)
-            };
-        } else {
-            opt = {
-                minX: this.printableConf.back_left
-                , minY: this.printableConf.back_top
-                , maxX: Number(this.printableConf.back_left) + Number(this.printableConf.back_width)
-                , maxY: Number(this.printableConf.back_top) + Number(this.printableConf.back_height)
-            };
-        }
+        const opt = this.Product.getOpt(this.Product.face);
         this.resetSelect();
         leyer.selectize().resize({
             constraint: opt
@@ -386,48 +273,24 @@ export class DesignComponent implements OnInit {
 
     public deleteImg() {
         if (this.selectItem) {
-            this.selectItem.selectize(false, {deepSelect: true}).remove();
-            let indexx: number = this.arrNestedFront.indexOf(this.selectItem);
-            if (indexx >= 0) {
-                this.arrNestedFront.splice(indexx, 1);
-            }
-            indexx = this.arrNestedBack.indexOf(this.selectItem);
-            if (indexx >= 0) {
-                this.arrNestedBack.splice(indexx, 1);
-            }
+            this.Design = new Design();
+            this.Design.img = this.selectItem;
+            this.Design.face = this.Product.face;
+            this.Design.img.selectize(false, {deepSelect: true}).remove();
+            this.Product.deleteDesign(this.Design);
+            this.Products.edit(this.Product);
             this.selectItem = null;
         }
     }
 
     public deleteLayer(leyer: any) {
+        this.Design = new Design();
+        this.Design.img = leyer;
+        this.Design.face = this.Product.face;
+        this.Design.img.selectize(false, {deepSelect: true}).remove();
+        this.Product.deleteDesign(this.Design);
+        this.Products.edit(this.Product);
         this.selectItem = null;
-        leyer.selectize(false, {deepSelect: true}).remove();
-        let indexx: number = this.arrNestedFront.indexOf(leyer);
-        if (indexx >= 0) {
-            this.arrNestedFront.splice(indexx, 1);
-        }
-        indexx = this.arrNestedBack.indexOf(leyer);
-        if (indexx >= 0) {
-            this.arrNestedBack.splice(indexx, 1);
-        }
-    }
-
-    private setImgFace() {
-        if (this.oDesign.sFace === 'front') {
-            for (let i = 0; i < this.arrNestedFront.length; i++) {
-                this.arrNestedFront[i].show();
-            }
-            for (let i = 0; i < this.arrNestedBack.length; i++) {
-                this.arrNestedBack[i].hide();
-            }
-        } else {
-            for (let i = 0; i < this.arrNestedFront.length; i++) {
-                this.arrNestedFront[i].hide();
-            }
-            for (let i = 0; i < this.arrNestedBack.length; i++) {
-                this.arrNestedBack[i].show();
-            }
-        }
     }
 
     public addProduct() {
@@ -435,7 +298,7 @@ export class DesignComponent implements OnInit {
             title: 'Select product'
         })
             .subscribe((product) => {
-                this.arrProduct.push(product);
+                // this.arrProduct.push(product);
             });
     }
 }

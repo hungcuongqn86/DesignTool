@@ -10,7 +10,7 @@ import {DesignComponent} from './design/design.component';
 import {PricingComponent} from './pricing/pricing.component';
 import {LaunchingComponent} from './launching/launching.component';
 
-import {DesignService} from './design/design.service';
+import {Design, Product, Products, DesignService} from './design/design.service';
 
 import {Ng2UploaderModule} from 'ng2-uploader';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
@@ -49,7 +49,10 @@ export function createTranslateLoader(http: Http) {
         appRoutingProviders,
         HttpClient,
         AppService,
-        DesignService
+        DesignService,
+        Design,
+        Product,
+        Products
     ],
     entryComponents: [
         ProductComponent

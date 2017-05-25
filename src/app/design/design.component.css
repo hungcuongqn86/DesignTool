@@ -198,8 +198,16 @@
     opacity: 1;
 }
 
-.producs-list {
+.produc-box {
+    cursor: pointer;
+}
 
+.produc-box:hover {
+    background: #f5f9ff;
+}
+
+.produc-box .active {
+    background-color: #e1f3fb;
 }
 
 .producs-list img {
