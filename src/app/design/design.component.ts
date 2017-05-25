@@ -19,21 +19,17 @@ export class DesignComponent implements OnInit {
     Design: Design;
     arrBaseTypes: any = [];
     arrBase: any = [];
-    fDesign: any = JSON.parse('{"sBaseType":""}');
+    fDesign: any = JSON.parse('{"sBaseType":"","file":""}');
     draw: any;
     productColor: any;
     productImg: any;
     printable: any;
     selectItem: any;
-
-    file: any = JSON.parse('{"input":""}');
-    arrFile: any = [];
     filetype = '';
 
     constructor(public Product: Product, private Products: Products,
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Products.add(this.Product);
-        this.Design = new Design();
     }
 
     ngOnInit() {
@@ -55,12 +51,9 @@ export class DesignComponent implements OnInit {
         const file = files[0];
 
         if (files && file) {
-            this.arrFile.push(file);
             this.filetype = file.type;
             const reader = new FileReader();
-
             reader.onload = this._handleReaderLoaded.bind(this);
-
             reader.readAsBinaryString(file);
         }
     }
@@ -68,7 +61,6 @@ export class DesignComponent implements OnInit {
     private _handleReaderLoaded(readerEvt) {
         const binaryString = readerEvt.target.result;
         this.addImg(this.filetype, btoa(binaryString));
-        // console.log(this.form['controls']['filePicker']);
         this.form['controls']['filePicker'].reset();
     }
 
