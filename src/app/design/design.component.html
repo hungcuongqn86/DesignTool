@@ -63,18 +63,16 @@
                         <div class="col-sm-8 prod-inf">
                             <div class="colors">
                                 <div class="ColorPicker interactive">
-                                    <div class="color">
-                                        <div class="ui small circular label" style="background-color:#111111;"><span>&nbsp;</span>
+                                    <div *ngFor='let itemColor of productItem.colors' class="color">
+                                        <div class="ui small circular label"
+                                             [ngStyle]="{ 'background-color': itemColor }"><span>&nbsp;</span>
                                         </div>
                                     </div>
                                     <div class="color">
-                                        <div class="ui small circular label" style="background-color:#b1202d;"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <a class="add-color-icon"><i style="bottom: 0;position: absolute;"
-                                                                     class="fa fa-plus-circle fa-2"
-                                                                     aria-hidden="true"></i></a>
+                                        <a (click)="addColor(productItem)" class="add-color-icon"><i
+                                                style="bottom: 0;position: absolute;"
+                                                class="fa fa-plus-circle fa-2"
+                                                aria-hidden="true"></i></a>
                                     </div>
 
                                 </div>

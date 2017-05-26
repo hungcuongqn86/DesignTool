@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgModel} from '@angular/forms';
 import {Design, Product, Products, DesignService} from './design.service';
 import {ProductComponent} from './product.component';
+import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
 
 import {Observable} from 'rxjs/Rx';
@@ -344,5 +345,11 @@ export class DesignComponent implements OnInit {
         this.Product.color = '#fff';
         this.fDesign.sBaseType = this.arrBaseTypes[0].base_types[0].id;
         this.selectBaseType();
+    }
+
+    public addColor(oProduct: Product) {
+        this.dialogService.addDialog(ColorComponent, {
+            oProduct: oProduct
+        });
     }
 }
