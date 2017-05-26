@@ -56,8 +56,8 @@
                        title="delete">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
-                    <div class="row producs-list">
-                        <div class="col-sm-4" (click)="selectProduct(i)">
+                    <div class="row producs-list" (click)="selectProduct(i)">
+                        <div class="col-sm-4">
                             <img alt="" src="{{productItem.base.image.front}}">
                         </div>
                         <div class="col-sm-8 prod-inf">
