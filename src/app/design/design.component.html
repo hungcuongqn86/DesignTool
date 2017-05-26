@@ -50,7 +50,7 @@
 
             <div *ngFor='let productItem of Products.data' class="panel panel-default produc-box">
                 <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
-                     class="panel-body {{Product.base.id==productItem.base.id? 'active': ''}}">
+                     class="panel-body {{Product.base&&Product.base.id==productItem.base.id? 'active': ''}}">
                     <span (click)="selectProduct(productItem.base.id)">{{productItem.base.name}}</span>
                     <a (click)="deleteProduct(productItem.base.id)" class="producs-action-item pull-right"
                        title="delete">

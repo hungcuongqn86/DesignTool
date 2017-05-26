@@ -35,19 +35,13 @@ export class DesignComponent implements OnInit {
 
     ngOnInit() {
         const myobj = this;
-        if (this.Products.data.length > 0) {
-            const newProduct = new Product();
-            newProduct.base = this.Products.data[0].base;
-            newProduct.designs = this.Products.data[0].designs;
-            this.Product = newProduct;
-        }
-        this.getBaseTypes();
         this.draw = SVG('drawing');
         this.productColor = this.draw.rect().fill('#fff');
         this.productImg = this.draw.image().click(function () {
             myobj.imgClick();
         });
         this.printable = this.draw.polyline().fill('none').stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
+        this.getBaseTypes();
         key('delete', function () {
             myobj.deleteImg();
         });
