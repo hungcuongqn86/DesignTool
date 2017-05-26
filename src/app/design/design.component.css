@@ -1,3 +1,9 @@
+.btn-add {
+    position: absolute;
+    right: 40px;
+    top: 20px;
+}
+
 .product-selector {
     border-bottom: none;
     min-height: inherit;

@@ -31,7 +31,6 @@ export class DesignComponent implements OnInit {
     constructor(public Products: Products,
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Product = new Product();
-        this.Products.add(this.Product);
     }
 
     ngOnInit() {
@@ -120,7 +119,6 @@ export class DesignComponent implements OnInit {
 
     private _selectBase(base: any) {
         this.Product.base = base;
-        this.Products.edit(this.Product);
         this.setSize();
         this.setFace(this.Product.face);
     }
@@ -140,7 +138,6 @@ export class DesignComponent implements OnInit {
         this.setPrintable();
         this.resetSelect();
         this.setImgFace();
-        this.Products.edit(this.Product);
     }
 
     private setImgFace() {
@@ -212,7 +209,6 @@ export class DesignComponent implements OnInit {
     public setColor(sColor) {
         this.Product.color = sColor;
         this.productColor.fill(sColor);
-        this.Products.edit(this.Product);
     }
 
     public addImg(filetype, binaryString: any) {
@@ -256,7 +252,6 @@ export class DesignComponent implements OnInit {
         this.Design.face = this.Product.face;
         this.Design.img = image;
         this.Product.addDesign(this.Design);
-        this.Products.edit(this.Product);
     }
 
     public selectLayer(leyer: any) {
@@ -275,7 +270,6 @@ export class DesignComponent implements OnInit {
             this.Design.face = this.Product.face;
             this.Design.img.selectize(false, {deepSelect: true}).remove();
             this.Product.deleteDesign(this.Design);
-            this.Products.edit(this.Product);
             this.selectItem = null;
         }
     }
@@ -286,8 +280,14 @@ export class DesignComponent implements OnInit {
         this.Design.face = this.Product.face;
         this.Design.img.selectize(false, {deepSelect: true}).remove();
         this.Product.deleteDesign(this.Design);
-        this.Products.edit(this.Product);
         this.selectItem = null;
+    }
+
+    public _addProduct() {
+        const newProduct = new Product();
+        newProduct.base = this.Product.base;
+        newProduct.designs = this.Product.designs;
+        this.Products.add(newProduct);
     }
 
     public addProduct() {
@@ -296,20 +296,22 @@ export class DesignComponent implements OnInit {
         })
             .subscribe((product) => {
                 if (product) {
-                    const newProduct = new Product();
-                    newProduct.base = product;
-                    newProduct.designs = this.Product.designs;
-                    this.Product = newProduct;
-                    this.Products.add(newProduct);
+                    this.Product.base = product;
+                    this._addProduct();
                     this.setFace(this.Product.face);
                 }
             });
     }
 
-    public selectProduct(index) {
-        this.Products.index = index;
-        this.Product = this.Products.data[index];
-        this.setFace(this.Product.face);
+    public selectProduct(id) {
+        for (let index = 0; index < this.Products.data.length; index++) {
+            if (this.Products.data[index].base.id === id) {
+                this.Products.index = index;
+                this.Product.base = this.Products.data[index].base;
+                this.setFace(this.Product.face);
+                return true;
+            }
+        }
     }
 
     public deleteProduct(id) {

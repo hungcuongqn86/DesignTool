@@ -48,15 +48,15 @@
                 </div>
             </div>
 
-            <div *ngFor='let productItem of Products.data; let i = index' class="panel panel-default produc-box">
+            <div *ngFor='let productItem of Products.data' class="panel panel-default produc-box">
                 <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
                      class="panel-body {{Product.base.id==productItem.base.id? 'active': ''}}">
-                    <span (click)="selectProduct(i)">{{productItem.base.name}}</span>
+                    <span (click)="selectProduct(productItem.base.id)">{{productItem.base.name}}</span>
                     <a (click)="deleteProduct(productItem.base.id)" class="producs-action-item pull-right"
                        title="delete">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
-                    <div class="row producs-list" (click)="selectProduct(i)">
+                    <div class="row producs-list" (click)="selectProduct(productItem.base.id)">
                         <div class="col-sm-4">
                             <img alt="" src="{{productItem.base.image.front}}">
                         </div>
@@ -91,10 +91,14 @@
         <div class="col-sm-6">
             <div class="row">
                 <div class="svg-surface text-center">
+                    <button *ngIf="Product.base&&!Products.hasBase(Product.base.id)" type="button"
+                            (click)="_addProduct()"
+                            class="btn btn-danger pull-right btn-add"> Add
+                    </button>
                     <div id="drawing"></div>
                 </div>
             </div>
-            <div class="row text-center">
+            <div class="row text-center" style="margin-bottom: 20px;">
                 <div class="btn-group">
                     <button type="button" (click)="setFace('front')"
                             class="btn {{Product.face==='front'? 'btn-primary': 'btn-default'}}">Front
