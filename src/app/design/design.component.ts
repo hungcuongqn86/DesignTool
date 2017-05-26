@@ -35,6 +35,12 @@ export class DesignComponent implements OnInit {
 
     ngOnInit() {
         const myobj = this;
+        if (this.Products.data.length > 0) {
+            const newProduct = new Product();
+            newProduct.base = this.Products.data[0].base;
+            newProduct.designs = this.Products.data[0].designs;
+            this.Product = newProduct;
+        }
         this.getBaseTypes();
         this.draw = SVG('drawing');
         this.productColor = this.draw.rect().fill('#fff');
@@ -329,6 +335,7 @@ export class DesignComponent implements OnInit {
                 this.setFace(this.Product.face);
             }
         } else {
+            this.Products.deletePro(id);
             this.Products.index = 0;
             this.resetDs();
         }
