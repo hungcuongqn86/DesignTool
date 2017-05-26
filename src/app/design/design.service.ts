@@ -143,11 +143,19 @@ export class Products {
         this.data[this.index] = Product;
     }
 
-    public delete(id) {
+    public deletePro(id) {
         for (let index = 0; index < this.data.length; index++) {
             if (this.data[index].base.id === id) {
-                console.log(this.data[index]);
                 this.data.splice(index, 1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public hasBase(id) {
+        for (let index = 0; index < this.data.length; index++) {
+            if (this.data[index].base.id === id) {
                 return true;
             }
         }

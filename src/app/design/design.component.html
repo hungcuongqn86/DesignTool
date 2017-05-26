@@ -124,30 +124,31 @@
 
                     <div class="product-selector">
                         <ul class="options item-options active nav">
-                            <li *ngFor='let itemBase of arrBase'
-                                class="item-option {{itemBase.id===Product.base.id? 'active': ''}}"
-                                (click)="selectBase(itemBase.id)">
-                                <p class="item-name">{{itemBase.name}}</p>
-                                <div class="item-overview">
-                                    <div class="item-thumb-container item-thumb-loaded">
-                                        <img class="item-thumb" src="{{itemBase.image.front}}"></div>
-                                    <p class="item-qualities">{{itemBase.desc}}</p>
-                                    <div class="sizes-label">S – XL</div>
-                                </div>
-                                <div *ngIf="itemBase.id===Product.base.id" class="product-colors">
-                                    <div class="tool_tip__container">
-                                        <div class="tool_tip__definition">
-                                            <ul class="color-column quick-colors">
-                                                <li *ngFor='let itemColor of itemBase.colors'
-                                                    (click)="setColor(itemColor.value)"
-                                                    class="shirt-color-sample js-color"
-                                                    title="{{itemColor.name}}"
-                                                    [ngStyle]="{ 'background-color': itemColor.value }"></li>
-                                            </ul>
+                            <template ngFor let-itemBase [ngForOf]="arrBase">
+                                <li class="item-option {{itemBase.id===Product.base.id? 'active': ''}}"
+                                    (click)="selectBase(itemBase.id)">
+                                    <p class="item-name">{{itemBase.name}}</p>
+                                    <div class="item-overview">
+                                        <div class="item-thumb-container item-thumb-loaded">
+                                            <img class="item-thumb" src="{{itemBase.image.front}}"></div>
+                                        <p class="item-qualities">{{itemBase.desc}}</p>
+                                        <div class="sizes-label">S – XL</div>
+                                    </div>
+                                    <div *ngIf="itemBase.id===Product.base.id" class="product-colors">
+                                        <div class="tool_tip__container">
+                                            <div class="tool_tip__definition">
+                                                <ul class="color-column quick-colors">
+                                                    <li *ngFor='let itemColor of itemBase.colors'
+                                                        (click)="setColor(itemColor.value)"
+                                                        class="shirt-color-sample js-color"
+                                                        title="{{itemColor.name}}"
+                                                        [ngStyle]="{ 'background-color': itemColor.value }"></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+                            </template>
                         </ul>
                     </div>
                 </div>

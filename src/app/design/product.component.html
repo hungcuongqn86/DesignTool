@@ -4,7 +4,8 @@
             <button type="button" class="close" (click)="mdClose()">&times;</button>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a (click)="getBaseTypes()" href="javascript:void(0)"><i class="fa fa-home"
-                                                                                                     aria-hidden="true"></i> Base</a>
+                                                                                                     aria-hidden="true"></i>
+                    Base</a>
                 </li>
                 <!--<li class="breadcrumb-item"><a href="#">Library</a></li>-->
                 <li *ngIf="baseType.name && baseType.name !=''" class="breadcrumb-item active">{{baseType.name}}</li>
@@ -34,17 +35,20 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{baseType.name}}</div>
                     <div class="panel-body">
-                        <div *ngFor='let item of arrBase' class="col-sm-3 text-center">
-                            <div class="producs-base-item" (click)="selectProductBase(item)">
-                                <div class="produc-name">
-                                    {{item.name}}
+                        <template ngFor let-item [ngForOf]="arrBase">
+                            <div *ngIf="!Products.hasBase(item.id)" class="col-sm-3 text-center">
+                                <div class="producs-base-item"
+                                     (click)="selectProductBase(item)">
+                                    <div class="produc-name">
+                                        {{item.name}}
+                                    </div>
+                                    <div class="ui fluid image"><img
+                                            src="{{item.image.front}}">
+                                    </div>
+                                    <div class="clearfix"></div>
                                 </div>
-                                <div class="ui fluid image"><img
-                                        src="{{item.image.front}}">
-                                </div>
-                                <div class="clearfix"></div>
                             </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
             </div>

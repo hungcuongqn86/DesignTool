@@ -314,7 +314,7 @@ export class DesignComponent implements OnInit {
 
     public deleteProduct(id) {
         if (this.Products.data.length > 1) {
-            this.Products.delete(id);
+            this.Products.deletePro(id);
             let checkHas = false;
             for (let index = 0; index < this.Products.data.length; index++) {
                 if (this.Products.data[index].base.id === this.Product.base.id) {
@@ -327,9 +327,8 @@ export class DesignComponent implements OnInit {
                 this.setFace(this.Product.face);
             }
         } else {
-            for (let index = 0; index < this.Products.data.length; index++) {
-                this.resetDs();
-            }
+            this.Products.index = 0;
+            this.resetDs();
         }
     }
 

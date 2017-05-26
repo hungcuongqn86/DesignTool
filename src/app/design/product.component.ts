@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DialogComponent, DialogService} from 'ng2-bootstrap-modal';
-import {DesignService} from './design.service';
+import {Products, DesignService} from './design.service';
 
 import {Observable} from 'rxjs/Rx';
 
@@ -20,7 +20,7 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
     baseType: any = [];
     arrBase: any = [];
 
-    constructor(dialogService: DialogService, private DesignService: DesignService) {
+    constructor(public Products: Products, dialogService: DialogService, private DesignService: DesignService) {
         super(dialogService);
     }
 
