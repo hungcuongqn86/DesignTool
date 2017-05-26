@@ -223,6 +223,10 @@
     color: #000;
     opacity: 0.5;
     cursor: pointer;
+    display: block;
+    position: absolute;
+    right: 25px;
+    margin-top: -25px;
 }
 
 .producs-action-item:hover {

@@ -17,6 +17,7 @@ declare const key: any;
 export class DesignComponent implements OnInit {
     @ViewChild('form1') form: NgModel;
     Design: Design;
+    Product: Product;
     arrBaseTypes: any = [];
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":"","file":""}');
@@ -27,8 +28,9 @@ export class DesignComponent implements OnInit {
     selectItem: any;
     filetype = '';
 
-    constructor(public Product: Product, public Products: Products,
+    constructor(public Products: Products,
                 private DesignService: DesignService, private dialogService: DialogService) {
+        this.Product = new Product();
         this.Products.add(this.Product);
     }
 
@@ -296,6 +298,7 @@ export class DesignComponent implements OnInit {
                 if (product) {
                     const newProduct = new Product();
                     newProduct.base = product;
+                    newProduct.designs = this.Product.designs;
                     this.Product = newProduct;
                     this.Products.add(newProduct);
                     this.setFace(this.Product.face);
@@ -307,5 +310,37 @@ export class DesignComponent implements OnInit {
         this.Products.index = index;
         this.Product = this.Products.data[index];
         this.setFace(this.Product.face);
+    }
+
+    public deleteProduct(id) {
+        if (this.Products.data.length > 1) {
+            this.Products.delete(id);
+            let checkHas = false;
+            for (let index = 0; index < this.Products.data.length; index++) {
+                if (this.Products.data[index].base.id === this.Product.base.id) {
+                    checkHas = true;
+                }
+            }
+            if (!checkHas) {
+                this.Product = this.Products.data[0];
+                this.Products.index = 0;
+                this.setFace(this.Product.face);
+            }
+        } else {
+            for (let index = 0; index < this.Products.data.length; index++) {
+                this.resetDs();
+            }
+        }
+    }
+
+    private resetDs() {
+        Object.keys(this.Product.designs).map((index) => {
+            this.Product.designs[index].img.selectize(false, {deepSelect: true}).remove();
+        });
+        this.Product.designs = [];
+        this.Product.colors = [];
+        this.Product.color = '#fff';
+        this.fDesign.sBaseType = this.arrBaseTypes[0].base_types[0].id;
+        this.selectBaseType();
     }
 }

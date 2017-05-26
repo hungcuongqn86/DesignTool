@@ -50,13 +50,17 @@
 
             <div *ngFor='let productItem of Products.data; let i = index' class="panel panel-default produc-box">
                 <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
-                     class="panel-body {{i==Products.index? 'active': ''}}" (click)="selectProduct(i)">
-                    <span>{{productItem.base.name}}</span>
+                     class="panel-body {{Product.base.id==productItem.base.id? 'active': ''}}">
+                    <span (click)="selectProduct(i)">{{productItem.base.name}}</span>
+                    <a (click)="deleteProduct(productItem.base.id)" class="producs-action-item pull-right"
+                       title="delete">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </a>
                     <div class="row producs-list">
-                        <div class="col-sm-4">
+                        <div class="col-sm-4" (click)="selectProduct(i)">
                             <img alt="" src="{{productItem.base.image.front}}">
                         </div>
-                        <div class="col-sm-6 prod-inf">
+                        <div class="col-sm-8 prod-inf">
                             <div class="colors">
                                 <div class="ColorPicker interactive">
                                     <div class="color">
@@ -75,11 +79,6 @@
 
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-2 producs-action">
-                            <a class="producs-action-item pull-right" title="delete">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
