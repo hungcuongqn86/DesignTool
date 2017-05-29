@@ -10,6 +10,12 @@ import {Observable} from 'rxjs/Rx';
 declare const SVG: any;
 declare const key: any;
 
+const colors: any = {
+    white: {
+        value: '#ffffff'
+    }
+};
+
 @Component({
     selector: 'app-design',
     templateUrl: './design.component.html',
@@ -149,23 +155,20 @@ export class DesignComponent implements OnInit {
         this.setSize();
         this.setFace(this.Product.face);
         if (this.Product.color) {
-            const index = this.Product.base.colors.indexOf(this.Product.color);
-            if (index < 0) {
-                if (this.Product.base.colors.length) {
+            this.Product.color = null;
+            if (this.Product.base.colors) {
+                const index = this.Product.base.colors.indexOf(this.Product.color);
+                if (index < 0) {
                     this.Product.color = this.Product.base.colors[0];
-                } else {
-                    this.Product.color = null;
                 }
-                this.setColor(this.Product.color);
             }
         } else {
-            if (this.Product.base.colors.length) {
+            this.Product.color = null;
+            if (this.Product.base.colors) {
                 this.Product.color = this.Product.base.colors[0];
-            } else {
-                this.Product.color = null;
             }
-            this.setColor(this.Product.color);
         }
+        this.setColor(this.Product.color);
     }
 
     private setSize() {
@@ -252,8 +255,12 @@ export class DesignComponent implements OnInit {
     }
 
     public setColor(sColor) {
-        this.Product.color = sColor;
-        this.productColor.fill(sColor.value);
+        if (sColor) {
+            this.Product.color = sColor;
+            this.productColor.fill(sColor.value);
+        } else {
+            this.productColor.fill(colors.white.value);
+        }
     }
 
     public addImg(filetype, binaryString: any) {
@@ -328,15 +335,18 @@ export class DesignComponent implements OnInit {
     public _addProduct() {
         const newProduct = new Product();
         newProduct.base = this.Product.base;
+        console.log(this.Product.base);
         newProduct.group = this.Product.group;
         if (this.Product.color) {
-            const index = newProduct.base.colors.indexOf(this.Product.color);
-            if (index < 0) {
-                if (newProduct.base.colors.length) {
-                    newProduct.colors.push(newProduct.base.colors[0]);
+            if (newProduct.base.colors) {
+                const index = newProduct.base.colors.indexOf(this.Product.color);
+                if (index < 0) {
+                    if (newProduct.base.colors.length) {
+                        newProduct.colors.push(newProduct.base.colors[0]);
+                    }
+                } else {
+                    newProduct.colors.push(this.Product.color);
                 }
-            } else {
-                newProduct.colors.push(this.Product.color);
             }
         } else {
             if (newProduct.base.colors.length) {
