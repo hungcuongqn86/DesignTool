@@ -134,7 +134,7 @@
                                         <p class="item-qualities">{{itemBase.desc}}</p>
                                         <div class="sizes-label">S – XL</div>
                                     </div>
-                                    <div *ngIf="itemBase.id===Product.base.id" class="product-colors">
+                                    <div *ngIf="itemBase.colors&&itemBase.id===Product.base.id" class="product-colors">
                                         <div class="tool_tip__container">
                                             <div class="tool_tip__definition">
                                                 <ul class="color-column quick-colors">
