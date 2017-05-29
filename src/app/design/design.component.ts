@@ -20,6 +20,7 @@ export class DesignComponent implements OnInit {
     Design: Design;
     Product: Product;
     arrBaseTypes: any = [];
+    BaseTypeGroup: any;
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":"","file":""}');
     draw: any;
@@ -90,13 +91,27 @@ export class DesignComponent implements OnInit {
     }
 
     public selectBaseType() {
+        this.setBaseTypeGroup();
         this.getBases();
+    }
+
+    private setBaseTypeGroup() {
+        for (let i = 0; i < this.arrBaseTypes.length; i++) {
+            const arrBaseType: any = this.arrBaseTypes[i].base_types;
+            for (let j = 0; j < arrBaseType.length; j++) {
+                if (arrBaseType[j].id === this.fDesign.sBaseType) {
+                    this.BaseTypeGroup = this.arrBaseTypes[i];
+                    return true;
+                }
+            }
+        }
     }
 
     private getBases() {
         this.DesignService.getBases(this.fDesign.sBaseType).subscribe(
             data => {
                 this.arrBase = data;
+                console.log(this.BaseTypeGroup);
                 if (this.arrBase.length > 0) {
                     const baseid = this.arrBase[0].id;
                     this.selectBase(baseid);
