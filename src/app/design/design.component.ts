@@ -4,6 +4,7 @@ import {Design, Designs, Product, Products, DesignService} from './design.servic
 import {ProductComponent} from './product.component';
 import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
+import {Cookie} from 'ng2-cookies';
 
 import {Observable} from 'rxjs/Rx';
 
@@ -15,6 +16,8 @@ const colors: any = {
         value: '#ffffff'
     }
 };
+const campaignCookie = 'campaign_id';
+const userid = 'cuongnh';
 
 @Component({
     selector: 'app-design',
@@ -35,15 +38,43 @@ export class DesignComponent implements OnInit {
     selectItem: any;
     filetype = '';
 
+    campaign: any;
+
     constructor(public Products: Products, public Designs: Designs,
                 private DesignService: DesignService, private dialogService: DialogService) {
+        // const check: boolean = Cookie.check(campaignCookie);
+        const check = true;
+        if (!check) {
+            this.DesignService.createCampaign(userid).subscribe(
+                res => {
+                    this.campaign = res;
+                },
+                error => {
+                    console.error(error.json().message);
+                    return Observable.throw(error);
+                }
+            );
+        } else {
+            // const id = Cookie.get(campaignCookie);
+            const id = 'RcSX3ZZfo96uRJ2F';
+            this.DesignService.getCampaign(id).subscribe(
+                res => {
+                    this.campaign = res;
+                    console.log(this.campaign);
+                },
+                error => {
+                    console.error(error.json().message);
+                    return Observable.throw(error);
+                }
+            );
+        }
         this.Product = new Product();
     }
 
     ngOnInit() {
         const myobj = this;
         this.draw = SVG('drawing');
-        this.productColor = this.draw.rect().fill('#fff');
+        this.productColor = this.draw.rect().fill(colors.white.value);
         this.productImg = this.draw.image().click(function () {
             myobj.imgClick();
         });

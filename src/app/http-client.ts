@@ -32,14 +32,6 @@ export class HttpClient {
         return this.intercept(this.http.delete(url, this.getRequestOptionArgs(options)));
     }
 
-    public patch(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.intercept(this.http.patch(url, body, options));
-    }
-
-    public head(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.intercept(this.http.head(url, options));
-    }
-
     private getRequestOptionArgs(options?: RequestOptionsArgs): RequestOptionsArgs {
         if (options == null) {
             options = new RequestOptions();

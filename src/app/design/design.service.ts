@@ -183,6 +183,17 @@ export class DesignService {
     constructor(private http: HttpClient) {
     }
 
+    createCampaign(userid): any {
+        const url = this.apiUrl + `campaigns`;
+        const body = JSON.stringify({user_id: userid});
+        return this.http.post(url, body).map((res: Response) => res.json());
+    }
+
+    getCampaign(id): any {
+        const url = this.apiUrl + `campaigns/` + id;
+        return this.http.get(url).map((res: Response) => res.json());
+    }
+
     getBaseTypes(): any {
         const url = this.apiUrl + `base_groups`;
         return this.http.get(url).map((res: Response) => res.json().base_groups);
