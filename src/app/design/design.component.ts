@@ -122,6 +122,24 @@ export class DesignComponent implements OnInit {
         this.Product.base = base;
         this.setSize();
         this.setFace(this.Product.face);
+        if (this.Product.color) {
+            const index = this.Product.base.colors.indexOf(this.Product.color);
+            if (index < 0) {
+                if (this.Product.base.colors.length) {
+                    this.Product.color = this.Product.base.colors[0];
+                } else {
+                    this.Product.color = '#fff';
+                }
+                this.setColor(this.Product.color);
+            }
+        } else {
+            if (this.Product.base.colors.length) {
+                this.Product.color = this.Product.base.colors[0];
+            } else {
+                this.Product.color = '#fff';
+            }
+            this.setColor(this.Product.color);
+        }
     }
 
     private setSize() {
@@ -209,7 +227,7 @@ export class DesignComponent implements OnInit {
 
     public setColor(sColor) {
         this.Product.color = sColor;
-        this.productColor.fill(sColor);
+        this.productColor.fill(sColor.value);
     }
 
     public addImg(filetype, binaryString: any) {

@@ -127,10 +127,9 @@
                     <div class="product-selector">
                         <ul class="options item-options active nav">
                             <template ngFor let-itemBase [ngForOf]="arrBase">
-                                <li class="item-option {{itemBase.id===Product.base.id? 'active': ''}}"
-                                    (click)="selectBase(itemBase.id)">
-                                    <p class="item-name">{{itemBase.name}}</p>
-                                    <div class="item-overview">
+                                <li class="item-option {{itemBase.id===Product.base.id? 'active': ''}}">
+                                    <p (click)="selectBase(itemBase.id)" class="item-name">{{itemBase.name}}</p>
+                                    <div (click)="selectBase(itemBase.id)" class="item-overview">
                                         <div class="item-thumb-container item-thumb-loaded">
                                             <img class="item-thumb" src="{{itemBase.image.front}}"></div>
                                         <p class="item-qualities">{{itemBase.desc}}</p>
@@ -141,7 +140,7 @@
                                             <div class="tool_tip__definition">
                                                 <ul class="color-column quick-colors">
                                                     <li *ngFor='let itemColor of itemBase.colors'
-                                                        (click)="setColor(itemColor.value)"
+                                                        (click)="setColor(itemColor)"
                                                         class="shirt-color-sample js-color"
                                                         title="{{itemColor.name}}"
                                                         [ngStyle]="{ 'background-color': itemColor.value }"></li>
