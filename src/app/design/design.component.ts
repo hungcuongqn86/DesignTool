@@ -185,13 +185,17 @@ export class DesignComponent implements OnInit {
         }
         this.setPrintable();
         this.resetSelect();
-        this.setImgFace();
+        this.setDesigns();
     }
 
-    private setImgFace() {
+    private setDesigns() {
         Object.keys(this.Designs.data).map((index) => {
             if (this.Designs.data[index].face === this.Product.face) {
-                this.Designs.data[index].img.show();
+                if (this.Designs.data[index].group.id === this.BaseTypeGroup.id) {
+                    this.Designs.data[index].img.show();
+                } else {
+                    this.Designs.data[index].img.hide();
+                }
             } else {
                 this.Designs.data[index].img.hide();
             }
@@ -215,7 +219,7 @@ export class DesignComponent implements OnInit {
         const myobj = this;
         this.selectItem = null;
         for (let i = 0; i < this.Designs.data.length; i++) {
-            if (this.Designs.data[i].face === this.Product.face) {
+            if ((this.Designs.data[i].face === this.Product.face) && (this.Designs.data[i].group.id === this.BaseTypeGroup.id)) {
                 const img = this.Designs.data[i].img;
                 const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
                 const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
@@ -335,7 +339,6 @@ export class DesignComponent implements OnInit {
     public _addProduct() {
         const newProduct = new Product();
         newProduct.base = this.Product.base;
-        console.log(this.Product.base);
         newProduct.group = this.Product.group;
         if (this.Product.color) {
             if (newProduct.base.colors) {
@@ -349,7 +352,7 @@ export class DesignComponent implements OnInit {
                 }
             }
         } else {
-            if (newProduct.base.colors.length) {
+            if (newProduct.base.colors) {
                 newProduct.colors.push(newProduct.base.colors[0]);
             }
         }
@@ -367,7 +370,7 @@ export class DesignComponent implements OnInit {
                     this.BaseTypeGroup = this.getBaseTypeGroup();
                     this.Product.group = this.BaseTypeGroup;
                     this._addProduct();
-                    this.setFace(this.Product.face);
+                    this._selectBase(this.Product.base);
                 }
             });
     }
@@ -377,6 +380,7 @@ export class DesignComponent implements OnInit {
             if (this.Products.data[index].base.id === id) {
                 this.Products.index = index;
                 this.Product.base = this.Products.data[index].base;
+                this.BaseTypeGroup = this.getBaseTypeGroup();
                 this._selectBase(this.Product.base);
                 return true;
             }
@@ -399,6 +403,7 @@ export class DesignComponent implements OnInit {
                 newProduct.colors = this.Products.data[0].colors;
                 this.Product = newProduct;
                 this.Products.index = 0;
+                this.BaseTypeGroup = this.getBaseTypeGroup();
                 this._selectBase(this.Product.base);
             }
         } else {
