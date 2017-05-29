@@ -65,7 +65,7 @@
                                 <div class="ColorPicker interactive">
                                     <div *ngFor='let itemColor of productItem.colors' class="color">
                                         <div class="ui small circular label"
-                                             [ngStyle]="{ 'background-color': itemColor }"><span>&nbsp;</span>
+                                             [ngStyle]="{ 'background-color': itemColor.value }"><span>&nbsp;</span>
                                         </div>
                                     </div>
                                     <div class="color">

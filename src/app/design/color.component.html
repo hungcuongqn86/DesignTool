@@ -18,9 +18,9 @@
                                 <div class="ColorPicker interactive">
                                     <div *ngFor='let itemColor of oProduct.base.colors' class="color">
                                         <div class="ui small circular label" (mouseover)="previewColor(itemColor.value)"
-                                             (click)="selectColor(itemColor.value)"
+                                             (click)="selectColor(itemColor)"
                                              [ngStyle]="{ 'background-color': itemColor.value }"><span><i
-                                                *ngIf="oProduct.colors.includes(itemColor.value)" class="fa fa-check"
+                                                *ngIf="oProduct.colors.includes(itemColor)" class="fa fa-check"
                                                 aria-hidden="true"></i></span>
                                         </div>
                                     </div>

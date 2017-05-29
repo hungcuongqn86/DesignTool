@@ -128,7 +128,7 @@ export class DesignComponent implements OnInit {
                 if (this.Product.base.colors.length) {
                     this.Product.color = this.Product.base.colors[0];
                 } else {
-                    this.Product.color = '#fff';
+                    this.Product.color = null;
                 }
                 this.setColor(this.Product.color);
             }
@@ -136,7 +136,7 @@ export class DesignComponent implements OnInit {
             if (this.Product.base.colors.length) {
                 this.Product.color = this.Product.base.colors[0];
             } else {
-                this.Product.color = '#fff';
+                this.Product.color = null;
             }
             this.setColor(this.Product.color);
         }
@@ -306,6 +306,20 @@ export class DesignComponent implements OnInit {
         const newProduct = new Product();
         newProduct.base = this.Product.base;
         newProduct.designs = this.Product.designs;
+        if (this.Product.color) {
+            const index = newProduct.base.colors.indexOf(this.Product.color);
+            if (index < 0) {
+                if (newProduct.base.colors.length) {
+                    newProduct.colors.push(newProduct.base.colors[0]);
+                }
+            } else {
+                newProduct.colors.push(this.Product.color);
+            }
+        } else {
+            if (newProduct.base.colors.length) {
+                newProduct.colors.push(newProduct.base.colors[0]);
+            }
+        }
         this.Products.add(newProduct);
     }
 
@@ -328,7 +342,6 @@ export class DesignComponent implements OnInit {
                 this.Products.index = index;
                 this.Product.base = this.Products.data[index].base;
                 this._selectBase(this.Product.base);
-                // this.setFace(this.Product.face);
                 return true;
             }
         }
