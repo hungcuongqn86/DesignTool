@@ -327,7 +327,8 @@ export class DesignComponent implements OnInit {
             if (this.Products.data[index].base.id === id) {
                 this.Products.index = index;
                 this.Product.base = this.Products.data[index].base;
-                this.setFace(this.Product.face);
+                this._selectBase(this.Product.base);
+                // this.setFace(this.Product.face);
                 return true;
             }
         }
