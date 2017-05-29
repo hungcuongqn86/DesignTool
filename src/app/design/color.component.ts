@@ -41,7 +41,9 @@ export class ColorComponent extends DialogComponent<PromptModel, string> impleme
             this.oProduct.colors.push(color);
         } else {
             const indexx = this.oProduct.colors.indexOf(color);
-            this.oProduct.colors.splice(indexx, 1);
+            if (this.oProduct.colors.length > 1) {
+                this.oProduct.colors.splice(indexx, 1);
+            }
         }
     }
 

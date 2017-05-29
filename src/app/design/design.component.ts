@@ -321,6 +321,7 @@ export class DesignComponent implements OnInit {
             }
         }
         this.Products.add(newProduct);
+        this.setColor(newProduct.colors[0]);
     }
 
     public addProduct() {
