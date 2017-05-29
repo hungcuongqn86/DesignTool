@@ -358,9 +358,13 @@ export class DesignComponent implements OnInit {
                 }
             }
             if (!checkHas) {
-                this.Product = this.Products.data[0];
+                const newProduct = new Product();
+                newProduct.base = this.Products.data[0].base;
+                newProduct.designs = this.Products.data[0].designs;
+                newProduct.colors = this.Products.data[0].colors;
+                this.Product = newProduct;
                 this.Products.index = 0;
-                this.setFace(this.Product.face);
+                this._selectBase(this.Product.base);
             }
         } else {
             this.Products.deletePro(id);
