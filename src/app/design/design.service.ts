@@ -5,6 +5,7 @@ import {HttpClient} from '../http-client';
 
 @Injectable()
 export class Design {
+    public group: any;
     public face = 'front';
     public img: any;
 
@@ -14,23 +15,13 @@ export class Design {
 
 @Injectable()
 export class Product {
+    public group: any;
     public base: any;
     public face = 'front';
     public color;
     public colors: any = [];
-    public designs: Array<Design> = [];
 
     constructor() {
-    }
-
-    public getDesigns(face) {
-        const arrReturn = [];
-        for (let i = 0; i < this.designs.length; i++) {
-            if (this.designs[i].face === face) {
-                arrReturn.push(this.designs[i]);
-            }
-        }
-        return arrReturn;
     }
 
     public getOpt(sFace) {
@@ -108,15 +99,37 @@ export class Product {
         }
         return opt;
     }
+}
 
-    public addDesign(Design: Design) {
-        this.designs.push(Design);
+@Injectable()
+export class Designs {
+    static instance: Designs;
+    public data: Array<Design> = [];
+    public index = 0;
+
+    constructor() {
+        return Designs.instance = Designs.instance || this;
     }
 
-    public deleteDesign(Design: Design) {
-        for (let i = 0; i < this.designs.length; i++) {
-            if ((this.designs[i].face === Design.face) && (this.designs[i].img.attr('id') === Design.img.attr('id'))) {
-                this.designs.splice(i, 1);
+    public add(Design: Design) {
+        this.data.push(Design);
+        this.index = this.data.indexOf(Design);
+    }
+
+    public getByface(face) {
+        const arrReturn = [];
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i].face === face) {
+                arrReturn.push(this.data[i]);
+            }
+        }
+        return arrReturn;
+    }
+
+    public delete(Design: Design) {
+        for (let i = 0; i < this.data.length; i++) {
+            if ((this.data[i].face === Design.face) && (this.data[i].img.attr('id') === Design.img.attr('id'))) {
+                this.data.splice(i, 1);
                 return true;
             }
         }

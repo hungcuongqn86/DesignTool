@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgModel} from '@angular/forms';
-import {Design, Product, Products, DesignService} from './design.service';
+import {Design, Designs, Product, Products, DesignService} from './design.service';
 import {ProductComponent} from './product.component';
 import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
@@ -17,7 +17,6 @@ declare const key: any;
 })
 export class DesignComponent implements OnInit {
     @ViewChild('form1') form: NgModel;
-    Design: Design;
     Product: Product;
     arrBaseTypes: any = [];
     BaseTypeGroup: any;
@@ -30,7 +29,7 @@ export class DesignComponent implements OnInit {
     selectItem: any;
     filetype = '';
 
-    constructor(public Products: Products,
+    constructor(public Products: Products, public Designs: Designs,
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Product = new Product();
     }
@@ -107,11 +106,22 @@ export class DesignComponent implements OnInit {
         }
     }
 
+    private getBaseTypeGroup() {
+        for (let i = 0; i < this.arrBaseTypes.length; i++) {
+            const arrBaseType: any = this.arrBaseTypes[i].base_types;
+            for (let j = 0; j < arrBaseType.length; j++) {
+                if (arrBaseType[j].id === this.Product.base.type.id) {
+                    return this.arrBaseTypes[i];
+                }
+            }
+        }
+        return [];
+    }
+
     private getBases() {
         this.DesignService.getBases(this.fDesign.sBaseType).subscribe(
             data => {
                 this.arrBase = data;
-                console.log(this.BaseTypeGroup);
                 if (this.arrBase.length > 0) {
                     const baseid = this.arrBase[0].id;
                     this.selectBase(baseid);
@@ -135,6 +145,7 @@ export class DesignComponent implements OnInit {
 
     private _selectBase(base: any) {
         this.Product.base = base;
+        this.Product.group = this.BaseTypeGroup;
         this.setSize();
         this.setFace(this.Product.face);
         if (this.Product.color) {
@@ -175,19 +186,19 @@ export class DesignComponent implements OnInit {
     }
 
     private setImgFace() {
-        Object.keys(this.Product.designs).map((index) => {
-            if (this.Product.designs[index].face === this.Product.face) {
-                this.Product.designs[index].img.show();
+        Object.keys(this.Designs.data).map((index) => {
+            if (this.Designs.data[index].face === this.Product.face) {
+                this.Designs.data[index].img.show();
             } else {
-                this.Product.designs[index].img.hide();
+                this.Designs.data[index].img.hide();
             }
         });
     }
 
     private resetSelect() {
         this.selectItem = null;
-        Object.keys(this.Product.designs).map((index) => {
-            this.Product.designs[index].img.selectize(false, {deepSelect: true});
+        Object.keys(this.Designs.data).map((index) => {
+            this.Designs.data[index].img.selectize(false, {deepSelect: true});
         });
     }
 
@@ -200,9 +211,9 @@ export class DesignComponent implements OnInit {
     private setPosition(opt: any) {
         const myobj = this;
         this.selectItem = null;
-        for (let i = 0; i < this.Product.designs.length; i++) {
-            if (this.Product.designs[i].face === this.Product.face) {
-                const img = this.Product.designs[i].img;
+        for (let i = 0; i < this.Designs.data.length; i++) {
+            if (this.Designs.data[i].face === this.Product.face) {
+                const img = this.Designs.data[i].img;
                 const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
                 const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
                 const mx = (img.x() - img.printableConf.minX) * tlX;
@@ -235,7 +246,7 @@ export class DesignComponent implements OnInit {
                 });
 
                 img.printableConf = opt;
-                this.Product.designs[i].img = img;
+                this.Designs.data[i].img = img;
             }
         }
     }
@@ -282,10 +293,11 @@ export class DesignComponent implements OnInit {
             myobj.selectItem = this;
         });
 
-        this.Design = new Design();
-        this.Design.face = this.Product.face;
-        this.Design.img = image;
-        this.Product.addDesign(this.Design);
+        const img = new Design();
+        img.img = image;
+        img.face = this.Product.face;
+        img.group = this.BaseTypeGroup;
+        this.Designs.add(img);
     }
 
     public selectLayer(leyer: any) {
@@ -299,28 +311,24 @@ export class DesignComponent implements OnInit {
 
     public deleteImg() {
         if (this.selectItem) {
-            this.Design = new Design();
-            this.Design.img = this.selectItem;
-            this.Design.face = this.Product.face;
-            this.Design.img.selectize(false, {deepSelect: true}).remove();
-            this.Product.deleteDesign(this.Design);
-            this.selectItem = null;
+            this.deleteLayer(this.selectItem);
         }
     }
 
     public deleteLayer(leyer: any) {
-        this.Design = new Design();
-        this.Design.img = leyer;
-        this.Design.face = this.Product.face;
-        this.Design.img.selectize(false, {deepSelect: true}).remove();
-        this.Product.deleteDesign(this.Design);
+        const img = new Design();
+        img.img = leyer;
+        img.face = this.Product.face;
+        img.group = this.Product.group;
+        img.img.selectize(false, {deepSelect: true}).remove();
+        this.Designs.delete(img);
         this.selectItem = null;
     }
 
     public _addProduct() {
         const newProduct = new Product();
         newProduct.base = this.Product.base;
-        newProduct.designs = this.Product.designs;
+        newProduct.group = this.Product.group;
         if (this.Product.color) {
             const index = newProduct.base.colors.indexOf(this.Product.color);
             if (index < 0) {
@@ -346,6 +354,8 @@ export class DesignComponent implements OnInit {
             .subscribe((product) => {
                 if (product) {
                     this.Product.base = product;
+                    this.BaseTypeGroup = this.getBaseTypeGroup();
+                    this.Product.group = this.BaseTypeGroup;
                     this._addProduct();
                     this.setFace(this.Product.face);
                 }
@@ -375,7 +385,7 @@ export class DesignComponent implements OnInit {
             if (!checkHas) {
                 const newProduct = new Product();
                 newProduct.base = this.Products.data[0].base;
-                newProduct.designs = this.Products.data[0].designs;
+                newProduct.group = this.Products.data[0].group;
                 newProduct.colors = this.Products.data[0].colors;
                 this.Product = newProduct;
                 this.Products.index = 0;
@@ -389,10 +399,10 @@ export class DesignComponent implements OnInit {
     }
 
     private resetDs() {
-        Object.keys(this.Product.designs).map((index) => {
-            this.Product.designs[index].img.selectize(false, {deepSelect: true}).remove();
+        Object.keys(this.Designs.data).map((index) => {
+            this.Designs.data[index].img.selectize(false, {deepSelect: true}).remove();
         });
-        this.Product.designs = [];
+        this.Designs.data = [];
         this.Product.colors = [];
         this.Product.color = '#fff';
         this.fDesign.sBaseType = this.arrBaseTypes[0].base_types[0].id;
