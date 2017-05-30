@@ -178,7 +178,7 @@ export class DesignComponent implements OnInit {
 
     private _selectBase(base: any) {
         this.Product.base = base;
-        this.Product.group = this.BaseTypeGroup;
+        this.Product.group = this.BaseTypeGroup.id;
         this.setSize();
         this.setFace(this.face);
         if (this.color) {
@@ -219,7 +219,7 @@ export class DesignComponent implements OnInit {
     private setDesigns() {
         Object.keys(this.Designs.data).map((index) => {
             if (this.Designs.data[index].face === this.face) {
-                if (this.Designs.data[index].group.id === this.BaseTypeGroup.id) {
+                if (this.Designs.data[index].group === this.BaseTypeGroup.id) {
                     this.Designs.data[index].img.show();
                 } else {
                     this.Designs.data[index].img.hide();
@@ -247,7 +247,7 @@ export class DesignComponent implements OnInit {
         const myobj = this;
         this.selectItem = null;
         for (let i = 0; i < this.Designs.data.length; i++) {
-            if ((this.Designs.data[i].face === this.face) && (this.Designs.data[i].group.id === this.BaseTypeGroup.id)) {
+            if ((this.Designs.data[i].face === this.face) && (this.Designs.data[i].group === this.BaseTypeGroup.id)) {
                 const img = this.Designs.data[i].img;
                 const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
                 const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
@@ -339,7 +339,7 @@ export class DesignComponent implements OnInit {
         const img = new Design();
         img.img = image;
         img.face = this.face;
-        img.group = this.BaseTypeGroup;
+        img.group = this.BaseTypeGroup.id;
         this.Designs.add(img);
     }
 
@@ -400,7 +400,7 @@ export class DesignComponent implements OnInit {
                 if (product) {
                     this.Product.base = product;
                     this.BaseTypeGroup = this.getBaseTypeGroup();
-                    this.Product.group = this.BaseTypeGroup;
+                    this.Product.group = this.BaseTypeGroup.id;
                     this._addProduct();
                     this._selectBase(this.Product.base);
                 }

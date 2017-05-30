@@ -3,10 +3,12 @@ import {Response, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {HttpClient} from '../http-client';
 
+const sFaceDf = 'front';
+
 @Injectable()
 export class Design {
-    public group: any;
-    public face = 'front';
+    public group;
+    public face = sFaceDf;
     public img: any;
 
     constructor() {
@@ -23,7 +25,7 @@ export class Product {
     public price;
     public sale_expected;
     public state = 'approved';
-    public group: any;
+    public group;
     public base: any;
     public colors: Array<any> = [];
     public designs: Array<Design> = [];
@@ -32,27 +34,25 @@ export class Product {
     }
 
     public getOpt(sFace) {
-        let opt: any = [];
-        if (sFace === 'front') {
-            opt = {
+        if (sFace === sFaceDf) {
+            return {
                 minX: Number(this.base.printable.front_left)
                 , minY: Number(this.base.printable.front_top)
                 , maxX: Number(this.base.printable.front_left) + Number(this.base.printable.front_width)
                 , maxY: Number(this.base.printable.front_top) + Number(this.base.printable.front_height)
             };
         } else {
-            opt = {
+            return {
                 minX: Number(this.base.printable.back_left)
                 , minY: Number(this.base.printable.back_top)
                 , maxX: Number(this.base.printable.back_left) + Number(this.base.printable.back_width)
                 , maxY: Number(this.base.printable.back_top) + Number(this.base.printable.back_height)
             };
         }
-        return opt;
     }
 
     public getHeight(sFace) {
-        if (sFace === 'front') {
+        if (sFace === sFaceDf) {
             return this.base.printable.front_height;
         } else {
             return this.base.printable.back_height;
@@ -60,7 +60,7 @@ export class Product {
     }
 
     public getWidth(sFace) {
-        if (sFace === 'front') {
+        if (sFace === sFaceDf) {
             return this.base.printable.front_width;
         } else {
             return this.base.printable.back_width;
@@ -68,7 +68,7 @@ export class Product {
     }
 
     public getTop(sFace) {
-        if (sFace === 'front') {
+        if (sFace === sFaceDf) {
             return this.base.printable.front_top;
         } else {
             return this.base.printable.back_top;
@@ -76,7 +76,7 @@ export class Product {
     }
 
     public getLeft(sFace) {
-        if (sFace === 'front') {
+        if (sFace === sFaceDf) {
             return this.base.printable.front_left;
         } else {
             return this.base.printable.back_left;
@@ -85,7 +85,7 @@ export class Product {
 
     public getPrintablePoint(sFace) {
         let opt: any = [];
-        if (sFace === 'front') {
+        if (sFace === sFaceDf) {
             opt = [[Number(this.base.printable.front_left), Number(this.base.printable.front_top)],
                 [Number(this.base.printable.front_left), Number(this.base.printable.front_top) + Number(this.base.printable.front_height)],
                 [Number(this.base.printable.front_left) + Number(this.base.printable.front_width),
