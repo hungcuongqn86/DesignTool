@@ -91,7 +91,9 @@ export class DesignComponent implements OnInit {
     private updateCampaign() {
         this.DesignService.updateCampaign(this.Campaign).subscribe(
             res => {
-                console.log(res);
+                Object.keys(res).map((index) => {
+                    this.Campaign[index] = res[index];
+                });
             },
             error => {
                 console.error(error.json().message);
@@ -227,6 +229,7 @@ export class DesignComponent implements OnInit {
 
     private setSize() {
         this.draw.size(this.Product.base.image.width, this.Product.base.image.height);
+        this.productImg.size(this.Product.base.image.width, this.Product.base.image.height);
         this.productColor.size(this.Product.base.image.width, this.Product.base.image.height);
     }
 
@@ -464,6 +467,7 @@ export class DesignComponent implements OnInit {
             this.Campaign.deletePro(id);
             this.resetDs();
         }
+        this.updateCampaign();
     }
 
     private resetDs() {

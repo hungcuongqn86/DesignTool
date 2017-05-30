@@ -6,6 +6,8 @@ export interface PromptModel {
     oProduct: Product;
 }
 
+const imgDir = 'http://cdn.30usd.com/images/';
+
 @Component({
     templateUrl: './color.component.html',
     styleUrls: ['./color.component.css']
@@ -21,6 +23,10 @@ export class ColorComponent extends DialogComponent<PromptModel, string> impleme
 
     ngOnInit() {
 
+    }
+
+    public getBaseImgUrl(sFace, base: any) {
+        return imgDir + base + '_' + sFace + '.png';
     }
 
     ngAfterViewInit() {

@@ -11,7 +11,8 @@
                         <div class="col-sm-4">
                             <div #backgroundBase id="backgroundBase"
                                  class="background-color"></div>
-                            <img #imgBase id="imgBase" name="imgBase" alt="" src="{{oProduct.base.image.front}}">
+                            <img #imgBase id="imgBase" name="imgBase" alt=""
+                                 src="{{getBaseImgUrl('front',oProduct.base.id)}}">
                         </div>
                         <div class="col-sm-8 prod-inf">
                             <div class="colors">
