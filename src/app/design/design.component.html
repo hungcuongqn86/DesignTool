@@ -50,15 +50,15 @@
 
             <div *ngFor='let productItem of Campaign.products' class="panel panel-default produc-box">
                 <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
-                     class="panel-body {{Product.base&&Product.base.id==productItem.base.id? 'active': ''}}">
-                    <span (click)="selectProduct(productItem.base.id)">{{productItem.base.name}}</span>
+                     class="panel-body {{Product.id==productItem.id? 'active': ''}}">
+                    <span (click)="selectProduct(productItem)">{{productItem.base.name}}</span>
                     <a (click)="deleteProduct(productItem.base.id)" class="producs-action-item pull-right"
                        title="delete">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
-                    <div class="row producs-list" (click)="selectProduct(productItem.base.id)">
+                    <div class="row producs-list" (click)="selectProduct(productItem)">
                         <div class="col-sm-4">
-                            <img alt="" src="{{productItem.base.image.front}}">
+                            <img alt="" src="{{getBaseImgUrl('front',productItem.base.id)}}">
                         </div>
                         <div class="col-sm-8 prod-inf">
                             <div class="colors">
@@ -127,8 +127,8 @@
                         <ul class="options item-options active nav">
                             <template ngFor let-itemBase [ngForOf]="arrBase">
                                 <li class="item-option {{itemBase.id===Product.base.id? 'active': ''}}">
-                                    <p (click)="selectBase(itemBase.id)" class="item-name">{{itemBase.name}}</p>
-                                    <div (click)="selectBase(itemBase.id)" class="item-overview">
+                                    <p (click)="_selectBase(itemBase)" class="item-name">{{itemBase.name}}</p>
+                                    <div (click)="_selectBase(itemBase)" class="item-overview">
                                         <div class="item-thumb-container item-thumb-loaded">
                                             <img class="item-thumb" src="{{itemBase.image.front}}"></div>
                                         <p class="item-qualities">{{itemBase.desc}}</p>

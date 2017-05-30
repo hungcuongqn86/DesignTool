@@ -18,14 +18,7 @@ export class Design {
 @Injectable()
 export class Product {
     public id;
-    public back_view = false;
-    public currency = 'USD';
-    public default = false;
     public position;
-    public price;
-    public sale_expected;
-    public state = 'approved';
-    public group;
     public base: any;
     public colors: Array<any> = [];
     public designs: Array<Design> = [];
@@ -84,9 +77,8 @@ export class Product {
     }
 
     public getPrintablePoint(sFace) {
-        let opt: any = [];
         if (sFace === sFaceDf) {
-            opt = [[Number(this.base.printable.front_left), Number(this.base.printable.front_top)],
+            return [[Number(this.base.printable.front_left), Number(this.base.printable.front_top)],
                 [Number(this.base.printable.front_left), Number(this.base.printable.front_top) + Number(this.base.printable.front_height)],
                 [Number(this.base.printable.front_left) + Number(this.base.printable.front_width),
                     Number(this.base.printable.front_top) + Number(this.base.printable.front_height)],
@@ -95,7 +87,7 @@ export class Product {
                 [Number(this.base.printable.front_left), Number(this.base.printable.front_top)]
             ];
         } else {
-            opt = [[Number(this.base.printable.back_left), Number(this.base.printable.back_top)],
+            return [[Number(this.base.printable.back_left), Number(this.base.printable.back_top)],
                 [Number(this.base.printable.back_left), Number(this.base.printable.back_top) + Number(this.base.printable.back_height)],
                 [Number(this.base.printable.back_left) + Number(this.base.printable.back_width),
                     Number(this.base.printable.back_top) + Number(this.base.printable.back_height)],
@@ -104,7 +96,6 @@ export class Product {
                 [Number(this.base.printable.back_left), Number(this.base.printable.back_top)]
             ];
         }
-        return opt;
     }
 }
 
@@ -147,8 +138,8 @@ export class Designs {
 @Injectable()
 export class Campaign {
     static instance: Campaign;
+    public id;
     public products: Array<Product> = [];
-    public index = 0;
 
     constructor() {
         return Campaign.instance = Campaign.instance || this;
@@ -156,7 +147,6 @@ export class Campaign {
 
     public add(Product: Product) {
         this.products.push(Product);
-        this.index = this.products.indexOf(Product);
     }
 
     public deletePro(id) {
@@ -186,13 +176,27 @@ export class DesignService {
     constructor(private http: HttpClient) {
     }
 
-    createCampaign(userid): any {
+    initCampaign(id, userid): any {
+        if (id !== '') {
+            return this.getCampaign(id);
+        } else {
+            return this.createCampaign(userid);
+        }
+    }
+
+    updateCampaign(campaign: Campaign) {
+        const url = this.apiUrl + `campaigns/` + campaign.id;
+        const body = JSON.stringify(campaign);
+        return this.http.put(url, body).map((res: Response) => res.json());
+    }
+
+    private createCampaign(userid): any {
         const url = this.apiUrl + `campaigns`;
         const body = JSON.stringify({user_id: userid});
         return this.http.post(url, body).map((res: Response) => res.json());
     }
 
-    getCampaign(id): any {
+    private getCampaign(id): any {
         const url = this.apiUrl + `campaigns/` + id;
         return this.http.get(url).map((res: Response) => res.json());
     }
