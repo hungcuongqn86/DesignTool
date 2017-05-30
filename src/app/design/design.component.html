@@ -31,7 +31,7 @@
                         </div>
                         <div id="menu2" class="tab-pane fade">
                             <ul class="layers">
-                                <li *ngFor='let itemNested of Designs.getByface(Product.face)'
+                                <li *ngFor='let itemNested of Designs.getByface(face)'
                                     class="layer {{selectItem && (itemNested.img.attr('id')==selectItem.attr('id'))? 'active': ''}}">
                                     <span (click)="selectLayer(itemNested.img)"><img alt=""
                                                                                      src="{{itemNested.img.src}}">{{itemNested.img.attr('id')}}</span>
@@ -98,10 +98,10 @@
             <div class="row text-center" style="margin-bottom: 20px;">
                 <div class="btn-group">
                     <button type="button" (click)="setFace('front')"
-                            class="btn {{Product.face==='front'? 'btn-primary': 'btn-default'}}">Front
+                            class="btn {{face==='front'? 'btn-primary': 'btn-default'}}">Front
                     </button>
                     <button type="button" (click)="setFace('back')"
-                            class="btn {{Product.face==='back'? 'btn-primary': 'btn-default'}}">Back
+                            class="btn {{face==='back'? 'btn-primary': 'btn-default'}}">Back
                     </button>
                 </div>
             </div>

@@ -26,6 +26,8 @@ const userid = 'cuongnh';
 })
 export class DesignComponent implements OnInit {
     @ViewChild('form1') form: NgModel;
+    face = 'front';
+    color = null;
     Product: Product;
     arrBaseTypes: any = [];
     BaseTypeGroup: any;
@@ -74,7 +76,7 @@ export class DesignComponent implements OnInit {
         this.draw = SVG('drawing');
         this.productColor = this.draw.rect().fill(colors.white.value);
         this.productImg = this.draw.image().click(function () {
-            myobj.imgClick();
+            myobj.resetSelect();
         });
         this.printable = this.draw.polyline().fill('none').stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
         this.getBaseTypes();
@@ -99,10 +101,6 @@ export class DesignComponent implements OnInit {
         const binaryString = readerEvt.target.result;
         this.addImg(this.filetype, btoa(binaryString));
         this.form['controls']['filePicker'].reset();
-    }
-
-    private imgClick() {
-        this.resetSelect();
     }
 
     private getBaseTypes() {
@@ -182,23 +180,23 @@ export class DesignComponent implements OnInit {
         this.Product.base = base;
         this.Product.group = this.BaseTypeGroup;
         this.setSize();
-        this.setFace(this.Product.face);
-        if (this.Product.color) {
+        this.setFace(this.face);
+        if (this.color) {
             if (this.Product.base.colors) {
-                const index = this.Product.base.colors.indexOf(this.Product.color);
+                const index = this.Product.base.colors.indexOf(this.color);
                 if (index < 0) {
-                    this.Product.color = this.Product.base.colors[0];
+                    this.color = this.Product.base.colors[0];
                 }
             } else {
-                this.Product.color = null;
+                this.color = null;
             }
         } else {
-            this.Product.color = null;
+            this.color = null;
             if (this.Product.base.colors) {
-                this.Product.color = this.Product.base.colors[0];
+                this.color = this.Product.base.colors[0];
             }
         }
-        this.setColor(this.Product.color);
+        this.setColor(this.color);
     }
 
     private setSize() {
@@ -207,7 +205,7 @@ export class DesignComponent implements OnInit {
     }
 
     public setFace(face) {
-        this.Product.face = face;
+        this.face = face;
         if (face === 'front') {
             this.productImg.load(this.Product.base.image.front);
         } else {
@@ -220,7 +218,7 @@ export class DesignComponent implements OnInit {
 
     private setDesigns() {
         Object.keys(this.Designs.data).map((index) => {
-            if (this.Designs.data[index].face === this.Product.face) {
+            if (this.Designs.data[index].face === this.face) {
                 if (this.Designs.data[index].group.id === this.BaseTypeGroup.id) {
                     this.Designs.data[index].img.show();
                 } else {
@@ -241,15 +239,15 @@ export class DesignComponent implements OnInit {
 
     private setPrintable() {
         this.printable.clear();
-        this.printable.plot(this.Product.getPrintablePoint(this.Product.face));
-        this.setPosition(this.Product.getOpt(this.Product.face));
+        this.printable.plot(this.Product.getPrintablePoint(this.face));
+        this.setPosition(this.Product.getOpt(this.face));
     }
 
     private setPosition(opt: any) {
         const myobj = this;
         this.selectItem = null;
         for (let i = 0; i < this.Designs.data.length; i++) {
-            if ((this.Designs.data[i].face === this.Product.face) && (this.Designs.data[i].group.id === this.BaseTypeGroup.id)) {
+            if ((this.Designs.data[i].face === this.face) && (this.Designs.data[i].group.id === this.BaseTypeGroup.id)) {
                 const img = this.Designs.data[i].img;
                 const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
                 const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
@@ -290,7 +288,7 @@ export class DesignComponent implements OnInit {
 
     public setColor(sColor: any) {
         if (sColor) {
-            this.Product.color = sColor;
+            this.color = sColor;
             this.productColor.fill(sColor.value);
         } else {
             this.productColor.fill(colors.white.value);
@@ -298,14 +296,14 @@ export class DesignComponent implements OnInit {
     }
 
     public changeColor(sColor: any) {
-        this.Product.color = sColor;
+        this.color = sColor;
     }
 
     public addImg(filetype, binaryString: any) {
         const myobj = this;
-        const printw = this.Product.getWidth(this.Product.face);
-        const printh = this.Product.getHeight(this.Product.face);
-        const opt = this.Product.getOpt(this.Product.face);
+        const printw = this.Product.getWidth(this.face);
+        const printh = this.Product.getHeight(this.face);
+        const opt = this.Product.getOpt(this.face);
         const image = this.draw.image('data:' + filetype + ';base64,' + binaryString)
             .loaded(function (loader) {
                 if (printw < loader.width) {
@@ -326,7 +324,7 @@ export class DesignComponent implements OnInit {
                     }
                 }
             })
-            .move(this.Product.getLeft(this.Product.face), this.Product.getTop(this.Product.face));
+            .move(this.Product.getLeft(this.face), this.Product.getTop(this.face));
 
 
         image.printableConf = opt;
@@ -340,13 +338,13 @@ export class DesignComponent implements OnInit {
 
         const img = new Design();
         img.img = image;
-        img.face = this.Product.face;
+        img.face = this.face;
         img.group = this.BaseTypeGroup;
         this.Designs.add(img);
     }
 
     public selectLayer(leyer: any) {
-        const opt = this.Product.getOpt(this.Product.face);
+        const opt = this.Product.getOpt(this.face);
         this.resetSelect();
         leyer.selectize().resize({
             constraint: opt
@@ -363,7 +361,7 @@ export class DesignComponent implements OnInit {
     public deleteLayer(leyer: any) {
         const img = new Design();
         img.img = leyer;
-        img.face = this.Product.face;
+        img.face = this.face;
         img.group = this.Product.group;
         img.img.selectize(false, {deepSelect: true}).remove();
         this.Designs.deleteImg(img);
@@ -374,15 +372,15 @@ export class DesignComponent implements OnInit {
         const newProduct = new Product();
         newProduct.base = this.Product.base;
         newProduct.group = this.Product.group;
-        if (this.Product.color) {
+        if (this.color) {
             if (newProduct.base.colors) {
-                const index = newProduct.base.colors.indexOf(this.Product.color);
+                const index = newProduct.base.colors.indexOf(this.color);
                 if (index < 0) {
                     if (newProduct.base.colors.length) {
                         newProduct.colors.push(newProduct.base.colors[0]);
                     }
                 } else {
-                    newProduct.colors.push(this.Product.color);
+                    newProduct.colors.push(this.color);
                 }
             }
         } else {
@@ -453,7 +451,7 @@ export class DesignComponent implements OnInit {
         });
         this.Designs.data = [];
         this.Product.colors = [];
-        this.Product.color = '#fff';
+        this.color = null;
         this.fDesign.sBaseType = this.arrBaseTypes[0].base_types[0].id;
         this.selectBaseType();
     }

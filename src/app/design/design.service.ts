@@ -15,11 +15,18 @@ export class Design {
 
 @Injectable()
 export class Product {
+    public id;
+    public back_view = false;
+    public currency = 'USD';
+    public default = false;
+    public position;
+    public price;
+    public sale_expected;
+    public state = 'approved';
     public group: any;
     public base: any;
-    public face = 'front';
-    public color;
-    public colors: any = [];
+    public colors: Array<any> = [];
+    public designs: Array<Design> = [];
 
     constructor() {
     }
