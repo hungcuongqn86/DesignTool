@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgModel} from '@angular/forms';
-import {Design, Designs, Product, Products, DesignService} from './design.service';
+import {Design, Designs, Product, Campaign, DesignService} from './design.service';
 import {ProductComponent} from './product.component';
 import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
@@ -38,16 +38,14 @@ export class DesignComponent implements OnInit {
     selectItem: any;
     filetype = '';
 
-    campaign: any;
-
-    constructor(public Products: Products, public Designs: Designs,
+    constructor(public Campaign: Campaign, public Designs: Designs,
                 private DesignService: DesignService, private dialogService: DialogService) {
         // const check: boolean = Cookie.check(campaignCookie);
         const check = true;
         if (!check) {
             this.DesignService.createCampaign(userid).subscribe(
                 res => {
-                    this.campaign = res;
+                    // this.campaign = res;
                 },
                 error => {
                     console.error(error.json().message);
@@ -59,8 +57,8 @@ export class DesignComponent implements OnInit {
             const id = 'RcSX3ZZfo96uRJ2F';
             this.DesignService.getCampaign(id).subscribe(
                 res => {
-                    this.campaign = res;
-                    console.log(this.campaign);
+                    // this.campaign = res;
+                    console.log(res);
                 },
                 error => {
                     console.error(error.json().message);
@@ -368,7 +366,7 @@ export class DesignComponent implements OnInit {
         img.face = this.Product.face;
         img.group = this.Product.group;
         img.img.selectize(false, {deepSelect: true}).remove();
-        this.Designs.delete(img);
+        this.Designs.deleteImg(img);
         this.selectItem = null;
     }
 
@@ -392,7 +390,7 @@ export class DesignComponent implements OnInit {
                 newProduct.colors.push(newProduct.base.colors[0]);
             }
         }
-        this.Products.add(newProduct);
+        this.Campaign.add(newProduct);
         this.setColor(newProduct.colors[0]);
     }
 
@@ -412,10 +410,10 @@ export class DesignComponent implements OnInit {
     }
 
     public selectProduct(id) {
-        for (let index = 0; index < this.Products.data.length; index++) {
-            if (this.Products.data[index].base.id === id) {
-                this.Products.index = index;
-                this.Product.base = this.Products.data[index].base;
+        for (let index = 0; index < this.Campaign.products.length; index++) {
+            if (this.Campaign.products[index].base.id === id) {
+                this.Campaign.index = index;
+                this.Product.base = this.Campaign.products[index].base;
                 this.BaseTypeGroup = this.getBaseTypeGroup();
                 this._selectBase(this.Product.base);
                 return true;
@@ -424,27 +422,27 @@ export class DesignComponent implements OnInit {
     }
 
     public deleteProduct(id) {
-        if (this.Products.data.length > 1) {
-            this.Products.deletePro(id);
+        if (this.Campaign.products.length > 1) {
+            this.Campaign.deletePro(id);
             let checkHas = false;
-            for (let index = 0; index < this.Products.data.length; index++) {
-                if (this.Products.data[index].base.id === this.Product.base.id) {
+            for (let index = 0; index < this.Campaign.products.length; index++) {
+                if (this.Campaign.products[index].base.id === this.Product.base.id) {
                     checkHas = true;
                 }
             }
             if (!checkHas) {
                 const newProduct = new Product();
-                newProduct.base = this.Products.data[0].base;
-                newProduct.group = this.Products.data[0].group;
-                newProduct.colors = this.Products.data[0].colors;
+                newProduct.base = this.Campaign.products[0].base;
+                newProduct.group = this.Campaign.products[0].group;
+                newProduct.colors = this.Campaign.products[0].colors;
                 this.Product = newProduct;
-                this.Products.index = 0;
+                this.Campaign.index = 0;
                 this.BaseTypeGroup = this.getBaseTypeGroup();
                 this._selectBase(this.Product.base);
             }
         } else {
-            this.Products.deletePro(id);
-            this.Products.index = 0;
+            this.Campaign.deletePro(id);
+            this.Campaign.index = 0;
             this.resetDs();
         }
     }

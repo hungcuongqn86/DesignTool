@@ -126,7 +126,7 @@ export class Designs {
         return arrReturn;
     }
 
-    public delete(Design: Design) {
+    public deleteImg(Design: Design) {
         for (let i = 0; i < this.data.length; i++) {
             if ((this.data[i].face === Design.face) && (this.data[i].img.attr('id') === Design.img.attr('id'))) {
                 this.data.splice(i, 1);
@@ -138,28 +138,24 @@ export class Designs {
 }
 
 @Injectable()
-export class Products {
-    static instance: Products;
-    public data: Array<Product> = [];
+export class Campaign {
+    static instance: Campaign;
+    public products: Array<Product> = [];
     public index = 0;
 
     constructor() {
-        return Products.instance = Products.instance || this;
+        return Campaign.instance = Campaign.instance || this;
     }
 
     public add(Product: Product) {
-        this.data.push(Product);
-        this.index = this.data.indexOf(Product);
-    }
-
-    public edit(Product: Product) {
-        this.data[this.index] = Product;
+        this.products.push(Product);
+        this.index = this.products.indexOf(Product);
     }
 
     public deletePro(id) {
-        for (let index = 0; index < this.data.length; index++) {
-            if (this.data[index].base.id === id) {
-                this.data.splice(index, 1);
+        for (let index = 0; index < this.products.length; index++) {
+            if (this.products[index].base.id === id) {
+                this.products.splice(index, 1);
                 return true;
             }
         }
@@ -167,8 +163,8 @@ export class Products {
     }
 
     public hasBase(id) {
-        for (let index = 0; index < this.data.length; index++) {
-            if (this.data[index].base.id === id) {
+        for (let index = 0; index < this.products.length; index++) {
+            if (this.products[index].base.id === id) {
                 return true;
             }
         }
