@@ -73,9 +73,16 @@ export class DesignComponent implements OnInit {
                     this.Campaign[index] = res[index];
                 });
                 if (this.Campaign.products.length) {
-                    Object.keys(this.Campaign.products[0]).map((index) => {
-                        this.Product[index] = this.Campaign.products[0][index];
-                    });
+                    const checkExit = this.Campaign.products.findIndex(x => x.id === this.Product.id);
+                    if (checkExit < 0) {
+                        Object.keys(this.Campaign.products[0]).map((index) => {
+                            this.Product[index] = this.Campaign.products[0][index];
+                        });
+                    } else {
+                        Object.keys(this.Campaign.products[checkExit]).map((index) => {
+                            this.Product[index] = this.Campaign.products[checkExit][index];
+                        });
+                    }
                     this.selectProduct(this.Product);
                 } else {
                     this.loadconflic = true;
@@ -429,7 +436,11 @@ export class DesignComponent implements OnInit {
         this.Product.base = Product.base;
         this.Product.colors = Product.colors;
         if (this.loadconflic) {
-            this.fDesign.sBaseType = this.Product.base.type_id;
+            if (this.Product.base.type_id) {
+                this.fDesign.sBaseType = this.Product.base.type_id;
+            } else {
+                this.fDesign.sBaseType = this.Product.base.type.id;
+            }
             this.selectBaseType();
         } else {
             this.loadconflic = true;
