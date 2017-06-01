@@ -29,9 +29,8 @@
         "../node_modules/bootstrap/dist/js/bootstrap.js",
         "../node_modules/svg.js/dist/svg.min.js",
         "../node_modules/svg.draggable.js/dist/svg.draggable.min.js",
-        "../node_modules/svg.select.js/dist/svg.select.min.js",
-        "../ext/svg.resize.js/dist/svg.resize.js",
-        "../node_modules/keymaster/keymaster.js"
+        "../ext/svg.select.js/dist/svg.select.js",
+        "../ext/svg.resize.js/dist/svg.resize.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {Location} from '@angular/common';
 import {NgModel} from '@angular/forms';
 import {Design, Product, Campaign, DesignService} from './design.service';
 import {ProductComponent} from './product.component';
@@ -30,7 +31,6 @@ export class DesignComponent implements OnInit {
     color = null;
     Product: Product;
     arrBaseTypes: any = [];
-    BaseTypeGroup: any;
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":"","file":""}');
     draw: any;
@@ -43,12 +43,14 @@ export class DesignComponent implements OnInit {
 
     loadconflic = false;
 
-    constructor(public Campaign: Campaign, private DesignService: DesignService, private dialogService: DialogService) {
+    constructor(private location: Location, public Campaign: Campaign,
+                private DesignService: DesignService, private dialogService: DialogService) {
         this.Product = new Product();
-        let id = 'RcSX3ZZfo96uRJ2F';
+        let id = 'z8YcVNt1mvGeFbDK';
         if (Cookie.check(campaignCookie)) {
             id = Cookie.get(campaignCookie);
         }
+        this.location.go('/design/' + id);
         this.initCampaign(id, userid);
     }
 
@@ -62,9 +64,6 @@ export class DesignComponent implements OnInit {
         this.printable = this.draw.polyline().fill('none').stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
         this.nested = this.draw.nested();
         this.getBaseTypes();
-        key('delete', function () {
-            myobj.deleteImg();
-        });
     }
 
     private initCampaign(id, user) {
@@ -152,8 +151,8 @@ export class DesignComponent implements OnInit {
         newDesign.image.mime_type = this.filetype;
         newDesign.image.data = btoa(binaryString);
         this.DesignService.addDesign(newDesign).subscribe(
-            res => {
-                this.addImg(res);
+            () => {
+                this.initCampaign(this.Campaign.id, userid);
                 this.form['controls']['filePicker'].reset();
             },
             error => {
@@ -165,18 +164,6 @@ export class DesignComponent implements OnInit {
 
     public selectBaseType() {
         this.getBases();
-    }
-
-    private getBaseTypeGroup() {
-        for (let i = 0; i < this.arrBaseTypes.length; i++) {
-            const arrBaseType: any = this.arrBaseTypes[i].base_types;
-            for (let j = 0; j < arrBaseType.length; j++) {
-                if (arrBaseType[j].id === this.Product.base.type_id) {
-                    return this.arrBaseTypes[i];
-                }
-            }
-        }
-        return [];
     }
 
     private getBases() {
@@ -207,23 +194,33 @@ export class DesignComponent implements OnInit {
         }
     }
 
+    private getColor(color: any, arrcolors: any) {
+        if (color) {
+            if (arrcolors.length) {
+                const index = arrcolors.findIndex(x => x.id === color.id);
+                if (index < 0) {
+                    return arrcolors[0];
+                } else {
+                    return color;
+                }
+            } else {
+                return null;
+            }
+        } else {
+            if (arrcolors.length) {
+                return arrcolors[0];
+            } else {
+                return null;
+            }
+        }
+    }
+
     public _selectBase(base: any) {
         this.Product.base = base;
         this.setFace(this.face);
-        if (this.color) {
-            if (this.Product.base.colors) {
-                const index = this.Product.base.colors.findIndex(x => x.id === this.color.id);
-                if (index < 0) {
-                    this.color = this.Product.base.colors[0];
-                }
-            } else {
-                this.color = null;
-            }
-        } else {
-            this.color = null;
-            if (this.Product.base.colors) {
-                this.color = this.Product.base.colors[0];
-            }
+        this.color = this.getColor(this.color, this.Product.colors);
+        if (!this.color) {
+            this.color = this.getColor(this.color, this.Product.base.colors);
         }
         this.setColor(this.color);
         this.setSize();
@@ -346,11 +343,14 @@ export class DesignComponent implements OnInit {
                 }).draggable(opt);
                 myobj.selectItem = this;
             })
+            .on('delete', function (e) {
+                myobj.deleteImg();
+            })
             .on('dragend', function (e) {
-                myobj.updateCampaign();
+                // myobj.updateCampaign();
             })
             .on('resizedone', function (e) {
-                myobj.updateCampaign();
+                // myobj.updateCampaign();
             });
         image.id = dsrs.id;
     }
@@ -372,8 +372,8 @@ export class DesignComponent implements OnInit {
 
     public deleteLayer(leyer: any) {
         this.DesignService.deleteDesign(leyer, this.Campaign.id).subscribe(
-            res => {
-                console.log(res);
+            () => {
+                this.initCampaign(this.Campaign.id, userid);
             },
             error => {
                 console.error(error.json().message);
@@ -418,7 +418,6 @@ export class DesignComponent implements OnInit {
             .subscribe((product) => {
                 if (product) {
                     this.Product.base = product;
-                    this.BaseTypeGroup = this.getBaseTypeGroup();
                     this._addProduct();
                     this._selectBase(this.Product.base);
                 }
@@ -426,7 +425,9 @@ export class DesignComponent implements OnInit {
     }
 
     public selectProduct(Product) {
+        this.Product.id = Product.id;
         this.Product.base = Product.base;
+        this.Product.colors = Product.colors;
         if (this.loadconflic) {
             this.fDesign.sBaseType = this.Product.base.type_id;
             this.selectBaseType();

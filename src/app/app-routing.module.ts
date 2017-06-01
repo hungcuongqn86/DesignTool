@@ -7,6 +7,7 @@ import {LaunchingComponent} from './launching/launching.component';
 const appRoutes: Routes = [
     {path: '', redirectTo: 'design', pathMatch: 'full'},
     {path: 'design', component: DesignComponent},
+    {path: 'design/:id', component: DesignComponent},
     {path: 'pricing', component: PricingComponent},
     {path: 'launching', component: LaunchingComponent},
 ];

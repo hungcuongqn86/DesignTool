@@ -9,7 +9,6 @@ const sFaceDf = 'front';
 @Injectable()
 export class Design {
     public id;
-    public group;
     public product_id;
     public type = sFaceDf;
     public img: any;
@@ -28,17 +27,6 @@ export class Product {
     public designs: Array<any> = [];
 
     constructor() {
-    }
-
-    public updateDs(ds: any) {
-        for (let index = 0; index < this.designs.length; index++) {
-            if (this.designs[index].id === ds.id) {
-                console.log(ds);
-                // this.designs[index] = ds;
-                return true;
-            }
-        }
-        return false;
     }
 
     public getOpt(sFace) {
@@ -116,12 +104,10 @@ export class Product {
 
 @Injectable()
 export class Campaign {
-    static instance: Campaign;
     public id;
     public products: Array<Product> = [];
 
     constructor() {
-        return Campaign.instance = Campaign.instance || this;
     }
 
     public add(Product: Product) {
