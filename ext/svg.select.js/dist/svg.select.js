@@ -124,23 +124,11 @@
 
         // set.get(1) is always in the upper left corner. no need to move it
         if (this.options.points) {
-            this.rectSelection.set.get(2).center(bbox.width, 0);
-            this.rectSelection.set.get(3).center(bbox.width, bbox.height);
-            this.rectSelection.set.get(4).center(0, bbox.height);
-
-            /*this.rectSelection.set.get(5).center(bbox.width / 2, 0);
-             this.rectSelection.set.get(6).center(bbox.width, bbox.height / 2);
-             this.rectSelection.set.get(7).center(bbox.width / 2, bbox.height);
-             this.rectSelection.set.get(8).center(0, bbox.height / 2);*/
+            this.rectSelection.set.get(1).center(bbox.width, bbox.height);
+            this.rectSelection.set.get(2).center(0, bbox.height);
+            this.rectSelection.set.get(3).center(bbox.width / 2, 0);
+            this.rectSelection.set.get(4).center(bbox.width / 2, bbox.height);
         }
-
-        /*if (this.options.rotationPoint) {
-         if (this.options.points) {
-         this.rectSelection.set.get(9).center(bbox.width / 2, 20);
-         } else {
-         this.rectSelection.set.get(1).center(bbox.width / 2, 20);
-         }
-         }*/
     };
 
     SelectHandler.prototype.selectRect = function (value) {
@@ -174,44 +162,18 @@
             var myobj = this.el;
             var ename = "touchstart", mname = "mousedown";
             this.el.attr('class', 'img_select');
-            this.rectSelection.set.add(this.nested.circle(this.options.radius).center(0, 0).hide());
-            this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width, 0).hide());
             this.rectSelection.set.add(this.nested.image('./assets/img/scale.png').move(bbox.width - (21 / 2), bbox.height - (21 / 2)).on(mname, getMoseDownFunc('rb')).on(ename, getMoseDownFunc('rb')));
             this.rectSelection.set.add(this.nested.image('./assets/img/delete.png').move(-(21 / 2), bbox.height - (21 / 2))
                 .click(function () {
                     myobj.fire('delete');
                 })
             );
-
-            // this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width, bbox.height).attr('class', this.options.classPoints + '_rb').on(mname, getMoseDownFunc('rb')).on(ename, getMoseDownFunc('rb')));
-            // this.rectSelection.set.add(this.nested.circle(this.options.radius).center(0, bbox.height).attr('class', this.options.classPoints + '_lb').on(mname, getMoseDownFunc('lb')).on(ename, getMoseDownFunc('lb')));
-
-            /*this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width / 2, 0).attr('class', this.options.classPoints + '_t').on(mname, getMoseDownFunc('t')).on(ename, getMoseDownFunc('t')));
-             this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width, bbox.height / 2).attr('class', this.options.classPoints + '_r').on(mname, getMoseDownFunc('r')).on(ename, getMoseDownFunc('r')));
-             this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width / 2, bbox.height).attr('class', this.options.classPoints + '_b').on(mname, getMoseDownFunc('b')).on(ename, getMoseDownFunc('b')));
-             this.rectSelection.set.add(this.nested.circle(this.options.radius).center(0, bbox.height / 2).attr('class', this.options.classPoints + '_l').on(mname, getMoseDownFunc('l')).on(ename, getMoseDownFunc('l')));
-             */
+            this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width / 2, 0).attr('class', this.options.classPoints + '_t').on(mname, getMoseDownFunc('t')).on(ename, getMoseDownFunc('t')));
+            this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width / 2, bbox.height).attr('class', this.options.classPoints + '_b').on(mname, getMoseDownFunc('b')).on(ename, getMoseDownFunc('b')));
             this.rectSelection.set.each(function () {
                 this.addClass(_this.options.classPoints);
             });
         }
-
-        // draw rotationPint, if enabled
-        /*if (this.options.rotationPoint && ((this.options.points && !this.rectSelection.set.get(9)) || (!this.options.points && !this.rectSelection.set.get(1)))) {
-
-         var curriedEvent = function (ev) {
-         ev = ev || window.event;
-         ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
-
-         var x= ev.pageX || ev.touches[0].pageX;
-         var y= ev.pageY || ev.touches[0].pageY;
-         _this.el.fire('rot', {x: x, y: y, event: ev});
-         };
-         this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width / 2, 20).attr('class', this.options.classPoints + '_rot')
-         .on("touchstart", curriedEvent).on("mousedown", curriedEvent));
-
-         }*/
-
     };
 
     SelectHandler.prototype.handler = function () {
@@ -328,7 +290,7 @@
         points: true,                            // If true, points at the edges are drawn. Needed for resize!
         classRect: 'svg_select_boundingRect',    // Css-class added to the rect
         classPoints: 'svg_select_points',        // Css-class added to the points
-        radius: 15,                               // radius of the points
+        radius: 5,                               // radius of the points
         rotationPoint: false,                     // If true, rotation point is drawn. Needed for rotation!
         deepSelect: false                        // If true, moving of single points is possible (only line, polyline, polyon)
     };

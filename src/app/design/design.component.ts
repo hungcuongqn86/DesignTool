@@ -38,6 +38,7 @@ export class DesignComponent implements OnInit {
     productColor: any;
     productImg: any;
     printable: any;
+    line: any;
     selectItem: any;
     filetype = '';
 
@@ -63,6 +64,7 @@ export class DesignComponent implements OnInit {
         });
         this.printable = this.draw.polyline().fill('none').stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
         this.nested = this.draw.nested();
+        this.line = this.draw.line(0, 0, 0, 0).stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
         this.getBaseTypes();
     }
 
@@ -260,7 +262,10 @@ export class DesignComponent implements OnInit {
     private setPrintable() {
         this.printable.clear();
         this.printable.plot(this.Product.getPrintablePoint(this.face));
-        this.setPosition(this.Product.getOpt(this.face));
+        const opt = this.Product.getOpt(this.face);
+        const lX = opt.minX + ((opt.maxX - opt.minX) / 2);
+        this.line.plot(lX, 0, lX, this.Product.base.image.height).stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
+        this.setPosition(opt);
     }
 
     private setPosition(opt: any) {
@@ -354,8 +359,11 @@ export class DesignComponent implements OnInit {
             .on('delete', function (e) {
                 myobj.deleteImg();
             })
+            .on('dragstart', function (e) {
+                myobj.line.show().animate().stroke({color: 'blue', width: 1});
+            })
             .on('dragend', function (e) {
-                // myobj.updateCampaign();
+                myobj.line.hide();
             })
             .on('resizedone', function (e) {
                 // myobj.updateCampaign();
