@@ -173,10 +173,11 @@
         if (this.options.points && !this.rectSelection.set.get(1)) {
             var myobj = this.el;
             var ename = "touchstart", mname = "mousedown";
+            this.el.attr('class', 'img_select');
             this.rectSelection.set.add(this.nested.circle(this.options.radius).center(0, 0).hide());
             this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width, 0).hide());
-            this.rectSelection.set.add(this.nested.image('https://d1b2zzpxewkr9z.cloudfront.net/images/designer/tool/scale.png').move(bbox.width - 10, bbox.height - 10).on(mname, getMoseDownFunc('rb')).on(ename, getMoseDownFunc('rb')));
-            this.rectSelection.set.add(this.nested.image('https://d1b2zzpxewkr9z.cloudfront.net/images/designer/tool/delete.png').move(-10, bbox.height - 10)
+            this.rectSelection.set.add(this.nested.image('./assets/img/scale.png').move(bbox.width - (21 / 2), bbox.height - (21 / 2)).on(mname, getMoseDownFunc('rb')).on(ename, getMoseDownFunc('rb')));
+            this.rectSelection.set.add(this.nested.image('./assets/img/delete.png').move(-(21 / 2), bbox.height - (21 / 2))
                 .click(function () {
                     myobj.fire('delete');
                 })
@@ -265,6 +266,7 @@
                 this.remove();
             });
 
+            this.el.removeClass('img_select');
             this.rectSelection.set.clear();
             delete this.rectSelection.set;
         }

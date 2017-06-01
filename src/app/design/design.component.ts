@@ -163,6 +163,7 @@ export class DesignComponent implements OnInit {
                 this.form['controls']['filePicker'].reset();
             },
             error => {
+                this.form['controls']['filePicker'].reset();
                 console.error(error.json().message);
                 return Observable.throw(error);
             }
