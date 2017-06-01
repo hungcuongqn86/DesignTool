@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgModel} from '@angular/forms';
-import {Design, Designs, Product, Campaign, DesignService} from './design.service';
+import {Design, Product, Campaign, DesignService} from './design.service';
 import {ProductComponent} from './product.component';
 import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
@@ -34,6 +34,7 @@ export class DesignComponent implements OnInit {
     arrBase: any = [];
     fDesign: any = JSON.parse('{"sBaseType":"","file":""}');
     draw: any;
+    nested: any;
     productColor: any;
     productImg: any;
     printable: any;
@@ -42,8 +43,7 @@ export class DesignComponent implements OnInit {
 
     loadconflic = false;
 
-    constructor(public Campaign: Campaign, public Designs: Designs,
-                private DesignService: DesignService, private dialogService: DialogService) {
+    constructor(public Campaign: Campaign, private DesignService: DesignService, private dialogService: DialogService) {
         this.Product = new Product();
         let id = 'RcSX3ZZfo96uRJ2F';
         if (Cookie.check(campaignCookie)) {
@@ -60,6 +60,7 @@ export class DesignComponent implements OnInit {
             myobj.resetSelect();
         });
         this.printable = this.draw.polyline().fill('none').stroke({color: 'rgba(0, 0, 0, 0.3)', width: 1});
+        this.nested = this.draw.nested();
         this.getBaseTypes();
         key('delete', function () {
             myobj.deleteImg();
@@ -108,8 +109,8 @@ export class DesignComponent implements OnInit {
                 this.arrBaseTypes = data;
                 if (this.arrBaseTypes.length) {
                     if (this.loadconflic) {
-                        if (this.Product.base) {
-                            this.fDesign.sBaseType = this.Product.base.type;
+                        if (this.Product.base.type_id) {
+                            this.fDesign.sBaseType = this.Product.base.type_id;
                         } else {
                             this.fDesign.sBaseType = this.arrBaseTypes[0].base_types[0].id;
                         }
@@ -144,32 +145,33 @@ export class DesignComponent implements OnInit {
 
     private _handleReaderLoaded(readerEvt) {
         const binaryString = readerEvt.target.result;
-        this.addImg(this.filetype, btoa(binaryString));
-        this.form['controls']['filePicker'].reset();
+        const newDesign = new Design();
+        newDesign.product_id = this.Product.id;
+        newDesign.type = this.face;
+        newDesign.image.position = this.Product.designs.length + 1;
+        newDesign.image.mime_type = this.filetype;
+        newDesign.image.data = btoa(binaryString);
+        this.DesignService.addDesign(newDesign).subscribe(
+            res => {
+                this.addImg(res);
+                this.form['controls']['filePicker'].reset();
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
     }
 
     public selectBaseType() {
-        this.setBaseTypeGroup();
         this.getBases();
-    }
-
-    private setBaseTypeGroup() {
-        for (let i = 0; i < this.arrBaseTypes.length; i++) {
-            const arrBaseType: any = this.arrBaseTypes[i].base_types;
-            for (let j = 0; j < arrBaseType.length; j++) {
-                if (arrBaseType[j].id === this.fDesign.sBaseType) {
-                    this.BaseTypeGroup = this.arrBaseTypes[i];
-                    return true;
-                }
-            }
-        }
     }
 
     private getBaseTypeGroup() {
         for (let i = 0; i < this.arrBaseTypes.length; i++) {
             const arrBaseType: any = this.arrBaseTypes[i].base_types;
             for (let j = 0; j < arrBaseType.length; j++) {
-                if (arrBaseType[j].id === this.Product.base.type.id) {
+                if (arrBaseType[j].id === this.Product.base.type_id) {
                     return this.arrBaseTypes[i];
                 }
             }
@@ -207,11 +209,10 @@ export class DesignComponent implements OnInit {
 
     public _selectBase(base: any) {
         this.Product.base = base;
-        this.setSize();
         this.setFace(this.face);
         if (this.color) {
             if (this.Product.base.colors) {
-                const index = this.Product.base.colors.indexOf(this.color);
+                const index = this.Product.base.colors.findIndex(x => x.id === this.color.id);
                 if (index < 0) {
                     this.color = this.Product.base.colors[0];
                 }
@@ -225,6 +226,7 @@ export class DesignComponent implements OnInit {
             }
         }
         this.setColor(this.color);
+        this.setSize();
     }
 
     private setSize() {
@@ -235,35 +237,19 @@ export class DesignComponent implements OnInit {
 
     public setFace(face) {
         this.face = face;
-        if (face === 'front') {
-            this.productImg.load(this.Product.base.image.front);
-        } else {
-            this.productImg.load(this.Product.base.image.back);
-        }
+        this.productImg.load(this.getBaseImgUrl(this.face, this.Product.base.id));
+        this.genDesign();
         this.setPrintable();
-        this.resetSelect();
-        this.setDesigns();
-    }
-
-    private setDesigns() {
-        Object.keys(this.Designs.data).map((index) => {
-            if (this.Designs.data[index].face === this.face) {
-                if (this.Designs.data[index].group === this.BaseTypeGroup.id) {
-                    this.Designs.data[index].img.show();
-                } else {
-                    this.Designs.data[index].img.hide();
-                }
-            } else {
-                this.Designs.data[index].img.hide();
-            }
-        });
     }
 
     private resetSelect() {
-        this.selectItem = null;
-        Object.keys(this.Designs.data).map((index) => {
-            this.Designs.data[index].img.selectize(false, {deepSelect: true});
+        const nestedElement = this.nested.children();
+        Object.keys(nestedElement).map((index) => {
+            if (nestedElement[index].type === 'image') {
+                nestedElement[index].selectize(false, {deepSelect: true});
+            }
         });
+        this.selectItem = null;
     }
 
     private setPrintable() {
@@ -274,44 +260,43 @@ export class DesignComponent implements OnInit {
 
     private setPosition(opt: any) {
         const myobj = this;
-        this.selectItem = null;
-        for (let i = 0; i < this.Designs.data.length; i++) {
-            if ((this.Designs.data[i].face === this.face) && (this.Designs.data[i].group === this.BaseTypeGroup.id)) {
-                const img = this.Designs.data[i].img;
-                const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
-                const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
-                const mx = (img.x() - img.printableConf.minX) * tlX;
-                const my = (img.y() - img.printableConf.minY) * tlY;
+        for (let i = 0; i < this.nested.length; i++) {
+            const img = this.nested[i];
+            console.log(img);
 
-                let mW = img.width() * tlX;
-                let mH = 0;
-                if (opt.minX + mx + mW <= opt.maxX) {
-                    mH = mW * img.height() / img.width();
-                } else {
-                    mW = opt.maxX - (opt.minX + mx);
-                    mH = mW * img.height() / img.width();
-                }
+            /*const tlX = (opt.maxX - opt.minX) / (img.printableConf.maxX - img.printableConf.minX);
+             const tlY = (opt.maxY - opt.minY) / (img.printableConf.maxY - img.printableConf.minY);
+             const mx = (img.x() - img.printableConf.minX) * tlX;
+             const my = (img.y() - img.printableConf.minY) * tlY;
 
-                if (opt.minY + my + mH <= opt.maxY) {
-                    img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
-                } else {
-                    mH = opt.maxY - (opt.minY + my);
-                    mW = mH * img.width() / img.height();
-                    img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
-                }
+             let mW = img.width() * tlX;
+             let mH = 0;
+             if (opt.minX + mx + mW <= opt.maxX) {
+             mH = mW * img.height() / img.width();
+             } else {
+             mW = opt.maxX - (opt.minX + mx);
+             mH = mW * img.height() / img.width();
+             }
 
-                img.selectize(false, {deepSelect: true}).draggable(false);
-                img.click(function () {
-                    myobj.resetSelect();
-                    this.selectize().resize({
-                        constraint: opt
-                    }).draggable(opt);
-                    myobj.selectItem = this;
-                });
+             if (opt.minY + my + mH <= opt.maxY) {
+             img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+             } else {
+             mH = opt.maxY - (opt.minY + my);
+             mW = mH * img.width() / img.height();
+             img.move(opt.minX + mx, opt.minY + my).size(mW, mH);
+             }*/
 
-                img.printableConf = opt;
-                this.Designs.data[i].img = img;
-            }
+            img.selectize(false, {deepSelect: true}).draggable(false);
+            img.click(function () {
+                myobj.resetSelect();
+                this.selectize().resize({
+                    constraint: opt
+                }).draggable(opt);
+                myobj.selectItem = this;
+            });
+
+            img.printableConf = opt;
+            this.Product.designs[i] = img;
         }
     }
 
@@ -328,12 +313,12 @@ export class DesignComponent implements OnInit {
         this.color = sColor;
     }
 
-    public addImg(filetype, binaryString: any) {
+    public addImg(dsrs: any) {
         const myobj = this;
         const printw = this.Product.getWidth(this.face);
         const printh = this.Product.getHeight(this.face);
         const opt = this.Product.getOpt(this.face);
-        const image = this.draw.image('data:' + filetype + ';base64,' + binaryString)
+        const image = this.nested.image(dsrs.image.url)
             .loaded(function (loader) {
                 if (printw < loader.width) {
                     let mwidth = printw;
@@ -353,23 +338,21 @@ export class DesignComponent implements OnInit {
                     }
                 }
             })
-            .move(this.Product.getLeft(this.face), this.Product.getTop(this.face));
-
-
-        image.printableConf = opt;
-        image.click(function () {
-            myobj.resetSelect();
-            this.selectize().resize({
-                constraint: opt
-            }).draggable(opt);
-            myobj.selectItem = this;
-        });
-
-        const img = new Design();
-        img.img = image;
-        img.face = this.face;
-        img.group = this.BaseTypeGroup.id;
-        this.Designs.add(img);
+            .move(this.Product.getLeft(this.face), this.Product.getTop(this.face))
+            .click(function () {
+                myobj.resetSelect();
+                this.selectize().resize({
+                    constraint: opt
+                }).draggable(opt);
+                myobj.selectItem = this;
+            })
+            .on('dragend', function (e) {
+                myobj.updateCampaign();
+            })
+            .on('resizedone', function (e) {
+                myobj.updateCampaign();
+            });
+        image.id = dsrs.id;
     }
 
     public selectLayer(leyer: any) {
@@ -388,35 +371,41 @@ export class DesignComponent implements OnInit {
     }
 
     public deleteLayer(leyer: any) {
-        const img = new Design();
-        img.img = leyer;
-        img.face = this.face;
-        img.group = this.BaseTypeGroup;
-        img.img.selectize(false, {deepSelect: true}).remove();
-        this.Designs.deleteImg(img);
-        this.selectItem = null;
+        this.DesignService.deleteDesign(leyer, this.Campaign.id).subscribe(
+            res => {
+                console.log(res);
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
     }
 
     public _addProduct() {
         const newProduct = new Product();
-        newProduct.base = this.Product.base;
+        newProduct.base.id = this.Product.base.id;
+        let color: any;
         if (this.color) {
-            if (newProduct.base.colors) {
-                const index = newProduct.base.colors.indexOf(this.color);
+            if (this.Product.base.colors) {
+                const index = this.Product.base.colors.findIndex(x => x.id === this.color.id);
                 if (index < 0) {
-                    if (newProduct.base.colors.length) {
-                        newProduct.colors.push(newProduct.base.colors[0]);
+                    if (this.Product.base.colors.length) {
+                        color = this.Product.base.colors[0];
                     }
                 } else {
-                    newProduct.colors.push(this.color);
+                    color = this.color;
                 }
             }
         } else {
             if (newProduct.base.colors) {
-                newProduct.colors.push(newProduct.base.colors[0]);
+                color = this.Product.base.colors[0];
             }
         }
         newProduct.position = this.Campaign.products.length + 1;
+        if (color) {
+            newProduct.colors.push({id: color.id});
+        }
         this.Campaign.add(newProduct);
         this.updateCampaign();
         this.setColor(newProduct.colors[0]);
@@ -439,44 +428,39 @@ export class DesignComponent implements OnInit {
     public selectProduct(Product) {
         this.Product.base = Product.base;
         if (this.loadconflic) {
-            this.fDesign.sBaseType = this.Product.base.type;
+            this.fDesign.sBaseType = this.Product.base.type_id;
             this.selectBaseType();
         } else {
             this.loadconflic = true;
         }
     }
 
-    public deleteProduct(id) {
-        if (this.Campaign.products.length > 1) {
-            this.Campaign.deletePro(id);
-            let checkHas = false;
-            for (let index = 0; index < this.Campaign.products.length; index++) {
-                if (this.Campaign.products[index].base.id === this.Product.base.id) {
-                    checkHas = true;
-                }
+    private genDesign() {
+        this.nested.clear();
+        Object.keys(this.Product.designs).map((index) => {
+            if (this.Product.designs[index].type === this.face) {
+                this.addImg(this.Product.designs[index]);
             }
-            if (!checkHas) {
-                const newProduct = new Product();
-                newProduct.base = this.Campaign.products[0].base;
-                newProduct.colors = this.Campaign.products[0].colors;
-                this.Product = newProduct;
-                this.BaseTypeGroup = this.getBaseTypeGroup();
-                this._selectBase(this.Product.base);
+        });
+    }
+
+    public deleteProduct(id) {
+        const count = this.Campaign.products.length;
+        this.Campaign.deletePro(id);
+        if (count > 1) {
+            const check = this.Campaign.products.findIndex(x => x.base.id === this.Product.base.id);
+            if (check < 0) {
+                this.selectProduct(this.Campaign.products[0]);
             }
         } else {
-            this.Campaign.deletePro(id);
             this.resetDs();
         }
         this.updateCampaign();
     }
 
     private resetDs() {
-        Object.keys(this.Designs.data).map((index) => {
-            this.Designs.data[index].img.selectize(false, {deepSelect: true}).remove();
-        });
-        this.Designs.data = [];
+        this.nested.clear();
         this.Product.colors = [];
-        this.color = null;
         this.fDesign.sBaseType = this.arrBaseTypes[0].base_types[0].id;
         this.selectBaseType();
     }
@@ -484,6 +468,8 @@ export class DesignComponent implements OnInit {
     public addColor(oProduct: Product) {
         this.dialogService.addDialog(ColorComponent, {
             oProduct: oProduct
+        }).subscribe(() => {
+            this.updateCampaign();
         });
     }
 }

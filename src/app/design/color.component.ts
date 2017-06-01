@@ -25,6 +25,15 @@ export class ColorComponent extends DialogComponent<PromptModel, string> impleme
 
     }
 
+    public checkColor(color: any) {
+        for (let i = 0; i < this.oProduct.colors.length; i++) {
+            if (this.oProduct.colors[i].id === color.id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public getBaseImgUrl(sFace, base: any) {
         return imgDir + base + '_' + sFace + '.png';
     }
@@ -41,12 +50,12 @@ export class ColorComponent extends DialogComponent<PromptModel, string> impleme
     }
 
     public selectColor(color) {
-        if (!this.oProduct.colors.includes(color)) {
+        const check = this.checkColor(color);
+        if (check < 0) {
             this.oProduct.colors.push(color);
         } else {
-            const indexx = this.oProduct.colors.indexOf(color);
             if (this.oProduct.colors.length > 1) {
-                this.oProduct.colors.splice(indexx, 1);
+                this.oProduct.colors.splice(check, 1);
             }
         }
     }

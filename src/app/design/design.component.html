@@ -31,17 +31,19 @@
                         </div>
                         <div id="menu2" class="tab-pane fade">
                             <ul class="layers">
-                                <li *ngFor='let itemNested of Designs.getByface(face)'
-                                    class="layer {{selectItem && (itemNested.img.attr('id')==selectItem.attr('id'))? 'active': ''}}">
-                                    <span (click)="selectLayer(itemNested.img)"><img alt=""
-                                                                                     src="{{itemNested.img.src}}">{{itemNested.img.attr('id')}}</span>
-                                    <div class="layer-action pull-right">
-                                        <a class="layer-action-item" (click)="deleteLayer(itemNested.img)"
-                                           title="Press `delete` on keyboard">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </li>
+                                <template ngFor let-itemNested [ngForOf]="nested.children()">
+                                    <li *ngIf="itemNested.type==='image'"
+                                        class="layer {{selectItem && (itemNested.attr('id')==selectItem.attr('id'))? 'active': ''}}">
+                                        <span (click)="selectLayer(itemNested)"><img alt=""
+                                                                                     src="{{itemNested.src}}">{{itemNested.attr('id')}}</span>
+                                        <div class="layer-action pull-right">
+                                            <a class="layer-action-item" (click)="deleteLayer(itemNested)"
+                                               title="Press `delete` on keyboard">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </template>
                             </ul>
                         </div>
                     </div>

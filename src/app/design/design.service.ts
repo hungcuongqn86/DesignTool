@@ -3,13 +3,17 @@ import {Response, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {HttpClient} from '../http-client';
 
+const apiUrl = './api/v1/';  // URL to web api
 const sFaceDf = 'front';
 
 @Injectable()
 export class Design {
+    public id;
     public group;
-    public face = sFaceDf;
+    public product_id;
+    public type = sFaceDf;
     public img: any;
+    public image: any = JSON.parse('{"position":"","mime_type":"","data":""}');
 
     constructor() {
     }
@@ -19,11 +23,22 @@ export class Design {
 export class Product {
     public id;
     public position;
-    public base: any;
+    public base: any = JSON.parse('{"id":""}');
     public colors: Array<any> = [];
-    public designs: Array<Design> = [];
+    public designs: Array<any> = [];
 
     constructor() {
+    }
+
+    public updateDs(ds: any) {
+        for (let index = 0; index < this.designs.length; index++) {
+            if (this.designs[index].id === ds.id) {
+                console.log(ds);
+                // this.designs[index] = ds;
+                return true;
+            }
+        }
+        return false;
     }
 
     public getOpt(sFace) {
@@ -100,42 +115,6 @@ export class Product {
 }
 
 @Injectable()
-export class Designs {
-    static instance: Designs;
-    public data: Array<Design> = [];
-    public index = 0;
-
-    constructor() {
-        return Designs.instance = Designs.instance || this;
-    }
-
-    public add(Design: Design) {
-        this.data.push(Design);
-        this.index = this.data.indexOf(Design);
-    }
-
-    public getByface(face) {
-        const arrReturn = [];
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i].face === face) {
-                arrReturn.push(this.data[i]);
-            }
-        }
-        return arrReturn;
-    }
-
-    public deleteImg(Design: Design) {
-        for (let i = 0; i < this.data.length; i++) {
-            if ((this.data[i].face === Design.face) && (this.data[i].img.attr('id') === Design.img.attr('id'))) {
-                this.data.splice(i, 1);
-                return true;
-            }
-        }
-        return false;
-    }
-}
-
-@Injectable()
 export class Campaign {
     static instance: Campaign;
     public id;
@@ -171,8 +150,6 @@ export class Campaign {
 
 @Injectable()
 export class DesignService {
-    private apiUrl = './api/v1/';  // URL to web api
-
     constructor(private http: HttpClient) {
     }
 
@@ -185,31 +162,42 @@ export class DesignService {
     }
 
     updateCampaign(campaign: Campaign) {
-        const url = this.apiUrl + `campaigns/` + campaign.id;
+        const url = apiUrl + `campaigns/` + campaign.id;
         const body = JSON.stringify(campaign);
         return this.http.put(url, body).map((res: Response) => res.json());
     }
 
     private createCampaign(userid): any {
-        const url = this.apiUrl + `campaigns`;
+        const url = apiUrl + `campaigns`;
         const body = JSON.stringify({user_id: userid});
         return this.http.post(url, body).map((res: Response) => res.json());
     }
 
     private getCampaign(id): any {
-        const url = this.apiUrl + `campaigns/` + id;
+        const url = apiUrl + `campaigns/` + id;
         return this.http.get(url).map((res: Response) => res.json());
     }
 
     getBaseTypes(): any {
-        const url = this.apiUrl + `base_groups`;
+        const url = apiUrl + `base_groups`;
         return this.http.get(url).map((res: Response) => res.json().base_groups);
     }
 
     getBases(type_id): any {
-        const url = this.apiUrl + `bases`;
+        const url = apiUrl + `bases`;
         const params: URLSearchParams = new URLSearchParams();
         params.set('type_id', type_id);
         return this.http.get(url, {search: params}).map((res: Response) => res.json().bases);
+    }
+
+    addDesign(Design: Design) {
+        const url = apiUrl + `designs`;
+        const body = JSON.stringify({product_id: Design.product_id, type: Design.type, image: Design.image});
+        return this.http.post(url, body).map((res: Response) => res.json());
+    }
+
+    deleteDesign(Design: Design, cpId) {
+        const url = apiUrl + `designs/` + Design.id + '?campaign_id=' + cpId;
+        return this.http.delete(url).map((res: Response) => res.json());
     }
 }
