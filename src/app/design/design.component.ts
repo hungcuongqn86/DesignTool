@@ -472,11 +472,6 @@ export class DesignComponent implements OnInit {
             });
     }
 
-    public changeProduct(Product) {
-        this.Product.id = Product.id;
-        this.initCampaign(this.Campaign.id, userid);
-    }
-
     private selectProduct(Product) {
         this.Product.id = Product.id;
         this.Product.base = Product.base;
