@@ -168,8 +168,8 @@
                     myobj.fire('delete');
                 })
             );
-            this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width / 2, 0).attr('class', this.options.classPoints + '_t').on(mname, getMoseDownFunc('t')).on(ename, getMoseDownFunc('t')));
-            this.rectSelection.set.add(this.nested.circle(this.options.radius).center(bbox.width / 2, bbox.height).attr('class', this.options.classPoints + '_b').on(mname, getMoseDownFunc('b')).on(ename, getMoseDownFunc('b')));
+            this.rectSelection.set.add(this.nested.rect(8, 8).center(bbox.width / 2, 0).attr('class', this.options.classPoints + '_t'));
+            this.rectSelection.set.add(this.nested.rect(8, 8).center(bbox.width / 2, bbox.height).attr('class', this.options.classPoints + '_b'));
             this.rectSelection.set.each(function () {
                 this.addClass(_this.options.classPoints);
             });

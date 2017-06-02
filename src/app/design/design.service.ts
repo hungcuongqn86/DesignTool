@@ -9,6 +9,7 @@ const sFaceDf = 'front';
 @Injectable()
 export class Design {
     public id;
+    public campaign_id;
     public product_id;
     public type = sFaceDf;
     public img: any;
@@ -180,6 +181,12 @@ export class DesignService {
         const url = apiUrl + `designs`;
         const body = JSON.stringify({product_id: Design.product_id, type: Design.type, image: Design.image});
         return this.http.post(url, body).map((res: Response) => res.json());
+    }
+
+    updateDesign(Design: Design) {
+        const url = apiUrl + `designs/` + Design.id;
+        const body = JSON.stringify(Design);
+        return this.http.put(url, body).map((res: Response) => res.json());
     }
 
     deleteDesign(Design: Design, cpId) {

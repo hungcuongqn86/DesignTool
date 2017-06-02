@@ -53,12 +53,12 @@
             <div *ngFor='let productItem of Campaign.products' class="panel panel-default produc-box">
                 <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
                      class="panel-body {{Product.base.id==productItem.base.id? 'active': ''}}">
-                    <span (click)="selectProduct(productItem)">{{productItem.base.name}}</span>
+                    <span (click)="changeProduct(productItem)">{{productItem.base.name}}</span>
                     <a (click)="deleteProduct(productItem.base.id)" class="producs-action-item pull-right"
                        title="delete">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </a>
-                    <div class="row producs-list" (click)="selectProduct(productItem)">
+                    <div class="row producs-list" (click)="changeProduct(productItem)">
                         <div class="col-sm-4">
                             <img alt="" src="{{getBaseImgUrl('front',productItem.base.id)}}">
                         </div>
