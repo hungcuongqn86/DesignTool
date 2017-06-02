@@ -296,11 +296,11 @@ export class DesignComponent implements OnInit {
         const dsrs = this.Campaign.products[0].designs.filter(function (itm) {
             return itm.id === dsrsold.id;
         })[0];
+
         const tlX: number = (optnew.maxX - optnew.minX) / (optold.maxX - optold.minX);
         const tlY: number = (optnew.maxY - optnew.minY) / (optold.maxY - optold.minY);
         const mx: number = dsrs.image.printable_left * tlX;
         const my: number = dsrs.image.printable_top * tlY;
-
         let mW = dsrs.image.printable_width * tlX;
         let mH = 0;
         if (optnew.minX + mx + mW <= optnew.maxX) {
@@ -349,6 +349,7 @@ export class DesignComponent implements OnInit {
         const opt = this.Product.getOpt(this.face);
         this.nested.image(dsrs.image.url)
             .loaded(function (loader) {
+                this.id = dsrs.id;
                 myobj.resizeImg(this, dsrs);
             })
             .click(function () {

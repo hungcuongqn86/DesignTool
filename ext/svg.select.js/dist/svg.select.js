@@ -168,8 +168,8 @@
                     myobj.fire('delete');
                 })
             );
-            this.rectSelection.set.add(this.nested.rect(8, 8).center(bbox.width / 2, 0).attr('class', this.options.classPoints + '_t'));
-            this.rectSelection.set.add(this.nested.rect(8, 8).center(bbox.width / 2, bbox.height).attr('class', this.options.classPoints + '_b'));
+            this.rectSelection.set.add(this.nested.rect(8, 8).center(bbox.width / 2, 0));
+            this.rectSelection.set.add(this.nested.rect(8, 8).center(bbox.width / 2, bbox.height));
             this.rectSelection.set.each(function () {
                 this.addClass(_this.options.classPoints);
             });
