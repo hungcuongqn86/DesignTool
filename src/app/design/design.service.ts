@@ -128,10 +128,10 @@ export class Campaign {
     public hasBase(id) {
         for (let index = 0; index < this.products.length; index++) {
             if (this.products[index].base.id === id) {
-                return true;
+                return index;
             }
         }
-        return false;
+        return -1;
     }
 }
 
@@ -160,7 +160,7 @@ export class DesignService {
         return this.http.post(url, body).map((res: Response) => res.json());
     }
 
-    private getCampaign(id): any {
+    getCampaign(id): any {
         const url = apiUrl + `campaigns/` + id;
         return this.http.get(url).map((res: Response) => res.json());
     }
