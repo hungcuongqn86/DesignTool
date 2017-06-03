@@ -40,6 +40,7 @@ export class DesignComponent implements OnInit {
     printable: any;
     line: any;
     selectItem: any;
+    dsrsSave: any;
     filetype = '';
 
     loadconflic = false;
@@ -103,6 +104,11 @@ export class DesignComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
+                const productIndex = this.Campaign.hasBase(this.Product.base.id);
+                Object.keys(this.Campaign.products[productIndex]).map((index) => {
+                    this.Product[index] = this.Campaign.products[productIndex][index];
+                });
+                this.selectProduct(this.Product);
             },
             error => {
                 console.error(error.json().message);
@@ -112,28 +118,18 @@ export class DesignComponent implements OnInit {
     }
 
     private reActionUpdateDesign() {
-        console.log(this.Product);
-        /*const img = new Design();
-         img.campaign_id = this.Campaign.id;
-         img.product_id = this.Product.id;
-         img.image.printable_top = 0;
-         img.image.printable_left = 0;
-         img.image.printable_width = this.Product.getWidth(this.face);
-         img.image.printable_height = (img.image.printable_width * img.image.height / img.image.width).toFixed(2);
-         if (img.image.printable_height > this.Product.getHeight(this.face)) {
-         img.image.printable_height = this.Product.getHeight(this.face);
-         img.image.printable_width = (img.image.printable_height * img.image.width / img.image.height).toFixed(2);
-         }
-         this.DesignService.updateDesign(img).subscribe(
-         () => {
-         this.initCampaign(this.Campaign.id, userid);
-         },
-         error => {
-         console.error(error.json().message);
-         this.initCampaign(this.Campaign.id, userid);
-         return Observable.throw(error);
-         }
-         );*/
+        this.dsrsSave.product_id = this.Product.id;
+        this.DesignService.updateDesign(this.dsrsSave).subscribe(
+            () => {
+                this.getCampaign();
+            },
+            error => {
+                console.error(error.json().message);
+                this.initCampaign(this.Campaign.id, userid);
+                return Observable.throw(error);
+            }
+        );
+        // this.dsrsSave = null;
     }
 
     private updateCampaign() {
@@ -147,7 +143,11 @@ export class DesignComponent implements OnInit {
                 Object.keys(this.Campaign.products[productIndex]).map((index) => {
                     this.Product[index] = this.Campaign.products[productIndex][index];
                 });
-                this.selectProduct(this.Product);
+                if (this.dsrsSave) {
+                    this.reActionUpdateDesign();
+                } else {
+                    this.selectProduct(this.Product);
+                }
             },
             error => {
                 console.error(error.json().message);
@@ -426,22 +426,22 @@ export class DesignComponent implements OnInit {
     }
 
     private updateDesign(image: any, dsrs: any) {
+        const ds = new Design();
+        delete ds.image.data;
+        delete ds.image.mime_type;
+        ds.id = dsrs.id;
+        ds.campaign_id = this.Campaign.id;
+        ds.product_id = this.Product.id;
+        ds.type = dsrs.type;
+        ds.image.id = dsrs.image.id;
+        ds.image.position = dsrs.image.position;
+        ds.image.width = dsrs.image.width;
+        ds.image.height = dsrs.image.height;
+        ds.image.printable_top = (image.y() - this.printable.y()).toFixed(2);
+        ds.image.printable_left = (image.x() - this.printable.x()).toFixed(2);
+        ds.image.printable_width = image.width().toFixed(2);
+        ds.image.printable_height = image.height().toFixed(2);
         if (this.Campaign.hasBase(this.Product.base.id) >= 0) {
-            const ds = new Design();
-            delete ds.image.data;
-            delete ds.image.mime_type;
-            ds.id = dsrs.id;
-            ds.campaign_id = this.Campaign.id;
-            ds.product_id = this.Product.id;
-            ds.type = dsrs.type;
-            ds.image.id = dsrs.image.id;
-            ds.image.position = dsrs.image.position;
-            ds.image.width = dsrs.image.width;
-            ds.image.height = dsrs.image.height;
-            ds.image.printable_top = (image.y() - this.printable.y()).toFixed(2);
-            ds.image.printable_left = (image.x() - this.printable.x()).toFixed(2);
-            ds.image.printable_width = image.width().toFixed(2);
-            ds.image.printable_height = image.height().toFixed(2);
             this.DesignService.updateDesign(ds).subscribe(
                 () => {
                     this.getCampaign();
@@ -452,6 +452,9 @@ export class DesignComponent implements OnInit {
                     return Observable.throw(error);
                 }
             );
+        } else {
+            delete ds.product_id;
+            this.dsrsSave = ds;
         }
     }
 
