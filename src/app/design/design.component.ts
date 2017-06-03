@@ -174,8 +174,28 @@ export class DesignComponent implements OnInit {
         newDesign.image.mime_type = this.filetype;
         newDesign.image.data = btoa(binaryString);
         this.DesignService.addDesign(newDesign).subscribe(
-            () => {
-                this.initCampaign(this.Campaign.id, userid);
+            (data) => {
+                const img = data;
+                img.campaign_id = this.Campaign.id;
+                img.product_id = this.Product.id;
+                img.image.printable_top = 0;
+                img.image.printable_left = 0;
+                img.image.printable_width = this.Product.getWidth(this.face);
+                img.image.printable_height = (img.image.printable_width * img.image.height / img.image.width).toFixed(2);
+                if (img.image.printable_height > this.Product.getHeight(this.face)) {
+                    img.image.printable_height = this.Product.getHeight(this.face);
+                    img.image.printable_width = (img.image.printable_height * img.image.width / img.image.height).toFixed(2);
+                }
+                this.DesignService.updateDesign(img).subscribe(
+                    () => {
+                        this.initCampaign(this.Campaign.id, userid);
+                    },
+                    error => {
+                        console.error(error.json().message);
+                        this.initCampaign(this.Campaign.id, userid);
+                        return Observable.throw(error);
+                    }
+                );
                 this.form['controls']['filePicker'].reset();
             },
             error => {
@@ -296,7 +316,6 @@ export class DesignComponent implements OnInit {
         const dsrs = this.Campaign.products[0].designs.filter(function (itm) {
             return itm.id === dsrsold.id;
         })[0];
-
         const tlX: number = (optnew.maxX - optnew.minX) / (optold.maxX - optold.minX);
         const tlY: number = (optnew.maxY - optnew.minY) / (optold.maxY - optold.minY);
         const mx: number = dsrs.image.printable_left * tlX;
@@ -304,15 +323,15 @@ export class DesignComponent implements OnInit {
         let mW = dsrs.image.printable_width * tlX;
         let mH = 0;
         if (optnew.minX + mx + mW <= optnew.maxX) {
-            mH = mW * dsrs.image.printable_height / dsrs.image.printable_width;
+            mH = mW * dsrs.image.height / dsrs.image.width;
         } else {
             mW = optnew.maxX - (optnew.minX + mx);
-            mH = mW * dsrs.image.printable_height / dsrs.image.printable_width;
+            mH = mW * dsrs.image.height / dsrs.image.width;
         }
 
         if (optnew.minY + my + mH > optnew.maxY) {
             mH = optnew.maxY - (optnew.minY + my);
-            mW = mH * dsrs.image.printable_width / dsrs.image.printable_height;
+            mW = mH * dsrs.image.width / dsrs.image.height;
         }
         img.move(optnew.minX + mx, optnew.minY + my).size(mW, mH);
     }
@@ -473,7 +492,7 @@ export class DesignComponent implements OnInit {
             });
     }
 
-    private selectProduct(Product) {
+    public selectProduct(Product) {
         this.Product.id = Product.id;
         this.Product.base = Product.base;
         this.Product.colors = Product.colors;
