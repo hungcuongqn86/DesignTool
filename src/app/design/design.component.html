@@ -13,10 +13,13 @@
                         <div id="home" class="tab-pane fade in active">
                             <div class="text-center bottom-margin">
                                 <form #form1="ngForm">
-                                    <input [(ngModel)]="fDesign.file" #filePicker="ngModel" style="display: none;"
-                                           type="file" id="filePicker" name="filePicker" class="form-control"
+                                    <input *ngIf="Product.base&&(Campaign.hasBase(Product.base.id) >=0)"
+                                           [(ngModel)]="fDesign.file" #filePicker="ngModel" style="display: none;"
+                                           type="file" id="filePicker" name="filePicker"
+                                           class="form-control"
                                            (change)="handleFileSelect($event)">
-                                    <label class="btn btn-danger" style='cursor: pointer' for="filePicker">
+                                    <label class="btn {{Product.base&&(Campaign.hasBase(Product.base.id) >=0)? 'btn-danger': 'btn-default disabled'}}"
+                                           style='cursor: pointer' for="filePicker">
                                         Import Img
                                     </label>
                                 </form>

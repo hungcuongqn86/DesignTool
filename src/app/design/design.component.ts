@@ -111,12 +111,43 @@ export class DesignComponent implements OnInit {
         );
     }
 
+    private reActionUpdateDesign() {
+        console.log(this.Product);
+        /*const img = new Design();
+         img.campaign_id = this.Campaign.id;
+         img.product_id = this.Product.id;
+         img.image.printable_top = 0;
+         img.image.printable_left = 0;
+         img.image.printable_width = this.Product.getWidth(this.face);
+         img.image.printable_height = (img.image.printable_width * img.image.height / img.image.width).toFixed(2);
+         if (img.image.printable_height > this.Product.getHeight(this.face)) {
+         img.image.printable_height = this.Product.getHeight(this.face);
+         img.image.printable_width = (img.image.printable_height * img.image.width / img.image.height).toFixed(2);
+         }
+         this.DesignService.updateDesign(img).subscribe(
+         () => {
+         this.initCampaign(this.Campaign.id, userid);
+         },
+         error => {
+         console.error(error.json().message);
+         this.initCampaign(this.Campaign.id, userid);
+         return Observable.throw(error);
+         }
+         );*/
+    }
+
     private updateCampaign() {
         this.DesignService.updateCampaign(this.Campaign).subscribe(
             res => {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
+
+                const productIndex = this.Campaign.hasBase(this.Product.base.id);
+                Object.keys(this.Campaign.products[productIndex]).map((index) => {
+                    this.Product[index] = this.Campaign.products[productIndex][index];
+                });
+                this.selectProduct(this.Product);
             },
             error => {
                 console.error(error.json().message);
@@ -269,6 +300,7 @@ export class DesignComponent implements OnInit {
             this.selectProduct(this.Product);
         } else {
             this.Product.base = base;
+            this.Product.colors = [];
         }
         this.setFace(this.face);
         this.color = this.getColor(this.color, this.Product.colors);
@@ -487,7 +519,6 @@ export class DesignComponent implements OnInit {
                 if (product) {
                     this.Product.base = product;
                     this._addProduct();
-                    this._selectBase(this.Product.base);
                 }
             });
     }
