@@ -104,11 +104,6 @@ export class DesignComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
-                const productIndex = this.Campaign.hasBase(this.Product.base.id);
-                Object.keys(this.Campaign.products[productIndex]).map((index) => {
-                    this.Product[index] = this.Campaign.products[productIndex][index];
-                });
-                this.selectProduct(this.Product);
             },
             error => {
                 console.error(error.json().message);
@@ -125,11 +120,10 @@ export class DesignComponent implements OnInit {
             },
             error => {
                 console.error(error.json().message);
-                this.initCampaign(this.Campaign.id, userid);
                 return Observable.throw(error);
             }
         );
-        // this.dsrsSave = null;
+        this.dsrsSave = null;
     }
 
     private updateCampaign() {
@@ -560,7 +554,7 @@ export class DesignComponent implements OnInit {
                 this.selectProduct(this.Campaign.products[0]);
             }
         } else {
-            this.resetDs();
+            // this.resetDs();
         }
         this.updateCampaign();
     }
