@@ -554,7 +554,7 @@ export class DesignComponent implements OnInit {
                 this.selectProduct(this.Campaign.products[0]);
             }
         } else {
-            // this.resetDs();
+            this.resetDs();
         }
         this.updateCampaign();
     }
