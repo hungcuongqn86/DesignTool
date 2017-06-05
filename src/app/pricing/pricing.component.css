@@ -1,0 +1,26 @@
+img {
+    max-width: 80px;
+    height: 100px;
+}
+
+input {
+    width: 80px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.color {
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.e-color {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+}
+
+.middle {
+    vertical-align: middle;
+}

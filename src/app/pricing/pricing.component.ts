@@ -1,4 +1,12 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Design, Product, Campaign, DesignService} from '../design/design.service';
+import {Cookie} from 'ng2-cookies';
+import {Observable} from 'rxjs/Rx';
+
+const imgDir = 'http://cdn.30usd.com/images/';
+const campaignCookie = 'campaign_id';
+const userid = 'cuongnh';
 
 @Component({
     selector: 'app-pricing',
@@ -6,11 +14,48 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./pricing.component.css']
 })
 export class PricingComponent implements OnInit {
+    total: number;
 
-    constructor() {
+    constructor(private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
+        this.Campaign.id = 'z8YcVNt1mvGeFbDK';
+        if (Cookie.check(campaignCookie)) {
+            this.Campaign.id = Cookie.get(campaignCookie);
+        } else {
+            // this.router.navigate(['/design']);
+        }
+        this.getCampaign();
     }
 
     ngOnInit() {
     }
 
+    private getCampaign() {
+        this.DesignService.getCampaign(this.Campaign.id).subscribe(
+            res => {
+                Object.keys(res).map((index) => {
+                    this.Campaign[index] = res[index];
+                });
+                console.log(this.Campaign);
+                this.caculater();
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
+    }
+
+    public getBaseImgUrl(sFace, base: any) {
+        return imgDir + base + '_' + sFace + '.png';
+    }
+
+    public caculater() {
+        let totalPrice = 0;
+        Object.keys(this.Campaign.products).map((index) => {
+            this.Campaign.products[index].Profit = Number(this.Campaign.products[index].price)
+                - Number(this.Campaign.products[index].base.cost);
+            totalPrice = totalPrice + (this.Campaign.products[index].sale_expected * this.Campaign.products[index].Profit);
+        });
+        this.total = totalPrice;
+    }
 }
