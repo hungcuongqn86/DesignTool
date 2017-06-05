@@ -14,6 +14,7 @@ import {Design, Product, Campaign, DesignService} from './design.service';
 
 import {Ng2UploaderModule} from 'ng2-uploader';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+import {FroalaEditorModule, FroalaViewModule} from 'angular2-froala-wysiwyg';
 import {BootstrapModalModule} from 'ng2-bootstrap-modal';
 import {ProductComponent} from './design/product.component';
 import {ColorComponent} from './design/color.component';
@@ -32,7 +33,7 @@ export function createTranslateLoader(http: Http) {
         PricingComponent,
         LaunchingComponent,
         ProductComponent,
-        ColorComponent
+        ColorComponent,
     ],
     imports: [
         BrowserModule,
@@ -45,6 +46,7 @@ export function createTranslateLoader(http: Http) {
             deps: [Http]
         }),
         BootstrapModalModule,
+        FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
         routing
     ],
     providers: [
