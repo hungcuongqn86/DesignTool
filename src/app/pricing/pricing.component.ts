@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Design, Product, Campaign, DesignService} from '../design.service';
+import {Campaign, DesignService} from '../design.service';
 import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
 

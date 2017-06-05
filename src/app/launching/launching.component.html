@@ -1,14 +1,38 @@
 <div class="container">
     <div class="row">
-        <div class="col-sm-6">
-            <h3>Column 1</h3>
-            <p>Lorem ipsum dolor..</p>
-            <p>Ut enim ad..</p>
+        <div class="col-sm-7">
+            <h3>Campaign Info</h3>
+            <form>
+                <div class="form-group">
+                    <label for="email">Title</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Description</label>
+                    <input type="text" class="form-control" id="pwd">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">URL</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Storefront</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Categories </label>
+                    <input type="text" class="form-control">
+                </div>
+            </form>
         </div>
-        <div class="col-sm-6">
-            <h3>Column 2</h3>
-            <p>Lorem ipsum dolor..</p>
-            <p>Ut enim ad..</p>
+        <div class="col-sm-5 text-center">
+            <template ngFor let-prod [ngForOf]="Campaign.products">
+                <div *ngIf="prod.default">
+                    <img alt="" src="{{getBaseImgUrl('front',prod.base.id)}}">
+                </div>
+            </template>
+            <div class="change-product-button">
+                <span>Change default product or side</span></div>
         </div>
     </div>
 </div>
