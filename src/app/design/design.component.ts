@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
 import {NgModel} from '@angular/forms';
-import {Design, Product, Campaign, DesignService} from './design.service';
+import {Design, Product, Campaign, DesignService} from '../design.service';
 import {ProductComponent} from './product.component';
 import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
@@ -47,6 +47,7 @@ export class DesignComponent implements OnInit {
 
     constructor(private location: Location, public Campaign: Campaign,
                 private DesignService: DesignService, private dialogService: DialogService) {
+        this.Campaign.step = 1;
         this.Product = new Product();
         let id = 'z8YcVNt1mvGeFbDK';
         if (Cookie.check(campaignCookie)) {
@@ -389,32 +390,30 @@ export class DesignComponent implements OnInit {
 
     public addImg(dsrs: any) {
         const myobj = this;
-        const printw = Number(this.Product.getWidth(this.face));
-        const printh = Number(this.Product.getHeight(this.face));
-        const opt = this.Product.getOpt(this.face);
         this.nested.image(dsrs.image.url)
-            .loaded(function (loader) {
+            .loaded(function () {
                 this.id = dsrs.id;
                 myobj.resizeImg(this, dsrs);
             })
             .click(function () {
                 myobj.resetSelect();
+                const opt = myobj.Product.getOpt(this.face);
                 this.selectize().resize({
                     constraint: opt
                 }).draggable(opt);
                 myobj.selectItem = this;
             })
-            .on('delete', function (e) {
+            .on('delete', function () {
                 myobj.deleteImg();
             })
-            .on('dragstart', function (e) {
+            .on('dragstart', function () {
                 myobj.line.animate(100, '-', 0).attr({opacity: 1});
             })
-            .on('dragend', function (e) {
+            .on('dragend', function () {
                 myobj.line.animate(100, '-', 0).attr({opacity: 0});
                 myobj.updateDesign(this, dsrs);
             })
-            .on('resizedone', function (e) {
+            .on('resizedone', function () {
                 myobj.updateDesign(this, dsrs);
             });
     }
@@ -572,5 +571,9 @@ export class DesignComponent implements OnInit {
         }).subscribe(() => {
             this.updateCampaign();
         });
+    }
+
+    public clickContinue() {
+        console.log(11);
     }
 }

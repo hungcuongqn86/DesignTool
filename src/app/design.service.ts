@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Response, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {HttpClient} from '../http-client';
+import {HttpClient} from './http-client';
 
 const apiUrl = './api/v1/';  // URL to web api
 const sFaceDf = 'front';
@@ -106,6 +106,7 @@ export class Product {
 @Injectable()
 export class Campaign {
     public id;
+    public step = 1;
     public products: Array<Product> = [];
 
     constructor() {

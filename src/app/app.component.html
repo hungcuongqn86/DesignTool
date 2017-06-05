@@ -70,19 +70,24 @@
                                     <span class="number">3</span>
                                     <span>{{ 'NAVIGATOR.LAUNCHING' | translate }}</span></a>
                             </li>
+                            <li>
+                                <button (click)="clickContinue()" class="btn btn-primary"> Continue</button>
+                            </li>
                         </ul>
 
                         <ul class="navigator-group pull-right">
                             <li style="margin-right: 0;margin-left: 20px;">
                                 <div>
-                                    <label for="select_location">{{ 'NAVIGATOR.FULFILLMENT_LOCATION' | translate }}</label>
+                                    <label for="select_location">{{ 'NAVIGATOR.FULFILLMENT_LOCATION' | translate
+                                        }}</label>
                                     <select id="select_location" name="select_lang">
                                         <option *ngFor='let item of locations' value="{{item}}">{{item}}</option>
                                     </select>
                                 </div>
                             </li>
                             <li style="margin-right: 0;margin-left: 20px;">
-                                <a href="#"><i class="fa fa-download fa-lg"></i><span>{{ 'COMMON.SAVE' | translate }}</span></a>
+                                <a href="#"><i
+                                        class="fa fa-download fa-lg"></i><span>{{ 'COMMON.SAVE' | translate }}</span></a>
                             </li>
                         </ul>
                     </div>

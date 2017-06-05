@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {Router} from '@angular/router';
 
 import {Observable} from 'rxjs/Rx';
 
 import {AppService} from './app.service';
+import {Campaign, DesignService} from './design.service';
 
 @Component({
     selector: 'app-root',
@@ -13,10 +15,11 @@ import {AppService} from './app.service';
 export class AppComponent implements OnInit {
     locations: any = [];
     location = 'en';
-    constructor(private AppService: AppService, private translate: TranslateService) {
+
+    constructor(public Campaign: Campaign, private router: Router, private AppService: AppService,
+                private DesignService: DesignService,
+                private translate: TranslateService) {
         translate.addLangs([this.location]);
-        // const browserLang: string = translate.getBrowserLang();
-        // translate.use(browserLang.match(/en/) ? browserLang : 'en');
         translate.use(this.location);
     }
 
@@ -34,5 +37,26 @@ export class AppComponent implements OnInit {
                 return Observable.throw(error);
             }
         );
+    }
+
+    private updateCampaign(rout) {
+        this.DesignService.updateCampaign(this.Campaign).subscribe(
+            () => {
+                this.router.navigate([rout]);
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
+    }
+
+    public clickContinue() {
+        if (this.Campaign.step === 1) {
+            this.router.navigate(['/pricing']);
+        }
+        if (this.Campaign.step === 2) {
+            this.updateCampaign('/launching');
+        }
     }
 }

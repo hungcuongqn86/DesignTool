@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DialogComponent, DialogService} from 'ng2-bootstrap-modal';
-import {Campaign, DesignService} from './design.service';
+import {Campaign, DesignService} from '../design.service';
 
 import {Observable} from 'rxjs/Rx';
 

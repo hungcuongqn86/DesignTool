@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer} from '@angular/core';
 import {DialogComponent, DialogService} from 'ng2-bootstrap-modal';
-import {Product} from './design.service';
+import {Product} from '../design.service';
 
 export interface PromptModel {
     oProduct: Product;

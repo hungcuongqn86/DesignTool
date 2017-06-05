@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Design, Product, Campaign, DesignService} from '../design/design.service';
+import {Design, Product, Campaign, DesignService} from '../design.service';
 import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
 
@@ -17,6 +17,8 @@ export class PricingComponent implements OnInit {
     total: number;
 
     constructor(private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
+        this.Campaign.step = 2;
+
         this.Campaign.id = 'z8YcVNt1mvGeFbDK';
         if (Cookie.check(campaignCookie)) {
             this.Campaign.id = Cookie.get(campaignCookie);
