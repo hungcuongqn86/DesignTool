@@ -52,7 +52,7 @@ export class LaunchingComponent implements OnInit {
                 if (checkS !== '/') {
                     this.Campaign.url += '/';
                 }
-                // console.log(this.Campaign);
+                console.log(this.Campaign);
             },
             error => {
                 console.error(error.json().message);
