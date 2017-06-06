@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {Campaign, DesignService} from '../design.service';
 import {Select2OptionData} from 'ng2-select2';
-import {Router} from '@angular/router';
+import {DialogService} from 'ng2-bootstrap-modal';
+import {ProductdfComponent} from './productdf.component';
 import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
 
@@ -31,7 +33,8 @@ export class LaunchingComponent implements OnInit {
     arrCatValue: Array<string> = [];
     uri: any = JSON.parse('{"url":""}');
 
-    constructor(private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
+    constructor(private router: Router, private DesignService: DesignService,
+                public Campaign: Campaign, private dialogService: DialogService) {
         this.Campaign.step = 3;
 
         this.Campaign.id = 'z8YcVNt1mvGeFbDK';
@@ -152,5 +155,14 @@ export class LaunchingComponent implements OnInit {
 
     public categoriesSelect(data: { value: string[] }) {
         this.Campaign.categories = data.value.join(',');
+    }
+
+    public changeProduct() {
+        this.dialogService.addDialog(ProductdfComponent, {
+            title: 'Select product'
+        })
+            .subscribe((product) => {
+                console.log(product);
+            });
     }
 }

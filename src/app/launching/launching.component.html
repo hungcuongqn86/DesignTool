@@ -64,7 +64,7 @@
                             Private
                         </span>
                     </div>
-                    <div class="col-sm-6 text-center">
+                    <div class="col-sm-6 text-right">
                         <div class="btn-group">
                             <button type="button" (click)="setVisibility(false)"
                                     class="btn {{!Campaign.private? 'btn-primary': 'btn-default'}}">Public
@@ -83,7 +83,7 @@
                     <img alt="" src="{{getBaseImgUrl('front',prod.base.id)}}">
                 </div>
             </template>
-            <div class="change-product-button">
+            <div (click)="changeProduct()" class="change-product-button">
                 <span>Change default product or side</span></div>
         </div>
     </div>

@@ -25,7 +25,6 @@ export class ProductComponent extends DialogComponent<PromptModel, string> imple
     }
 
     ngOnInit() {
-        const myobj = this;
         this.getBaseTypes();
     }
 

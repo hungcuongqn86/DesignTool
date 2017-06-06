@@ -19,6 +19,7 @@ import {QuillModule} from 'ngx-quill';
 import {Select2Module} from 'ng2-select2';
 import {BootstrapModalModule} from 'ng2-bootstrap-modal';
 import {ProductComponent} from './design/product.component';
+import {ProductdfComponent} from  './launching/productdf.component';
 import {ColorComponent} from './design/color.component';
 
 /* Routing Module */
@@ -35,6 +36,7 @@ export function createTranslateLoader(http: Http) {
         PricingComponent,
         LaunchingComponent,
         ProductComponent,
+        ProductdfComponent,
         ColorComponent,
         DebounceDirective
     ],
@@ -64,6 +66,7 @@ export function createTranslateLoader(http: Http) {
     ],
     entryComponents: [
         ProductComponent,
+        ProductdfComponent,
         ColorComponent
     ],
     bootstrap: [AppComponent]
