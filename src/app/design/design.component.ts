@@ -286,15 +286,16 @@ export class DesignComponent implements OnInit {
     }
 
     public _selectBase(base: any) {
+        this.Product.base = base;
         const productIndex = this.Campaign.hasBase(base.id);
-        if ((productIndex >= 0) && (this.Product.base.id !== this.Campaign.products[productIndex].base.id)) {
-            Object.keys(this.Campaign.products[productIndex]).map((index) => {
-                this.Product[index] = this.Campaign.products[productIndex][index];
-            });
-            this.Product.base = base;
-            this.selectProduct(this.Product);
+        if (productIndex >= 0) {
+            if ((this.Product.base.id !== this.Campaign.products[productIndex].base.id)) {
+                Object.keys(this.Campaign.products[productIndex]).map((index) => {
+                    this.Product[index] = this.Campaign.products[productIndex][index];
+                });
+                this.selectProduct(this.Product);
+            }
         } else {
-            this.Product.base = base;
             this.Product.colors = [];
         }
         this.setFace(this.face);
@@ -397,7 +398,7 @@ export class DesignComponent implements OnInit {
             })
             .click(function () {
                 myobj.resetSelect();
-                const opt = myobj.Product.getOpt(this.face);
+                const opt = myobj.Product.getOpt(myobj.face);
                 this.selectize().resize({
                     constraint: opt
                 }).draggable(opt);
@@ -571,9 +572,5 @@ export class DesignComponent implements OnInit {
         }).subscribe(() => {
             this.updateCampaign();
         });
-    }
-
-    public clickContinue() {
-        console.log(11);
     }
 }
