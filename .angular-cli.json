@@ -21,8 +21,9 @@
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "../node_modules/font-awesome/css/font-awesome.css",
-        "../node_modules/froala-editor/css/froala_editor.pkgd.min.css",
         "../node_modules/svg.select.js/dist/svg.min.css",
+        "../ext/quill/quill.bubble.css",
+        "../ext/quill/quill.snow.css",
         "styles.css"
       ],
       "scripts": [
@@ -31,11 +32,7 @@
         "../node_modules/svg.js/dist/svg.min.js",
         "../node_modules/svg.draggable.js/dist/svg.draggable.min.js",
         "../ext/svg.select.js/dist/svg.select.js",
-        "../ext/svg.resize.js/dist/svg.resize.js",
-        "../node_modules/froala-editor/js/froala_editor.pkgd.min.js"
-      ],
-      "addons": [
-        "../node_modules/font-awesome/fonts/*.+(otf|eot|svg|ttf|woff|woff2)"
+        "../ext/svg.resize.js/dist/svg.resize.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

@@ -4,16 +4,32 @@
             <h3>Campaign Info</h3>
             <form>
                 <div class="form-group">
-                    <label for="email">Title</label>
-                    <input type="email" class="form-control" id="email">
+                    <label for="title">Title</label>
+                    <input [(ngModel)]="Campaign.title" [app-debounce]="800" (onDebounce)="suggestion()" name="title"
+                           id="title"
+                           class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Description</label>
-                    <div [froalaEditor]>Hello, Froala!</div>
+                    <quill-editor [modules]="quillOption" [placeholder]="placeholder"></quill-editor>
                 </div>
                 <div class="form-group">
-                    <label>URL</label>
-                    <input type="text" class="form-control">
+                    <label for="uri">URL</label>
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                {{Campaign.url}}<i style="margin-left: 8px;" class="fa fa-caret-down"
+                                                   aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm.name)"
+                                                                         href="javascript:void(0)">{{itemDm.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <input [(ngModel)]="uri.uri" type="text" class="form-control" name="uri" id="uri">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Storefront</label>
@@ -22,6 +38,32 @@
                 <div class="form-group">
                     <label>Categories </label>
                     <input type="text" class="form-control">
+                </div>
+                <hr>
+                <h4>Conversion tracking</h4>
+                <div class="form-group">
+                    <label>Facebook pixel for this campaign </label>
+                    <input type="text" class="form-control">
+                </div>
+                <hr>
+                <h4>Visibility</h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span>Public campaigns will be visible on marketplace and searchable on the web.
+                            Public
+                            Private
+                        </span>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <div class="btn-group">
+                            <button type="button" (click)="setVisibility(false)"
+                                    class="btn {{!Campaign.private? 'btn-primary': 'btn-default'}}">Public
+                            </button>
+                            <button type="button" (click)="setVisibility(true)"
+                                    class="btn {{Campaign.private? 'btn-primary': 'btn-default'}}">Private
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

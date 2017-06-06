@@ -106,7 +106,10 @@ export class Product {
 @Injectable()
 export class Campaign {
     public id;
+    public title;
     public step = 1;
+    public private;
+    public url;
     public products: Array<Product> = [];
 
     constructor() {
@@ -193,5 +196,17 @@ export class DesignService {
     deleteDesign(Design: Design, cpId) {
         const url = apiUrl + `designs/` + Design.id + '?campaign_id=' + cpId;
         return this.http.delete(url).map((res: Response) => res.json());
+    }
+
+    getDomains(): any {
+        const url = apiUrl + `domains`;
+        return this.http.get(url).map((res: Response) => res.json());
+    }
+
+    suggestion(suggestion: string): any {
+        const url = apiUrl + `uri`;
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('suggestion', suggestion);
+        return this.http.get(url, {search: params}).map((res: Response) => res.json());
     }
 }

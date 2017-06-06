@@ -9,12 +9,13 @@ import {AppComponent} from './app.component';
 import {DesignComponent} from './design/design.component';
 import {PricingComponent} from './pricing/pricing.component';
 import {LaunchingComponent} from './launching/launching.component';
+import {DebounceDirective} from './app.debounce.directive';
 
 import {Design, Product, Campaign, DesignService} from './design.service';
 
 import {Ng2UploaderModule} from 'ng2-uploader';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
-import {FroalaEditorModule, FroalaViewModule} from 'angular2-froala-wysiwyg';
+import {QuillModule} from 'ngx-quill';
 import {BootstrapModalModule} from 'ng2-bootstrap-modal';
 import {ProductComponent} from './design/product.component';
 import {ColorComponent} from './design/color.component';
@@ -34,6 +35,7 @@ export function createTranslateLoader(http: Http) {
         LaunchingComponent,
         ProductComponent,
         ColorComponent,
+        DebounceDirective
     ],
     imports: [
         BrowserModule,
@@ -46,7 +48,7 @@ export function createTranslateLoader(http: Http) {
             deps: [Http]
         }),
         BootstrapModalModule,
-        FroalaEditorModule.forRoot(), FroalaViewModule.forRoot(),
+        QuillModule,
         routing
     ],
     providers: [
