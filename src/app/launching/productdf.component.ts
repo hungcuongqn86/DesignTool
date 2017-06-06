@@ -14,7 +14,7 @@ const campaignCookie = 'campaign_id';
 
 @Component({
     templateUrl: './productdf.component.html',
-    styleUrls: ['./launching.component.css']
+    styleUrls: ['./productdf.component.css']
 })
 export class ProductdfComponent extends DialogComponent<PromptModel, string> implements PromptModel, OnInit {
     title;

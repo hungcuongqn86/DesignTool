@@ -1,0 +1,54 @@
+.modal-dialog {
+    height: 95%;
+    width: 90%;
+}
+
+.modal-content {
+    height: 95%;
+}
+
+.modal-body {
+    height: 90%;
+}
+
+.prod-list {
+    max-height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: calc(100% - 120px);
+}
+
+.prod-list img {
+    max-width: 80px;
+    height: 100px;
+}
+
+.prod-view img {
+    max-width: 350px;
+}
+
+input {
+    width: 80px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.color {
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.e-color {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+}
+
+.middle {
+    vertical-align: middle;
+}
+
+.table tr:first-child td {
+    border-top: none;
+}
