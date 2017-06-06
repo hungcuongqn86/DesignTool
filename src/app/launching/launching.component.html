@@ -40,14 +40,20 @@
                 <div class="form-group">
                     <label>Categories </label>
                     <div>
-                        <select2 [data]="arrCategories" [options]="options"></select2>
+                        <select2 [data]="arrCategories" [options]="options"
+                                 [value]="arrCatValue"
+                                 (valueChanged)="categoriesSelect($event)"></select2>
                     </div>
                 </div>
                 <hr>
                 <h4>Conversion tracking</h4>
                 <div class="form-group">
                     <label>Facebook pixel for this campaign </label>
-                    <input type="text" class="form-control">
+                    <input [(ngModel)]="Campaign.fb_pixel" name="fb_pixel" type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Google pixel for this campaign </label>
+                    <input [(ngModel)]="Campaign.gg_pixel" name="gg_pixel" type="text" class="form-control">
                 </div>
                 <hr>
                 <h4>Visibility</h4>

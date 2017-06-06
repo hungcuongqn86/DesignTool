@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Campaign, DesignService} from '../design.service';
 import {Select2OptionData} from 'ng2-select2';
+import {Router} from '@angular/router';
 import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
 
@@ -27,9 +28,10 @@ export class LaunchingComponent implements OnInit {
     options: Select2Options;
     arrDomains: any = [];
     arrCategories: Array<Select2OptionData> = [];
+    arrCatValue: Array<string> = [];
     uri: any = JSON.parse('{"url":""}');
 
-    constructor(private DesignService: DesignService, public Campaign: Campaign) {
+    constructor(private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
         this.Campaign.step = 3;
 
         this.Campaign.id = 'z8YcVNt1mvGeFbDK';
@@ -59,6 +61,7 @@ export class LaunchingComponent implements OnInit {
                 if (checkS !== '/') {
                     this.Campaign.url += '/';
                 }
+                this.arrCatValue = this.Campaign.categories.split(',');
                 console.log(this.Campaign);
             },
             error => {
@@ -145,5 +148,9 @@ export class LaunchingComponent implements OnInit {
             arrCat[index]['text'] = arrCat[index].name;
         });
         return arrCat;
+    }
+
+    public categoriesSelect(data: { value: string[] }) {
+        this.Campaign.categories = data.value.join(',');
     }
 }

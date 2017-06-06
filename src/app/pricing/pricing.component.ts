@@ -19,11 +19,11 @@ export class PricingComponent implements OnInit {
     constructor(private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
         this.Campaign.step = 2;
 
-        this.Campaign.id = 'z8YcVNt1mvGeFbDK';
+        this.Campaign.id = '';
         if (Cookie.check(campaignCookie)) {
             this.Campaign.id = Cookie.get(campaignCookie);
         } else {
-            // this.router.navigate(['/design']);
+            this.router.navigate(['/design']);
         }
         this.getCampaign();
     }

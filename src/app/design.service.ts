@@ -110,6 +110,8 @@ export class Campaign {
     public step = 1;
     public private;
     public url;
+    public fb_pixel;
+    public categories;
     public products: Array<Product> = [];
 
     constructor() {
