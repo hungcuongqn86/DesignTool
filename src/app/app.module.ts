@@ -16,6 +16,7 @@ import {Design, Product, Campaign, DesignService} from './design.service';
 import {Ng2UploaderModule} from 'ng2-uploader';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 import {QuillModule} from 'ngx-quill';
+import {Select2Module} from 'ng2-select2';
 import {BootstrapModalModule} from 'ng2-bootstrap-modal';
 import {ProductComponent} from './design/product.component';
 import {ColorComponent} from './design/color.component';
@@ -49,6 +50,7 @@ export function createTranslateLoader(http: Http) {
         }),
         BootstrapModalModule,
         QuillModule,
+        Select2Module,
         routing
     ],
     providers: [

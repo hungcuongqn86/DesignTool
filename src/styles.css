@@ -14,3 +14,16 @@
     border-bottom-right-radius: 4px;
     min-height: 60px;
 }
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: 1px solid dodgerblue !important;
+    box-shadow: 0 0 8px -2px dodgerblue;
+}
+
+.select2-dropdown {
+    box-shadow: 0 0 8px -2px dodgerblue;
+}

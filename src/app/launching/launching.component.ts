@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Campaign, DesignService} from '../design.service';
+import {Select2OptionData} from 'ng2-select2';
 import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
 
@@ -22,8 +23,10 @@ export class LaunchingComponent implements OnInit {
             ['link', 'image']
         ]
     };
-    placeholder = 'Description ...';
+    placeholder = '...';
+    options: Select2Options;
     arrDomains: any = [];
+    arrCategories: Array<Select2OptionData> = [];
     uri: any = JSON.parse('{"url":""}');
 
     constructor(private DesignService: DesignService, public Campaign: Campaign) {
@@ -40,6 +43,10 @@ export class LaunchingComponent implements OnInit {
 
     ngOnInit() {
         this.getDomains();
+        this.getCategories();
+        this.options = {
+            multiple: true
+        };
     }
 
     private getCampaign() {
@@ -105,5 +112,38 @@ export class LaunchingComponent implements OnInit {
         } else {
             this.uri = JSON.parse('{"url":""}');
         }
+    }
+
+    public checkSuggestion() {
+        if (this.uri !== '') {
+            this.DesignService.checkSuggestion(this.uri).subscribe(
+                res => {
+                    console.log(res);
+                },
+                error => {
+                    console.error(error.json().message);
+                    return Observable.throw(error);
+                }
+            );
+        }
+    }
+
+    private getCategories() {
+        this.DesignService.getCategories(1).subscribe(
+            res => {
+                this.arrCategories = this.convertCat(res.categories);
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
+    }
+
+    private convertCat(arrCat) {
+        Object.keys(arrCat).map((index) => {
+            arrCat[index]['text'] = arrCat[index].name;
+        });
+        return arrCat;
     }
 }

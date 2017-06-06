@@ -203,10 +203,24 @@ export class DesignService {
         return this.http.get(url).map((res: Response) => res.json());
     }
 
+    getCategories(visible) {
+        const url = apiUrl + `categories`;
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('visible', visible);
+        return this.http.get(url).map((res: Response) => res.json());
+    }
+
     suggestion(suggestion: string): any {
         const url = apiUrl + `uri`;
         const params: URLSearchParams = new URLSearchParams();
         params.set('suggestion', suggestion);
+        return this.http.get(url, {search: params}).map((res: Response) => res.json());
+    }
+
+    checkSuggestion(uri: string): any {
+        const url = apiUrl + `uri`;
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('check', uri);
         return this.http.get(url, {search: params}).map((res: Response) => res.json());
     }
 }

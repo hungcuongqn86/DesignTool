@@ -29,7 +29,8 @@
                                 </li>
                             </ul>
                         </div>
-                        <input [(ngModel)]="uri.uri" type="text" class="form-control" name="uri" id="uri">
+                        <input [(ngModel)]="uri.uri" [app-debounce]="800" (onDebounce)="checkSuggestion()" type="text"
+                               class="form-control" name="uri" id="uri">
                     </div>
                 </div>
                 <div class="form-group">
@@ -38,7 +39,9 @@
                 </div>
                 <div class="form-group">
                     <label>Categories </label>
-                    <input type="text" class="form-control">
+                    <div>
+                        <select2 [data]="arrCategories" [options]="options"></select2>
+                    </div>
                 </div>
                 <hr>
                 <h4>Conversion tracking</h4>
