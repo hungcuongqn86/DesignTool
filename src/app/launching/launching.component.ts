@@ -310,10 +310,36 @@ export class LaunchingComponent implements OnInit {
 
     private resizeImg(img: any, dsrs: any, zoom) {
         const optnew = this.Product.getOpt(this.face);
-        const imgX = Number(((optnew.minX + Number(dsrs.image.printable_left)) * zoom).toFixed(2));
-        const imgY = Number(((optnew.minY + Number(dsrs.image.printable_top)) * zoom).toFixed(2));
-        const imgW = Number((dsrs.image.printable_width * zoom).toFixed(2));
-        const imgH = Number((dsrs.image.printable_height * zoom).toFixed(2));
-        img.move(imgX, imgY).size(imgW, imgH);
+        const optold = this.getOldOpt();
+        const tlX: number = (optnew.maxX - optnew.minX) / (optold.maxX - optold.minX);
+        const tlY: number = (optnew.maxY - optnew.minY) / (optold.maxY - optold.minY);
+        const mx: number = dsrs.image.printable_left * tlX;
+        const my: number = dsrs.image.printable_top * tlY;
+        let mW = dsrs.image.printable_width * tlX;
+        let mH = 0;
+        if (optnew.minX + mx + mW <= optnew.maxX) {
+            mH = mW * dsrs.image.height / dsrs.image.width;
+        } else {
+            mW = optnew.maxX - (optnew.minX + mx);
+            mH = mW * dsrs.image.height / dsrs.image.width;
+        }
+
+        if (optnew.minY + my + mH > optnew.maxY) {
+            mH = optnew.maxY - (optnew.minY + my);
+            mW = mH * dsrs.image.width / dsrs.image.height;
+        }
+        img.move((optnew.minX + mx) * zoom, (optnew.minY + my) * zoom).size(mW * zoom, mH * zoom);
+    }
+
+    private getOldOpt(): any {
+        for (let index = 0; index < this.Campaign.products.length; index++) {
+            const check = this.Campaign.products[index].designs.findIndex(x => x.main === true);
+            if (check >= 0) {
+                const product = new Product();
+                product.base = this.Campaign.products[index].base;
+                return product.getOpt(this.face);
+            }
+        }
+        return [];
     }
 }
