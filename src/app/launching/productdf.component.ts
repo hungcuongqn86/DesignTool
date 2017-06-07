@@ -91,21 +91,21 @@ export class ProductdfComponent extends DialogComponent<PromptModel, string> imp
         const maxH = 320;
         const maxW = 320;
         this.productImg.load(this.getBaseImgUrl(this.face, this.Product.base.id)).loaded(function (loader) {
-            const tl: number = Number((loader.width / loader.height).toFixed(2));
+            const tl: number = (loader.width / loader.height);
             let rsW: number = loader.width;
             let rsH: number = loader.height;
             if (rsH > maxH) {
                 rsH = maxH;
-                rsW = Number((rsH * tl).toFixed(2));
+                rsW = rsH * tl;
                 if (rsW > maxW) {
                     rsW = maxW;
-                    rsH = Number((rsW / tl).toFixed(2));
+                    rsH = rsW / tl;
                 }
             }
             myjs.draw.size(rsW, rsH);
             myjs.productImg.size(rsW, rsH);
             myjs.productColor.size(rsW, rsH);
-            const zoom = Number((rsW / myjs.Product.base.image.width).toFixed(2));
+            const zoom = (rsW / myjs.Product.base.image.width);
             myjs.genDesign(zoom);
         });
         if (this.color) {
