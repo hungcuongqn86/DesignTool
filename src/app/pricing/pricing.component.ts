@@ -37,7 +37,6 @@ export class PricingComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
-                console.log(this.Campaign);
                 this.caculater();
             },
             error => {
@@ -54,9 +53,10 @@ export class PricingComponent implements OnInit {
     public caculater() {
         let totalPrice = 0;
         Object.keys(this.Campaign.products).map((index) => {
-            this.Campaign.products[index].Profit = Number(this.Campaign.products[index].price)
-                - Number(this.Campaign.products[index].base.cost);
-            totalPrice = totalPrice + (this.Campaign.products[index].sale_expected * this.Campaign.products[index].Profit);
+            this.Campaign.products[index].Profit = (Number(this.Campaign.products[index].price)
+            - Number(this.Campaign.products[index].base.cost)).toFixed(2);
+            totalPrice = totalPrice
+                + Number((this.Campaign.products[index].sale_expected * this.Campaign.products[index].Profit).toFixed(2));
         });
         this.total = totalPrice;
     }
