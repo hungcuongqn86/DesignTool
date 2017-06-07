@@ -96,7 +96,7 @@ export class LaunchingComponent implements OnInit {
                 if (this.Product.back_view) {
                     this.face = 'back';
                 }
-                this.color = this.getColor(this.color, this.Product.colors);
+                this.color = this.getColor(this.Product.colors);
                 this.getBases();
                 this.getCategories();
             },
@@ -111,21 +111,12 @@ export class LaunchingComponent implements OnInit {
         return imgDir + base + '_' + sFace + '.png';
     }
 
-    private getColor(color: any, arrcolors: any) {
-        if (arrcolors.length) {
-            const check = arrcolors.findIndex(x => x.id === color.id);
-            if (check < 0) {
-                const index = arrcolors.findIndex(x => x.default === true);
-                if (index < 0) {
-                    return arrcolors[0];
-                } else {
-                    return arrcolors[index];
-                }
-            } else {
-                return arrcolors[check];
-            }
-        } else {
+    private getColor(arrcolors: any) {
+        const index = arrcolors.findIndex(x => x.default === true);
+        if (index < 0) {
             return null;
+        } else {
+            return arrcolors[index];
         }
     }
 
@@ -240,7 +231,7 @@ export class LaunchingComponent implements OnInit {
             } else {
                 this.face = 'front';
             }
-            this.color = this.getColor(this.color, this.Product.colors);
+            this.color = this.getColor(this.Product.colors);
             this.getBases();
         }
     }
@@ -292,10 +283,37 @@ export class LaunchingComponent implements OnInit {
             myjs.productImg.size(rsW, rsH);
             myjs.productColor.size(rsW, rsH);
             const zoom = Number((rsW / myjs.Product.base.image.width).toFixed(2));
-            // myjs.genDesign(zoom);
+            myjs.genDesign(zoom);
         });
         if (this.color) {
             this.productColor.fill(this.color.value);
         }
+    }
+
+    private genDesign(zoom) {
+        this.nested.clear();
+        Object.keys(this.Product.designs).map((index) => {
+            if (this.Product.designs[index].type === this.face) {
+                this.addImg(this.Product.designs[index], zoom);
+            }
+        });
+    }
+
+    public addImg(dsrs: any, zoom) {
+        const myobj = this;
+        this.nested.image(dsrs.image.url)
+            .loaded(function () {
+                this.id = dsrs.id;
+                myobj.resizeImg(this, dsrs, zoom);
+            });
+    }
+
+    private resizeImg(img: any, dsrs: any, zoom) {
+        const optnew = this.Product.getOpt(this.face);
+        const imgX = Number(((optnew.minX + Number(dsrs.image.printable_left)) * zoom).toFixed(2));
+        const imgY = Number(((optnew.minY + Number(dsrs.image.printable_top)) * zoom).toFixed(2));
+        const imgW = Number((dsrs.image.printable_width * zoom).toFixed(2));
+        const imgH = Number((dsrs.image.printable_height * zoom).toFixed(2));
+        img.move(imgX, imgY).size(imgW, imgH);
     }
 }
