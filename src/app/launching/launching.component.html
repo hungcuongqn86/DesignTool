@@ -78,11 +78,7 @@
             </form>
         </div>
         <div class="col-sm-5 text-center">
-            <template ngFor let-prod [ngForOf]="Campaign.products">
-                <div *ngIf="prod.default">
-                    <img alt="" src="{{getBaseImgUrl('front',prod.base.id)}}">
-                </div>
-            </template>
+            <div id="drawingLaunching"></div>
             <div (click)="changeProduct()" class="change-product-button">
                 <span>Change default product or side</span></div>
         </div>
