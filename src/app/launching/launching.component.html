@@ -20,8 +20,8 @@
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
-                                {{Campaign.url}}<i style="margin-left: 8px;" class="fa fa-caret-down"
-                                                   aria-hidden="true"></i>
+                                {{url}}<i style="margin-left: 8px;" class="fa fa-caret-down"
+                                          aria-hidden="true"></i>
                             </button>
                             <ul class="dropdown-menu">
                                 <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm.name)"

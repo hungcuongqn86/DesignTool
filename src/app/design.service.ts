@@ -26,6 +26,8 @@ export class Product {
     public base: any = JSON.parse('{"id":""}');
     public colors: Array<any> = [];
     public designs: Array<any> = [];
+    public default = false;
+    public back_view = false;
 
     constructor() {
     }

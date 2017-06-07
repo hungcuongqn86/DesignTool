@@ -1,6 +1,6 @@
 .modal-dialog {
     height: 95%;
-    width: 90%;
+    width: 80%;
 }
 
 .modal-content {
@@ -8,7 +8,7 @@
 }
 
 .modal-body {
-    height: 90%;
+    height: 70%;
 }
 
 .prod-list {
@@ -16,15 +16,12 @@
     overflow-y: scroll;
     overflow-x: hidden;
     min-height: calc(100% - 120px);
+    cursor: pointer;
 }
 
 .prod-list img {
     max-width: 80px;
     height: 100px;
-}
-
-.prod-view img {
-    max-width: 350px;
 }
 
 input {

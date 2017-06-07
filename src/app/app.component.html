@@ -71,7 +71,8 @@
                                     <span>{{ 'NAVIGATOR.LAUNCHING' | translate }}</span></a>
                             </li>
                             <li>
-                                <button (click)="clickContinue()" class="btn btn-primary"> Continue</button>
+                                <button (click)="clickContinue()" class="btn btn-primary">{{Campaign.step===3? 'Launch campaign': 'Continue'}}
+                                </button>
                             </li>
                         </ul>
 

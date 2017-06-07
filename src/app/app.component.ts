@@ -42,7 +42,9 @@ export class AppComponent implements OnInit {
     private updateCampaign(rout) {
         this.DesignService.updateCampaign(this.Campaign).subscribe(
             () => {
-                this.router.navigate([rout]);
+                if (rout) {
+                    this.router.navigate([rout]);
+                }
             },
             error => {
                 console.error(error.json().message);
@@ -56,6 +58,9 @@ export class AppComponent implements OnInit {
             this.router.navigate(['/pricing']);
         }
         if (this.Campaign.step === 2) {
+            this.updateCampaign('/launching');
+        }
+        if (this.Campaign.step === 3) {
             this.updateCampaign('/launching');
         }
     }

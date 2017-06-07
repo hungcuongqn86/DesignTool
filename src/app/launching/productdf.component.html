@@ -9,15 +9,15 @@
                 <table class="table">
                     <tbody>
                     <tr *ngFor="let prod of Campaign.products">
-                        <td style="width: 20%">
+                        <td style="width: 20%" (click)="selectProduct(prod)">
                             <div>
                                 <img alt="" src="{{getBaseImgUrl('front',prod.base.id)}}">
                             </div>
                         </td>
-                        <td style="width: 80%" class="middle">
+                        <td style="width: 80%" class="middle" (click)="selectProduct(prod)">
                             <div class="colors">
                                 <div *ngFor='let itemColor of prod.colors' class="color">
-                                    <div class="e-color"
+                                    <div (click)="changeColor(itemColor)" class="e-color"
                                          [ngStyle]="{ 'background-color': itemColor.value }">
                                     </div>
                                 </div>
@@ -28,12 +28,27 @@
                 </table>
             </div>
             <div class="col-sm-6 text-center prod-view">
-                <template ngFor let-prod [ngForOf]="Campaign.products">
-                    <div *ngIf="prod.default">
-                        <img alt="" src="{{getBaseImgUrl('front',prod.base.id)}}">
+                <div class="row">
+                    <div class="svg-surface text-center">
+                        <div id="drawing"></div>
                     </div>
-                </template>
+                </div>
+                <div class="row text-center" style="margin-bottom: 20px;">
+                    <div class="btn-group">
+                        <button type="button" (click)="setFace('front')"
+                                class="btn {{face==='front'? 'btn-primary': 'btn-default'}}">Front
+                        </button>
+                        <button type="button" (click)="setFace('back')"
+                                class="btn {{face==='back'? 'btn-primary': 'btn-default'}}">Back
+                        </button>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" (click)="confirm(Product)" class="btn btn-primary pull-left">Confirm</button>
+            <button type="button" (click)="mdClose()" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
     </div>
 </div>

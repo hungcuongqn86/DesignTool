@@ -10,7 +10,6 @@ import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
 
 declare const SVG: any;
-declare const key: any;
 const imgDir = 'http://cdn.30usd.com/images/';
 const colors: any = {
     white: {

@@ -30,8 +30,9 @@ export class LaunchingComponent implements OnInit {
     options: Select2Options;
     arrDomains: any = [];
     arrCategories: Array<Select2OptionData> = [];
-    arrCatValue: Array<string> = [];
+    arrCatValue: string[];
     uri: any = JSON.parse('{"url":""}');
+    url: string;
 
     constructor(private router: Router, private DesignService: DesignService,
                 public Campaign: Campaign, private dialogService: DialogService) {
@@ -48,7 +49,6 @@ export class LaunchingComponent implements OnInit {
 
     ngOnInit() {
         this.getDomains();
-        this.getCategories();
         this.options = {
             multiple: true
         };
@@ -62,10 +62,9 @@ export class LaunchingComponent implements OnInit {
                 });
                 const checkS = this.Campaign.url.slice(-1);
                 if (checkS !== '/') {
-                    this.Campaign.url += '/';
+                    this.url = this.Campaign.url + '/';
                 }
-                this.arrCatValue = this.Campaign.categories.split(',');
-                console.log(this.Campaign);
+                this.getCategories();
             },
             error => {
                 console.error(error.json().message);
@@ -99,7 +98,8 @@ export class LaunchingComponent implements OnInit {
         if (checkS !== '/') {
             val += '/';
         }
-        this.Campaign.url = val;
+        this.url = val;
+        this.Campaign.url = this.url + this.uri.uri;
     }
 
     public suggestion() {
@@ -108,6 +108,7 @@ export class LaunchingComponent implements OnInit {
                 res => {
                     if (res.available) {
                         this.uri = res;
+                        this.Campaign.url = this.url + this.uri.uri;
                     }
                 },
                 error => {
@@ -117,6 +118,7 @@ export class LaunchingComponent implements OnInit {
             );
         } else {
             this.uri = JSON.parse('{"url":""}');
+            this.Campaign.url = this.url + this.uri.uri;
         }
     }
 
@@ -124,7 +126,7 @@ export class LaunchingComponent implements OnInit {
         if (this.uri !== '') {
             this.DesignService.checkSuggestion(this.uri).subscribe(
                 res => {
-                    console.log(res);
+                    console.log(res.uri);
                 },
                 error => {
                     console.error(error.json().message);
@@ -138,6 +140,7 @@ export class LaunchingComponent implements OnInit {
         this.DesignService.getCategories(1).subscribe(
             res => {
                 this.arrCategories = this.convertCat(res.categories);
+                this.arrCatValue = this.Campaign.categories.split(',');
             },
             error => {
                 console.error(error.json().message);
@@ -162,7 +165,21 @@ export class LaunchingComponent implements OnInit {
             title: 'Select product'
         })
             .subscribe((product) => {
-                console.log(product);
+                this.mergProduct(product);
             });
+    }
+
+    private mergProduct(product: any) {
+        if (product) {
+            Object.keys(this.Campaign.products).map((index) => {
+                if (this.Campaign.products[index].id === product.id) {
+                    this.Campaign.products[index].default = true;
+                    this.Campaign.products[index].back_view = product.back_view;
+                    this.Campaign.products[index].colors = product.colors;
+                } else {
+                    this.Campaign.products[index].default = false;
+                }
+            });
+        }
     }
 }
