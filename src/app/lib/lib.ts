@@ -38,4 +38,8 @@ export class DsLib {
         const cookieName = btoa(config.cookie_tokens);
         Cookie.delete(cookieName, '/');
     }
+
+    public genCampaignDetailUrl(uri: string): string {
+        return config.campaign_url + `?campaign=${uri}`;
+    }
 }

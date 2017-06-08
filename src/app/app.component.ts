@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
         );
     }
 
-    getLocation() {
+    private getLocation() {
         this.AppService.getLocation().subscribe(
             data => {
                 this.locations = data.split(',');
@@ -60,11 +60,17 @@ export class AppComponent implements OnInit {
         );
     }
 
-    private updateCampaign(rout) {
+    private updateCampaign(rout, local: boolean) {
+        this.Campaign.title = encodeURIComponent(this.Campaign.title);
+        this.Campaign.desc = encodeURIComponent(this.Campaign.desc);
         this.DesignService.updateCampaign(this.Campaign).subscribe(
             () => {
                 if (rout) {
-                    this.router.navigate([rout]);
+                    if (local) {
+                        this.router.navigate([rout]);
+                    } else {
+                        window.location.replace(rout);
+                    }
                 }
             },
             error => {
@@ -79,11 +85,15 @@ export class AppComponent implements OnInit {
             this.router.navigate(['/pricing']);
         }
         if (this.Campaign.step === 2) {
-            this.updateCampaign('/launching');
+            this.updateCampaign('/launching', true);
         }
         if (this.Campaign.step === 3) {
-            // this.updateCampaign('/launching');
-            this.authDl();
+            if (this.DsLib.checkLogin()) {
+                this.Campaign.state = 'launching';
+                this.updateCampaign(this.DsLib.genCampaignDetailUrl(this.Campaign.uri), false);
+            } else {
+                this.authDl();
+            }
         }
     }
 

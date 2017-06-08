@@ -110,12 +110,15 @@ export class Product {
 export class Campaign {
     public id;
     public title;
+    public desc;
     public step = 1;
     public private;
+    public uri;
     public url;
     public fb_pixel;
     public categories;
     public products: Array<Product> = [];
+    public state;
 
     constructor() {
     }

@@ -55,9 +55,10 @@ export class PricingComponent implements OnInit {
         Object.keys(this.Campaign.products).map((index) => {
             this.Campaign.products[index].Profit = (Number(this.Campaign.products[index].price)
             - Number(this.Campaign.products[index].base.cost)).toFixed(2);
-            totalPrice = totalPrice
-                + Number((this.Campaign.products[index].sale_expected * this.Campaign.products[index].Profit).toFixed(2));
+            const tProfit = Number((this.Campaign.products[index].sale_expected * this.Campaign.products[index].Profit).toFixed(2));
+            this.Campaign.products[index].tProfit = tProfit;
+            totalPrice = totalPrice + tProfit;
         });
-        this.total = totalPrice;
+        this.total = Number(totalPrice.toFixed(2));
     }
 }

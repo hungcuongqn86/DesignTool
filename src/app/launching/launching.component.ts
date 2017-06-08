@@ -38,7 +38,7 @@ export class LaunchingComponent implements OnInit {
     arrDomains: any = [];
     arrCategories: Array<Select2OptionData> = [];
     arrCatValue: string[];
-    uri: any = JSON.parse('{"url":""}');
+    uri: any = JSON.parse('{"uri":""}');
     url: string;
 
     draw: any;
@@ -81,6 +81,8 @@ export class LaunchingComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
+                this.Campaign.title = decodeURIComponent(this.Campaign.title);
+                this.Campaign.desc = decodeURIComponent(this.Campaign.desc);
                 if (this.Campaign.products.length) {
                     const checkExit = this.Campaign.products.findIndex(x => x.default === true);
                     if (checkExit >= 0) {
@@ -92,6 +94,7 @@ export class LaunchingComponent implements OnInit {
                 const checkS = this.Campaign.url.slice(-1);
                 if (checkS !== '/') {
                     this.url = this.Campaign.url + '/';
+                    this.Campaign.uri = this.uri.uri;
                 }
                 if (this.Product.back_view) {
                     this.face = 'back';
@@ -143,6 +146,7 @@ export class LaunchingComponent implements OnInit {
         }
         this.url = val;
         this.Campaign.url = this.url + this.uri.uri;
+        this.Campaign.uri = this.uri.uri;
     }
 
     public suggestion() {
@@ -152,6 +156,7 @@ export class LaunchingComponent implements OnInit {
                     if (res.available) {
                         this.uri = res;
                         this.Campaign.url = this.url + this.uri.uri;
+                        this.Campaign.uri = this.uri.uri;
                     }
                 },
                 error => {
@@ -162,6 +167,7 @@ export class LaunchingComponent implements OnInit {
         } else {
             this.uri = JSON.parse('{"url":""}');
             this.Campaign.url = this.url + this.uri.uri;
+            this.Campaign.uri = this.uri.uri;
         }
     }
 

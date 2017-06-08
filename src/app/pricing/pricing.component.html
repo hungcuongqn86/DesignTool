@@ -17,6 +17,7 @@
             <th>Sale price</th>
             <th>Expected sales</th>
             <th>Profit / Unit</th>
+            <th>Profit</th>
         </tr>
         </thead>
         <tbody>
@@ -36,12 +37,14 @@
                 </div>
             </td>
             <td class="middle">${{prod.base.cost}}</td>
-            <td class="middle">$<input title="price" (change)="caculater()" type="number" class="form-control" [(ngModel)]="prod.price"
-                        id="price" name="price"></td>
+            <td class="middle">$<input title="price" (change)="caculater()" type="number" class="form-control"
+                                       [(ngModel)]="prod.price"
+                                       id="price" name="price"></td>
             <td class="middle">$<input title="sale expected" (change)="caculater()" type="number" class="form-control"
                                        [(ngModel)]="prod.sale_expected" id="sale_expected"
                                        name="sale_expected"></td>
             <td class="middle">${{prod.Profit}}</td>
+            <td class="middle">${{prod.tProfit}}</td>
         </tr>
         </tbody>
     </table>
