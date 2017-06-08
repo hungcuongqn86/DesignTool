@@ -1,6 +1,11 @@
 {
-  "/api/v1/*": {
-    "target": "http://api.30usd.com/psp",
+  "/psp/api/v1/*": {
+    "target": "http://api.30usd.com",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/asp/api/v1/*": {
+    "target": "http://api.30usd.com",
     "secure": false,
     "logLevel": "debug"
   }

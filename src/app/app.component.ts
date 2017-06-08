@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Router} from '@angular/router';
-
+import {AuthComponent} from './auth/auth.component';
+import {DialogService} from 'ng2-bootstrap-modal';
 import {Observable} from 'rxjs/Rx';
 
 import {AppService} from './app.service';
@@ -18,7 +19,8 @@ export class AppComponent implements OnInit {
 
     constructor(public Campaign: Campaign, private router: Router, private AppService: AppService,
                 private DesignService: DesignService,
-                private translate: TranslateService) {
+                private translate: TranslateService,
+                private dialogService: DialogService) {
         translate.addLangs([this.location]);
         translate.use(this.location);
     }
@@ -61,7 +63,17 @@ export class AppComponent implements OnInit {
             this.updateCampaign('/launching');
         }
         if (this.Campaign.step === 3) {
-            this.updateCampaign('/launching');
+            // this.updateCampaign('/launching');
+            this.authDl();
         }
+    }
+
+    public authDl() {
+        this.dialogService.addDialog(AuthComponent, {
+            title: 'Select product'
+        }, {closeByClickingOutside: true})
+            .subscribe((res) => {
+                console.log(res);
+            });
     }
 }

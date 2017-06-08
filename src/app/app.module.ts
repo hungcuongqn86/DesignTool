@@ -12,6 +12,7 @@ import {LaunchingComponent} from './launching/launching.component';
 import {DebounceDirective} from './app.debounce.directive';
 
 import {Design, Product, Campaign, DesignService} from './design.service';
+import {DsLib} from './lib/lib';
 
 import {Ng2UploaderModule} from 'ng2-uploader';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
@@ -19,8 +20,9 @@ import {QuillModule} from 'ngx-quill';
 import {Select2Module} from 'ng2-select2';
 import {BootstrapModalModule} from 'ng2-bootstrap-modal';
 import {ProductComponent} from './design/product.component';
-import {ProductdfComponent} from  './launching/productdf.component';
+import {ProductdfComponent} from './launching/productdf.component';
 import {ColorComponent} from './design/color.component';
+import {AuthComponent} from './auth/auth.component';
 
 /* Routing Module */
 import {routing, appRoutingProviders} from './app-routing.module';
@@ -38,6 +40,7 @@ export function createTranslateLoader(http: Http) {
         ProductComponent,
         ProductdfComponent,
         ColorComponent,
+        AuthComponent,
         DebounceDirective
     ],
     imports: [
@@ -62,12 +65,14 @@ export function createTranslateLoader(http: Http) {
         DesignService,
         Design,
         Product,
-        Campaign
+        Campaign,
+        DsLib
     ],
     entryComponents: [
         ProductComponent,
         ProductdfComponent,
-        ColorComponent
+        ColorComponent,
+        AuthComponent
     ],
     bootstrap: [AppComponent]
 })

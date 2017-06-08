@@ -3,7 +3,8 @@ import {Response, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {HttpClient} from './http-client';
 
-const apiUrl = './api/v1/';  // URL to web api
+const apiUrl = './psp/api/v1/';  // URL to web api
+const aspApiUrl = './asp/api/v1/';  // URL to web api
 const sFaceDf = 'front';
 
 @Injectable()
@@ -226,5 +227,17 @@ export class DesignService {
         const params: URLSearchParams = new URLSearchParams();
         params.set('check', uri);
         return this.http.get(url, {search: params}).map((res: Response) => res.json());
+    }
+
+    accRegister(acc: any) {
+        const url = aspApiUrl + `users`;
+        const body = JSON.stringify(acc);
+        return this.http.post(url, body).map((res: Response) => res.json());
+    }
+
+    accLogin(acc: any) {
+        const url = aspApiUrl + `tokens`;
+        const body = JSON.stringify(acc);
+        return this.http.post(url, body).map((res: Response) => res.json());
     }
 }
