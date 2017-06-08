@@ -247,4 +247,9 @@ export class DesignService {
         params.set('scope', 'profile');
         return this.http.get(url, {search: params}).map((res: Response) => res.json());
     }
+
+    accLogout(tk: any) {
+        const url = aspApiUrl + `tokens/${tk.id}`;
+        return this.http.delete(url).map((res: Response) => res.json());
+    }
 }

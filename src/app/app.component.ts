@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {AuthComponent} from './auth/auth.component';
 import {DialogService} from 'ng2-bootstrap-modal';
 import {Observable} from 'rxjs/Rx';
+import {DsLib} from './lib/lib';
 
 import {AppService} from './app.service';
 import {Campaign, DesignService} from './design.service';
@@ -18,7 +19,7 @@ export class AppComponent implements OnInit {
     location = 'en';
     profile: any;
 
-    constructor(public Campaign: Campaign, private router: Router, private AppService: AppService,
+    constructor(private DsLib: DsLib, public Campaign: Campaign, private router: Router, private AppService: AppService,
                 private DesignService: DesignService,
                 private translate: TranslateService,
                 private dialogService: DialogService) {
@@ -28,6 +29,23 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.getLocation();
+        if (this.DsLib.checkLogin()) {
+            this.getProfile();
+        } else {
+            this.logout();
+        }
+    }
+
+    private getProfile() {
+        this.DesignService.getProfile(this.DsLib.getToken()).subscribe(
+            res => {
+                this.profile = res;
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
     }
 
     getLocation() {
@@ -71,14 +89,30 @@ export class AppComponent implements OnInit {
 
     public authDl() {
         this.dialogService.addDialog(AuthComponent, {
-            title: 'Select product'
+            title: 'Login'
         }, {closeByClickingOutside: true})
             .subscribe((res) => {
-                this.profile = res;
+                if (res) {
+                    this.profile = res;
+                }
             });
     }
 
     public logout() {
-        console.log(11111);
+        if (this.DsLib.checkLogin()) {
+            this.DesignService.accLogout(this.DsLib.getToken()).subscribe(
+                () => {
+                    this.profile = null;
+                    this.DsLib.removeToken();
+                },
+                error => {
+                    console.error(error.json().message);
+                    return Observable.throw(error);
+                }
+            );
+        } else {
+            this.profile = null;
+            this.DsLib.removeToken();
+        }
     }
 }

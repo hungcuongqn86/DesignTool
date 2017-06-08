@@ -30,7 +30,6 @@ export class AuthComponent extends DialogComponent<PromptModel, string> implemen
     public actionRegister() {
         this.DesignService.accRegister(this.fRegiter).subscribe(
             res => {
-
                 console.log(res);
             },
             error => {
