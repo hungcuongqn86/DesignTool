@@ -16,6 +16,7 @@ import {Campaign, DesignService} from './design.service';
 export class AppComponent implements OnInit {
     locations: any = [];
     location = 'en';
+    profile: any;
 
     constructor(public Campaign: Campaign, private router: Router, private AppService: AppService,
                 private DesignService: DesignService,
@@ -73,7 +74,11 @@ export class AppComponent implements OnInit {
             title: 'Select product'
         }, {closeByClickingOutside: true})
             .subscribe((res) => {
-                console.log(res);
+                this.profile = res;
             });
+    }
+
+    public logout() {
+        console.log(11111);
     }
 }

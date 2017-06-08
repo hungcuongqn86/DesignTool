@@ -240,4 +240,11 @@ export class DesignService {
         const body = JSON.stringify(acc);
         return this.http.post(url, body).map((res: Response) => res.json());
     }
+
+    getProfile(tk: any) {
+        const url = aspApiUrl + `tokens/${tk.id}`;
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('scope', 'profile');
+        return this.http.get(url, {search: params}).map((res: Response) => res.json());
+    }
 }

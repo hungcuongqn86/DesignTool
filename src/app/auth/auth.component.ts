@@ -1,8 +1,6 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
-import {Cookie} from 'ng2-cookies';
 import {DesignService} from '../design.service';
 import {DialogComponent, DialogService} from 'ng2-bootstrap-modal';
-import * as config from '../lib/const';
 import {DsLib} from '../lib/lib';
 import {Observable} from 'rxjs/Rx';
 
@@ -45,37 +43,8 @@ export class AuthComponent extends DialogComponent<PromptModel, string> implemen
     public actionLogin() {
         this.DesignService.accLogin(this.fLogin).subscribe(
             res => {
-                const cookval = JSON.stringify({
-                    id: res.id,
-                    user_id: res.user_id
-                });
-                const cookieName = btoa(config.cookie_tokens);
-                Cookie.set(cookieName, btoa(cookval));
-                const tk = Cookie.get(cookieName);
-                console.log(this.DsLib.getToken());
-                // console.log(cookval, btoa(cookval), atob(btoa(cookval)));
-                //
-                // if (Cookie.check(cookie_tokens)) {
-                //     /*created
-                //      :
-                //      "20170608T111834Z"
-                //      expire
-                //      :
-                //      "20170608T114834Z"
-                //      id
-                //      :
-                //      "t0BMt2juB5ABOBHb"
-                //      state
-                //      :
-                //      "approved"
-                //      user_id
-                //      :
-                //      "OHSJU3wejSLkoNva"
-                //      value
-                //      :
-                //      "0306431572f42cd8d0f3a8d2b21b165ce2525e2a11cf539117c7d27ca104982b"*/
-                //     // Cookie.set(cookie_tokens,res.)
-                // }
+                this.DsLib.setToken(res);
+                this.getProfile();
             },
             error => {
                 console.error(error.json().message);
@@ -84,12 +53,20 @@ export class AuthComponent extends DialogComponent<PromptModel, string> implemen
         );
     }
 
-    public mdClose() {
-        this.close();
+    private getProfile() {
+        this.DesignService.getProfile(this.DsLib.getToken()).subscribe(
+            res => {
+                this.confirm(res);
+            },
+            error => {
+                console.error(error.json().message);
+                return Observable.throw(error);
+            }
+        );
     }
 
-    public confirm(product) {
-        this.result = product;
+    public confirm(profile) {
+        this.result = profile;
         this.close();
     }
 

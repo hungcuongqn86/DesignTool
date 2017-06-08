@@ -27,23 +27,22 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
+                        <li *ngIf="profile" class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
-                                Admin <span class="caret"></span>
+                                {{profile.user.email}} <span class="caret"></span>
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="#">
+                                    <a (click)="logout()" href="javascript: void(0)">
                                         {{ 'COMMON.SIGN_OUT' | translate }}
                                     </a>
-
-                                    <form id="logout-form" action="" method="POST"
-                                          style="display: none;">
-                                    </form>
                                 </li>
                             </ul>
+                        </li>
+                        <li *ngIf="!profile">
+                            <a (click)="authDl()" href="javascript: void(0)">Login</a>
                         </li>
                     </ul>
                 </div>
