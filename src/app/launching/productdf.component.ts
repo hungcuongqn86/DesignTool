@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Cookie} from 'ng2-cookies';
 import {DialogComponent, DialogService} from 'ng2-bootstrap-modal';
 import {Campaign, Product, DesignService} from '../design.service';
-
+import {DsLib} from '../lib/lib';
 import {Observable} from 'rxjs/Rx';
 
 export interface PromptModel {
@@ -15,8 +14,6 @@ const colors: any = {
         value: '#ffffff'
     }
 };
-const imgDir = 'http://cdn.30usd.com/images/';
-const campaignCookie = 'campaign_id';
 
 @Component({
     templateUrl: './productdf.component.html',
@@ -37,13 +34,10 @@ export class ProductdfComponent extends DialogComponent<PromptModel, string> imp
     productImg: any;
     nested: any;
 
-    constructor(public Campaign: Campaign, dialogService: DialogService, private DesignService: DesignService) {
+    constructor(public DsLib: DsLib, public Campaign: Campaign, dialogService: DialogService, private DesignService: DesignService) {
         super(dialogService);
         this.Product = new Product();
-        this.Campaign.id = 'z8YcVNt1mvGeFbDK';
-        if (Cookie.check(campaignCookie)) {
-            this.Campaign.id = Cookie.get(campaignCookie);
-        }
+        this.Campaign.id = this.DsLib.getCampaignId();
         this.getCampaign();
     }
 
@@ -90,7 +84,7 @@ export class ProductdfComponent extends DialogComponent<PromptModel, string> imp
         const myjs = this;
         const maxH = 320;
         const maxW = 320;
-        this.productImg.load(this.getBaseImgUrl(this.face, this.Product.base.id)).loaded(function (loader) {
+        this.productImg.load(this.DsLib.getBaseImgUrl(this.face, this.Product.base.id)).loaded(function (loader) {
             const tl: number = (loader.width / loader.height);
             let rsW: number = loader.width;
             let rsH: number = loader.height;
@@ -164,10 +158,6 @@ export class ProductdfComponent extends DialogComponent<PromptModel, string> imp
             }
         }
         return [];
-    }
-
-    public getBaseImgUrl(sFace, base: any) {
-        return imgDir + base + '_' + sFace + '.png';
     }
 
     public setFace(face) {

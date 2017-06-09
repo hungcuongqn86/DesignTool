@@ -1,12 +1,10 @@
 import {Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer} from '@angular/core';
 import {DialogComponent, DialogService} from 'ng2-bootstrap-modal';
 import {Product} from '../design.service';
-
+import {DsLib} from '../lib/lib';
 export interface PromptModel {
     oProduct: Product;
 }
-
-const imgDir = 'http://cdn.30usd.com/images/';
 
 @Component({
     templateUrl: './color.component.html',
@@ -17,7 +15,7 @@ export class ColorComponent extends DialogComponent<PromptModel, string> impleme
     @ViewChild('imgBase') imgBase: ElementRef;
     @ViewChild('backgroundBase') backgroundBase: ElementRef;
 
-    constructor(dialogService: DialogService, public renderer: Renderer) {
+    constructor(public DsLib: DsLib, dialogService: DialogService, public renderer: Renderer) {
         super(dialogService);
     }
 
@@ -32,10 +30,6 @@ export class ColorComponent extends DialogComponent<PromptModel, string> impleme
             }
         }
         return -1;
-    }
-
-    public getBaseImgUrl(sFace, base: any) {
-        return imgDir + base + '_' + sFace + '.png';
     }
 
     ngAfterViewInit() {

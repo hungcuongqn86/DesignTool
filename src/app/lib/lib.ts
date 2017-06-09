@@ -8,7 +8,8 @@ export class DsLib {
     public setToken(res: any) {
         const cookval = JSON.stringify({
             id: res.id,
-            user_id: res.user_id
+            user_id: '1LkvNVzwJFMJXr2Q'
+            // user_id: res.user_id
         });
         const cookieName = btoa(config.cookie_tokens);
 
