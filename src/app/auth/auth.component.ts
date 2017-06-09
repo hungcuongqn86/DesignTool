@@ -16,6 +16,8 @@ declare const $: any;
 })
 export class AuthComponent extends DialogComponent<PromptModel, string> implements PromptModel, OnInit, AfterViewInit {
     title;
+    rSuccess = false;
+    rError = false;
     fRegiter: any = JSON.parse('{"source": "general","email":"","password":"","confirm_password":""}');
     fLogin: any = JSON.parse('{"source": "general","email": "","password":""}');
 
@@ -30,7 +32,9 @@ export class AuthComponent extends DialogComponent<PromptModel, string> implemen
     public actionRegister() {
         this.DesignService.accRegister(this.fRegiter).subscribe(
             res => {
-                console.log(res);
+                if (res) {
+                    this.rSuccess = true;
+                }
             },
             error => {
                 console.error(error.json().message);

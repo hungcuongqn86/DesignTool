@@ -55,6 +55,12 @@
                                 </div>
                             </form>
                             <form id="register-form" style="display: none;">
+                                <div *ngIf="rSuccess" class="alert alert-success">
+                                    <strong>Success!</strong> Indicates a successful or positive action.
+                                </div>
+                                <div *ngIf="rError" class="alert alert-warning">
+                                    <strong>Warning!</strong> Indicates a warning that might need attention.
+                                </div>
                                 <div class="form-group">
                                     <input [(ngModel)]="fRegiter.email" type="email" name="email" tabindex="1"
                                            class="form-control" placeholder="Email Address">
