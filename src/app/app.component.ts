@@ -61,7 +61,6 @@ export class AppComponent implements OnInit {
     }
 
     private updateCampaign(rout, local: boolean) {
-        this.Campaign.title = encodeURIComponent(this.Campaign.title);
         this.Campaign.desc = encodeURIComponent(this.Campaign.desc);
         this.DesignService.updateCampaign(this.Campaign).subscribe(
             () => {

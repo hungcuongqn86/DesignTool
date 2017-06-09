@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-7">
             <h3>Campaign Info</h3>
-            <form>
+            <form #form="ngForm">
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input [(ngModel)]="Campaign.title" [app-debounce]="800" (onDebounce)="suggestion()" name="title"
@@ -16,21 +16,29 @@
                 </div>
                 <div class="form-group">
                     <label for="uri">URL</label>
-                    <div class="input-group">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                {{url}}<i style="margin-left: 8px;" class="fa fa-caret-down"
-                                          aria-hidden="true"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm.name)"
-                                                                         href="javascript:void(0)">{{itemDm.name}}</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <input [(ngModel)]="uri.uri" [app-debounce]="800" (onDebounce)="checkSuggestion()" type="text"
-                               class="form-control" name="uri" id="uri">
+                    <div class="input-group"
+                         [ngClass]="((!uri.available)||(uriVali.touched && !uriVali.valid))? 'has-error': ''">
+                        <span data-toggle="dropdown" class="input-group-addon">{{url}}<i style="margin-left: 8px;"
+                                                                                         class="fa fa-caret-down"
+                                                                                         aria-hidden="true"></i></span>
+                        <ul class="dropdown-menu">
+                            <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm.name)"
+                                                                     href="javascript:void(0)">{{itemDm.name}}</a>
+                            </li>
+                        </ul>
+                        <input [(ngModel)]="uri.uri" [app-debounce]="800" (onDebounce)="checkSuggestion()"
+                               type="text" #uriVali="ngModel"
+                               class="form-control" name="uri" id="uri" required>
+                    </div>
+                    <div [hidden]="uri.available && uriVali.valid && uriVali.touched">
+                                <span *ngIf="uriVali.errors && uriVali.errors.required"
+                                      class="help-block alert-warning"><i class="fa fa-exclamation-triangle"
+                                                                          aria-hidden="true"></i>
+                                    Please select a uri!</span>
+                        <span *ngIf="!uri.available"
+                              class="help-block alert-warning"><i class="fa fa-exclamation-triangle"
+                                                                  aria-hidden="true"></i>
+                                    Uri duplicates!</span>
                     </div>
                 </div>
                 <div class="form-group">

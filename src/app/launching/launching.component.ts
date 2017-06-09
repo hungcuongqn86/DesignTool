@@ -81,7 +81,6 @@ export class LaunchingComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
-                this.Campaign.title = decodeURIComponent(this.Campaign.title);
                 this.Campaign.desc = decodeURIComponent(this.Campaign.desc);
                 if (this.Campaign.products.length) {
                     const checkExit = this.Campaign.products.findIndex(x => x.default === true);
@@ -172,16 +171,18 @@ export class LaunchingComponent implements OnInit {
     }
 
     public checkSuggestion() {
-        if (this.uri !== '') {
-            this.DesignService.checkSuggestion(this.uri).subscribe(
+        if (this.uri && this.uri.uri !== '') {
+            this.DesignService.checkSuggestion(this.uri.uri).subscribe(
                 res => {
-                    console.log(res.uri);
+                    this.uri = res;
                 },
                 error => {
                     console.error(error.json().message);
                     return Observable.throw(error);
                 }
             );
+        } else {
+            this.uri = JSON.parse('{"uri":"","available": true}');
         }
     }
 
