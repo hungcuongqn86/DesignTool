@@ -72,7 +72,7 @@ export class AppComponent implements OnInit {
                         this.router.navigate([rout]);
                     } else {
                         this.DsLib.removeCampaign();
-                        // window.location.replace(rout);
+                        window.location.replace(rout);
                     }
                 }
             },
