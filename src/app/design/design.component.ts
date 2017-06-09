@@ -42,7 +42,7 @@ export class DesignComponent implements OnInit {
 
     loadconflic = false;
 
-    constructor(private DsLib: DsLib, private location: Location, public Campaign: Campaign,
+    constructor(public DsLib: DsLib, private location: Location, public Campaign: Campaign,
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Campaign.step = 1;
         this.Product = new Product();
@@ -69,6 +69,10 @@ export class DesignComponent implements OnInit {
         }
         this.DesignService.initCampaign(id, userId).subscribe(
             res => {
+                if (res.state === 'launching') {
+                    this.DsLib.removeCampaign();
+                    this.initCampaign('');
+                }
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
@@ -171,10 +175,6 @@ export class DesignComponent implements OnInit {
                 return Observable.throw(error);
             }
         );
-    }
-
-    public getBaseImgUrl(sFace, base: any) {
-        return imgDir + base + '_' + sFace + '.png';
     }
 
     public handleFileSelect(evt) {
@@ -313,7 +313,7 @@ export class DesignComponent implements OnInit {
 
     public setFace(face) {
         this.face = face;
-        this.productImg.load(this.getBaseImgUrl(this.face, this.Product.base.id));
+        this.productImg.load(this.DsLib.getBaseImgUrl(this.face, this.Product.base.id));
         this.genDesign();
         this.setPrintable();
     }

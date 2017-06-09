@@ -24,6 +24,10 @@ export class PricingComponent implements OnInit {
     private getCampaign() {
         this.DesignService.getCampaign(this.Campaign.id).subscribe(
             res => {
+                if (res.state === 'launching') {
+                    this.DsLib.removeCampaign();
+                    this.router.navigate(['/design']);
+                }
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
