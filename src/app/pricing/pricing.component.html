@@ -24,7 +24,7 @@
         <tr *ngFor="let prod of Campaign.products">
             <td>
                 <div>
-                    <img alt="" src="{{getBaseImgUrl('front',prod.base.id)}}">
+                    <img alt="" src="{{DsLib.getBaseImgUrl('front',prod.base.id)}}">
                 </div>
             </td>
             <td class="middle">{{prod.base.name}}

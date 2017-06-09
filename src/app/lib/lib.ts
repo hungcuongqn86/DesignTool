@@ -55,4 +55,8 @@ export class DsLib {
             return '';
         }
     }
+
+    public removeCampaign() {
+        Cookie.delete(config.campaignCookie, '/', config.domail);
+    }
 }

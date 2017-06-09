@@ -61,6 +61,9 @@ export class AppComponent implements OnInit {
     }
 
     private updateCampaign(rout, local: boolean) {
+        if (this.DsLib.checkLogin()) {
+            this.Campaign.user_id = this.DsLib.getToken().user_id;
+        }
         this.Campaign.desc = encodeURIComponent(this.Campaign.desc);
         this.DesignService.updateCampaign(this.Campaign).subscribe(
             () => {
@@ -68,7 +71,7 @@ export class AppComponent implements OnInit {
                     if (local) {
                         this.router.navigate([rout]);
                     } else {
-                        console.log(rout);
+                        this.DsLib.removeCampaign();
                         // window.location.replace(rout);
                     }
                 }

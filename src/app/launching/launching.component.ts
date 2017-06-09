@@ -112,8 +112,16 @@ export class LaunchingComponent implements OnInit {
         this.DesignService.getDomains().subscribe(
             res => {
                 this.arrDomains = res.domains;
-                if (this.arrDomains.length && this.Campaign.domain_id === '') {
-                    this.setDomain(this.arrDomains[0]);
+                if (this.arrDomains.length) {
+                    if (this.Campaign.domain_id === '') {
+                        this.setDomain(this.arrDomains[0]);
+                    } else {
+                        Object.keys(this.arrDomains).map((index) => {
+                            if (this.arrDomains[index].id = this.Campaign.domain_id) {
+                                this.setDomain(this.arrDomains[index]);
+                            }
+                        });
+                    }
                 }
             },
             error => {
@@ -129,12 +137,10 @@ export class LaunchingComponent implements OnInit {
     }
 
     public suggestion() {
-        console.log(this.Campaign.title);
         if (this.Campaign.title !== '') {
             this.DesignService.suggestion(this.Campaign.title).subscribe(
                 res => {
                     this.uri = res;
-                    console.log(this.uri);
                     this.Campaign.url = this.uri.uri;
                 },
                 error => {
@@ -148,7 +154,6 @@ export class LaunchingComponent implements OnInit {
     }
 
     public checkSuggestion() {
-        // console.log(this.Campaign.url);
         if (this.Campaign.url !== '') {
             this.DesignService.checkSuggestion(this.Campaign.url, this.Campaign.id).subscribe(
                 res => {

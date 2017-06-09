@@ -19,6 +19,7 @@ export class DebounceDirective implements OnInit {
         this.modelValue = this.model.value;
 
         if (!this.modelValue) {
+            console.log(11);
             const firstChangeSubs = this.model.valueChanges.subscribe(v => {
                 this.modelValue = v;
                 firstChangeSubs.unsubscribe();

@@ -1,11 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Campaign, DesignService} from '../design.service';
-import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
-
-const imgDir = 'http://cdn.30usd.com/images/';
-const campaignCookie = 'campaign_id';
+import {DsLib} from '../lib/lib';
 
 @Component({
     selector: 'app-pricing',
@@ -15,15 +12,9 @@ const campaignCookie = 'campaign_id';
 export class PricingComponent implements OnInit {
     total: number;
 
-    constructor(private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
+    constructor(public DsLib: DsLib, private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
         this.Campaign.step = 2;
-
-        this.Campaign.id = 'z8YcVNt1mvGeFbDK';
-        if (Cookie.check(campaignCookie)) {
-            this.Campaign.id = Cookie.get(campaignCookie);
-        } else {
-            // this.router.navigate(['/design']);
-        }
+        this.Campaign.id = this.DsLib.getCampaignId();
         this.getCampaign();
     }
 
@@ -36,6 +27,7 @@ export class PricingComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
+                this.Campaign.desc = decodeURIComponent(decodeURIComponent(this.Campaign.desc));
                 this.caculater();
             },
             error => {
@@ -43,10 +35,6 @@ export class PricingComponent implements OnInit {
                 return Observable.throw(error);
             }
         );
-    }
-
-    public getBaseImgUrl(sFace, base: any) {
-        return imgDir + base + '_' + sFace + '.png';
     }
 
     public caculater() {

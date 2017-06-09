@@ -119,6 +119,7 @@ export class Campaign {
     public categories;
     public products: Array<Product> = [];
     public state;
+    public user_id
 
     constructor() {
     }
