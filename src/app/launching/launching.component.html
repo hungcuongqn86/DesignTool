@@ -30,7 +30,7 @@
                                type="text" #uriVali="ngModel"
                                class="form-control" name="uri" id="uri" required>
                     </div>
-                    <div [hidden]="uri.available && uriVali.valid && uriVali.touched">
+                    <div [hidden]="uri.available && (uriVali.valid || uriVali.untouched)">
                                 <span *ngIf="uriVali.errors && uriVali.errors.required"
                                       class="help-block alert-warning"><i class="fa fa-exclamation-triangle"
                                                                           aria-hidden="true"></i>

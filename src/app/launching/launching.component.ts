@@ -6,6 +6,7 @@ import {DialogService} from 'ng2-bootstrap-modal';
 import {ProductdfComponent} from './productdf.component';
 import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
+import {DsLib} from '../lib/lib';
 
 declare const SVG: any;
 const colors: any = {
@@ -13,9 +14,7 @@ const colors: any = {
         value: '#ffffff'
     }
 };
-const imgDir = 'http://cdn.30usd.com/images/';
 const campaignCookie = 'campaign_id';
-const userid = 'cuongnh';
 
 @Component({
     selector: 'app-launching',
@@ -38,7 +37,7 @@ export class LaunchingComponent implements OnInit {
     arrDomains: any = [];
     arrCategories: Array<Select2OptionData> = [];
     arrCatValue: string[];
-    uri: any = JSON.parse('{"uri":""}');
+    uri: any = JSON.parse('{"uri":"","available": true}');
     url: string;
 
     draw: any;
@@ -49,7 +48,7 @@ export class LaunchingComponent implements OnInit {
     face = 'front';
     color: any = [];
 
-    constructor(private router: Router, private DesignService: DesignService,
+    constructor(private DsLib: DsLib, private router: Router, private DesignService: DesignService,
                 public Campaign: Campaign, private dialogService: DialogService) {
         this.Campaign.step = 3;
         this.Product = new Product();
@@ -107,10 +106,6 @@ export class LaunchingComponent implements OnInit {
                 return Observable.throw(error);
             }
         );
-    }
-
-    public getBaseImgUrl(sFace, base: any) {
-        return imgDir + base + '_' + sFace + '.png';
     }
 
     private getColor(arrcolors: any) {
@@ -274,7 +269,7 @@ export class LaunchingComponent implements OnInit {
         const myjs = this;
         const maxH = 500;
         const maxW = 400;
-        this.productImg.load(this.getBaseImgUrl(this.face, this.Product.base.id)).loaded(function (loader) {
+        this.productImg.load(this.DsLib.getBaseImgUrl(this.face, this.Product.base.id)).loaded(function (loader) {
             const tl: number = (loader.width / loader.height);
             let rsW: number = loader.width;
             let rsH: number = loader.height;

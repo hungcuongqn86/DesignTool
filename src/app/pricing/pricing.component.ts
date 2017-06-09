@@ -6,7 +6,6 @@ import {Observable} from 'rxjs/Rx';
 
 const imgDir = 'http://cdn.30usd.com/images/';
 const campaignCookie = 'campaign_id';
-const userid = 'cuongnh';
 
 @Component({
     selector: 'app-pricing',

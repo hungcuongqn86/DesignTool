@@ -19,7 +19,7 @@ export class DsLib {
         Cookie.set(cookieName, btoa(cookval), expires, '/');
     }
 
-    public getToken(): string {
+    public getToken(): any {
         const cookieName = btoa(config.cookie_tokens);
         const tk = Cookie.get(cookieName);
         return JSON.parse(atob(tk));
@@ -41,5 +41,9 @@ export class DsLib {
 
     public genCampaignDetailUrl(uri: string): string {
         return config.campaign_url + `?campaign=${uri}`;
+    }
+
+    public getBaseImgUrl(sFace, base: any) {
+        return config.imgDir + base + '_' + sFace + '.png';
     }
 }

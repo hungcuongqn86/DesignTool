@@ -6,6 +6,7 @@ import {ProductComponent} from './product.component';
 import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
 import {Cookie} from 'ng2-cookies';
+import {DsLib} from '../lib/lib';
 
 import {Observable} from 'rxjs/Rx';
 
@@ -17,7 +18,6 @@ const colors: any = {
     }
 };
 const campaignCookie = 'campaign_id';
-const userid = 'cuongnh';
 
 @Component({
     selector: 'app-design',
@@ -44,7 +44,7 @@ export class DesignComponent implements OnInit {
 
     loadconflic = false;
 
-    constructor(private location: Location, public Campaign: Campaign,
+    constructor(private DsLib: DsLib, private location: Location, public Campaign: Campaign,
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Campaign.step = 1;
         this.Product = new Product();
@@ -53,7 +53,7 @@ export class DesignComponent implements OnInit {
             id = Cookie.get(campaignCookie);
         }
         this.location.go('/design/' + id);
-        this.initCampaign(id, userid);
+        this.initCampaign(id);
     }
 
     ngOnInit() {
@@ -69,8 +69,12 @@ export class DesignComponent implements OnInit {
         this.getBaseTypes();
     }
 
-    private initCampaign(id, user) {
-        this.DesignService.initCampaign(id, user).subscribe(
+    private initCampaign(id) {
+        let userId = '';
+        if (this.DsLib.checkLogin()) {
+            userId = this.DsLib.getToken().user_id;
+        }
+        this.DesignService.initCampaign(id, userId).subscribe(
             res => {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
@@ -213,11 +217,11 @@ export class DesignComponent implements OnInit {
                 }
                 this.DesignService.updateDesign(img).subscribe(
                     () => {
-                        this.initCampaign(this.Campaign.id, userid);
+                        this.initCampaign(this.Campaign.id);
                     },
                     error => {
                         console.error(error.json().message);
-                        this.initCampaign(this.Campaign.id, userid);
+                        this.initCampaign(this.Campaign.id);
                         return Observable.throw(error);
                     }
                 );
@@ -441,7 +445,7 @@ export class DesignComponent implements OnInit {
                 },
                 error => {
                     console.error(error.json().message);
-                    this.initCampaign(this.Campaign.id, userid);
+                    this.initCampaign(this.Campaign.id);
                     return Observable.throw(error);
                 }
             );
@@ -469,7 +473,7 @@ export class DesignComponent implements OnInit {
     public deleteLayer(leyer: any) {
         this.DesignService.deleteDesign(leyer, this.Campaign.id).subscribe(
             () => {
-                this.initCampaign(this.Campaign.id, userid);
+                this.initCampaign(this.Campaign.id);
             },
             error => {
                 console.error(error.json().message);
