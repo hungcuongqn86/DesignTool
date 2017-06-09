@@ -22,11 +22,11 @@
                                                                                          class="fa fa-caret-down"
                                                                                          aria-hidden="true"></i></span>
                         <ul class="dropdown-menu">
-                            <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm.name)"
+                            <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm)"
                                                                      href="javascript:void(0)">{{itemDm.name}}</a>
                             </li>
                         </ul>
-                        <input [(ngModel)]="uri.uri" [app-debounce]="800" (onDebounce)="checkSuggestion()"
+                        <input [(ngModel)]="Campaign.url" [app-debounce]="800" (onDebounce)="checkSuggestion()"
                                type="text" #uriVali="ngModel"
                                class="form-control" name="uri" id="uri" required>
                     </div>

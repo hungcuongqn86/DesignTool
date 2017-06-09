@@ -4,7 +4,6 @@ import {Campaign, Product, DesignService} from '../design.service';
 import {Select2OptionData} from 'ng2-select2';
 import {DialogService} from 'ng2-bootstrap-modal';
 import {ProductdfComponent} from './productdf.component';
-import {Cookie} from 'ng2-cookies';
 import {Observable} from 'rxjs/Rx';
 import {DsLib} from '../lib/lib';
 
@@ -14,7 +13,6 @@ const colors: any = {
         value: '#ffffff'
     }
 };
-const campaignCookie = 'campaign_id';
 
 @Component({
     selector: 'app-launching',
@@ -52,13 +50,7 @@ export class LaunchingComponent implements OnInit {
                 public Campaign: Campaign, private dialogService: DialogService) {
         this.Campaign.step = 3;
         this.Product = new Product();
-
-        this.Campaign.id = 'z8YcVNt1mvGeFbDK';
-        if (Cookie.check(campaignCookie)) {
-            this.Campaign.id = Cookie.get(campaignCookie);
-        } else {
-            // this.router.navigate(['/design']);
-        }
+        this.Campaign.id = this.DsLib.getCampaignId();
         this.getCampaign();
     }
 
@@ -68,7 +60,6 @@ export class LaunchingComponent implements OnInit {
         this.productImg = this.draw.image();
         this.nested = this.draw.nested();
 
-        this.getDomains();
         this.options = {
             multiple: true
         };
@@ -80,7 +71,7 @@ export class LaunchingComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
-                this.Campaign.desc = decodeURIComponent(this.Campaign.desc);
+                this.Campaign.desc = decodeURIComponent(decodeURIComponent(this.Campaign.desc));
                 if (this.Campaign.products.length) {
                     const checkExit = this.Campaign.products.findIndex(x => x.default === true);
                     if (checkExit >= 0) {
@@ -89,15 +80,11 @@ export class LaunchingComponent implements OnInit {
                         });
                     }
                 }
-                const checkS = this.Campaign.url.slice(-1);
-                if (checkS !== '/') {
-                    this.url = this.Campaign.url + '/';
-                    this.Campaign.uri = this.uri.uri;
-                }
                 if (this.Product.back_view) {
                     this.face = 'back';
                 }
                 this.color = this.getColor(this.Product.colors);
+                this.getDomains();
                 this.getBases();
                 this.getCategories();
             },
@@ -125,6 +112,9 @@ export class LaunchingComponent implements OnInit {
         this.DesignService.getDomains().subscribe(
             res => {
                 this.arrDomains = res.domains;
+                if (this.arrDomains.length && this.Campaign.domain_id === '') {
+                    this.setDomain(this.arrDomains[0]);
+                }
             },
             error => {
                 console.error(error.json().message);
@@ -133,25 +123,19 @@ export class LaunchingComponent implements OnInit {
         );
     }
 
-    public setDomain(val) {
-        const checkS = val.slice(-1);
-        if (checkS !== '/') {
-            val += '/';
-        }
-        this.url = val;
-        this.Campaign.url = this.url + this.uri.uri;
-        this.Campaign.uri = this.uri.uri;
+    public setDomain(domail) {
+        this.Campaign.domain_id = domail.id;
+        this.url = domail.name;
     }
 
     public suggestion() {
+        console.log(this.Campaign.title);
         if (this.Campaign.title !== '') {
             this.DesignService.suggestion(this.Campaign.title).subscribe(
                 res => {
-                    if (res.available) {
-                        this.uri = res;
-                        this.Campaign.url = this.url + this.uri.uri;
-                        this.Campaign.uri = this.uri.uri;
-                    }
+                    this.uri = res;
+                    console.log(this.uri);
+                    this.Campaign.url = this.uri.uri;
                 },
                 error => {
                     console.error(error.json().message);
@@ -159,15 +143,14 @@ export class LaunchingComponent implements OnInit {
                 }
             );
         } else {
-            this.uri = JSON.parse('{"url":""}');
-            this.Campaign.url = this.url + this.uri.uri;
-            this.Campaign.uri = this.uri.uri;
+            this.uri = JSON.parse('{"uri":"","available": true}');
         }
     }
 
     public checkSuggestion() {
-        if (this.uri && this.uri.uri !== '') {
-            this.DesignService.checkSuggestion(this.uri.uri).subscribe(
+        // console.log(this.Campaign.url);
+        if (this.Campaign.url !== '') {
+            this.DesignService.checkSuggestion(this.Campaign.url, this.Campaign.id).subscribe(
                 res => {
                     this.uri = res;
                 },

@@ -68,7 +68,8 @@ export class AppComponent implements OnInit {
                     if (local) {
                         this.router.navigate([rout]);
                     } else {
-                        window.location.replace(rout);
+                        console.log(rout);
+                        // window.location.replace(rout);
                     }
                 }
             },
@@ -89,7 +90,7 @@ export class AppComponent implements OnInit {
         if (this.Campaign.step === 3) {
             if (this.DsLib.checkLogin()) {
                 this.Campaign.state = 'launching';
-                this.updateCampaign(this.DsLib.genCampaignDetailUrl(this.Campaign.uri), false);
+                this.updateCampaign(this.DsLib.genCampaignDetailUrl(this.Campaign.url), false);
             } else {
                 this.authDl();
             }

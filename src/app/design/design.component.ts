@@ -5,7 +5,6 @@ import {Design, Product, Campaign, DesignService} from '../design.service';
 import {ProductComponent} from './product.component';
 import {ColorComponent} from './color.component';
 import {DialogService} from 'ng2-bootstrap-modal';
-import {Cookie} from 'ng2-cookies';
 import {DsLib} from '../lib/lib';
 
 import {Observable} from 'rxjs/Rx';
@@ -17,7 +16,6 @@ const colors: any = {
         value: '#ffffff'
     }
 };
-const campaignCookie = 'campaign_id';
 
 @Component({
     selector: 'app-design',
@@ -48,12 +46,7 @@ export class DesignComponent implements OnInit {
                 private DesignService: DesignService, private dialogService: DialogService) {
         this.Campaign.step = 1;
         this.Product = new Product();
-        let id = 'z8YcVNt1mvGeFbDK';
-        if (Cookie.check(campaignCookie)) {
-            id = Cookie.get(campaignCookie);
-        }
-        this.location.go('/design/' + id);
-        this.initCampaign(id);
+        this.initCampaign(this.DsLib.getCampaignId());
     }
 
     ngOnInit() {
@@ -79,6 +72,8 @@ export class DesignComponent implements OnInit {
                 Object.keys(res).map((index) => {
                     this.Campaign[index] = res[index];
                 });
+                this.location.go(`/design/${this.Campaign.id}}`);
+
                 if (this.Campaign.products.length) {
                     const checkExit = this.Campaign.products.findIndex(x => x.id === this.Product.id);
                     if (checkExit < 0) {

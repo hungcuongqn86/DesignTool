@@ -113,7 +113,7 @@ export class Campaign {
     public desc;
     public step = 1;
     public private;
-    public uri;
+    public domain_id;
     public url;
     public fb_pixel;
     public categories;
@@ -225,10 +225,11 @@ export class DesignService {
         return this.http.get(url, {search: params}).map((res: Response) => res.json());
     }
 
-    checkSuggestion(uri: string): any {
+    checkSuggestion(uri: string, id): any {
         const url = apiUrl + `uri`;
         const params: URLSearchParams = new URLSearchParams();
         params.set('check', uri);
+        params.set('campaign_id', id);
         return this.http.get(url, {search: params}).map((res: Response) => res.json());
     }
 

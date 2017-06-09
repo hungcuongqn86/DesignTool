@@ -46,4 +46,13 @@ export class DsLib {
     public getBaseImgUrl(sFace, base: any) {
         return config.imgDir + base + '_' + sFace + '.png';
     }
+
+    public getCampaignId() {
+        const cookieName = config.campaignCookie;
+        if (Cookie.check(cookieName)) {
+            return Cookie.get(cookieName);
+        } else {
+            return '';
+        }
+    }
 }
