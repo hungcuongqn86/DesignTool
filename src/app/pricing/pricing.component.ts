@@ -15,6 +15,10 @@ export class PricingComponent implements OnInit {
     constructor(public DsLib: DsLib, private router: Router, private DesignService: DesignService, public Campaign: Campaign) {
         this.Campaign.step = 2;
         this.Campaign.id = this.DsLib.getCampaignId();
+        if (this.Campaign.id === '') {
+            this.DsLib.removeCampaign();
+            this.router.navigate(['/design']);
+        }
         this.getCampaign();
     }
 

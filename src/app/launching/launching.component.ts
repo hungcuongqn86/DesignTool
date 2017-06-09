@@ -51,6 +51,10 @@ export class LaunchingComponent implements OnInit {
         this.Campaign.step = 3;
         this.Product = new Product();
         this.Campaign.id = this.DsLib.getCampaignId();
+        if (this.Campaign.id === '') {
+            this.DsLib.removeCampaign();
+            this.router.navigate(['/design']);
+        }
         this.getCampaign();
     }
 
@@ -177,7 +181,9 @@ export class LaunchingComponent implements OnInit {
         this.DesignService.getCategories(1).subscribe(
             res => {
                 this.arrCategories = this.convertCat(res.categories);
-                this.arrCatValue = this.Campaign.categories.split(',');
+                if (this.Campaign && this.Campaign.categories) {
+                    this.arrCatValue = this.Campaign.categories.split(',');
+                }
             },
             error => {
                 console.error(error.json().message);
