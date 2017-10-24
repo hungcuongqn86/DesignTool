@@ -1,0 +1,105 @@
+<nav class="navbar navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="row">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+          <img class="" src="./assets/img/logo-burger.png" alt="">
+        </a>
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse js-navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li *ngIf="DesignService.http.profile" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              {{DesignService.http.profile}} <i class="ion-ios-arrow-down"></i>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-profile" role="menu">
+              <li>
+                <a (click)="linkToManage('campaigns')" href="javascript: void(0)">
+                  <i class="fa fa-server" aria-hidden="true"></i> {{ 'COMMON.CAMPAIGNS' | translate }}
+                </a>
+              </li>
+              <li>
+                <a (click)="linkToManage('storefronts')" href="javascript: void(0)">
+                  <i class="fa fa-newspaper-o" aria-hidden="true"></i> {{ 'COMMON.STOREFRONTS' | translate }}
+                </a>
+              </li>
+              <li>
+                <a (click)="linkToManage('promotions')" href="javascript: void(0)">
+                  <i class="fa fa-tags" aria-hidden="true"></i> {{ 'COMMON.PROMOTIONS' | translate }}
+                </a>
+              </li>
+              <li>
+                <a (click)="logout()" href="javascript: void(0)">
+                  <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'COMMON.SIGN_OUT' | translate }}
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--<li *ngIf="!DesignService.http.profile">
+            <a (click)="authDl('r')" href="javascript: void(0)">{{ 'HEADER.REGISTER' | translate }}</a>
+          </li>-->
+          <li *ngIf="!DesignService.http.profile">
+            <a (click)="authDl('l')" href="javascript: void(0)">{{ 'HEADER.SIGN_IN' | translate }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="navigator">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="navigator-group menu">
+          <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+            <a href="#" routerLink="design">
+              <span class="number">1</span>
+              <span>{{ 'NAVIGATOR.DESIGN' | translate }}</span></a>
+          </li>
+          <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+            <a href="#" routerLink="pricing">
+              <span class="number">2</span>
+              <span>{{ 'NAVIGATOR.PRICING' | translate }}</span></a>
+          </li>
+          <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">
+            <a href="#" routerLink="launching">
+              <span class="number">3</span>
+              <span>{{ 'NAVIGATOR.LAUNCHING' | translate }}</span></a>
+          </li>
+        </ul>
+
+        <ul class="navigator-group pull-right">
+          <li style="margin-right: 20px;" class="active">
+            <a href="javascript: void(0)">
+                                    <span>{{ 'NAVIGATOR.FULFILLMENT_LOCATION' | translate
+                                    }}</span></a>
+          </li>
+          <li>
+            <div style="width: 78px;margin-top: 15px;" class="form-group">
+              <div class="input-group select-ctr">
+                                <span data-toggle="dropdown"
+                                      class="input-group-addon">US</span>
+                <ul class="dropdown-menu">
+                  <li *ngFor='let item of DesignService.locations'><a
+                    href="javascript:void(0)">{{item}}</a>
+                  </li>
+                </ul>
+                <span class="input-group-addon" data-toggle="dropdown"><i class="ion-ios-arrow-down"></i></span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

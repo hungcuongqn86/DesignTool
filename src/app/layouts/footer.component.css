@@ -1,0 +1,127 @@
+/*----------Footer*/
+footer .footer-info {
+  background-color: #333333;
+  font-size: 14px;
+  padding: 40px 0;
+}
+
+footer .footer-info .container div {
+  padding: 0px;
+}
+
+.footer-copyright {
+  background: #545454;
+}
+
+.footer-copyright p {
+  padding: 10px 0;
+  margin: 0;
+  font-size: 12px;
+}
+
+.burger-info a {
+  margin: 10px 0;
+  display: block
+}
+
+.socical-ft a {
+  margin: 0;
+  line-height: 24px;
+}
+
+.list-social-footer a {
+  color: #fff;
+}
+
+.list-social-footer li {
+  background-color: #5b5b5b;
+  padding: 8px;
+  color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px !important;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.socical-ft ul {
+  margin-left: 25px;
+  display: inline;
+}
+
+.client-pay {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+/* You can add global styles to this file, and also import other style files */
+.img_select {
+  cursor: move;
+  pointer-events: auto;
+}
+
+.ql-toolbar {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.ql-container {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  min-height: 60px;
+}
+
+.select2-container {
+  width: 100% !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+  border: 1px solid dodgerblue !important;
+  box-shadow: 0 0 8px -2px dodgerblue;
+}
+
+.select2-dropdown {
+  box-shadow: 0 0 8px -2px dodgerblue;
+}
+
+.has-error .select2-selection {
+  border-color: #a94442 !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.ql-editing {
+  display: inline-block;
+  transform: translate(50%, -50%) !important;
+}
+
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  z-index: 5;
+}
+
+.modal.fade .loadding-modal {
+  -webkit-transition: -webkit-transform .3s ease-out;
+  -o-transition: -o-transform .3s ease-out;
+  transition: transform .3s ease-out;
+  -webkit-transform: translate(0, -25%);
+  -ms-transform: translate(0, -25%);
+  -o-transform: translate(0, -25%);
+  transform: translate(0, -25%);
+}
+
+.btn-full {
+  width: 95%;
+}
+
+.lightblue {
+  background: #0495e8;
+  border-color: #0489d6;
+  color: #fff;
+}
+
+.margin {
+  margin: 5px;
+}
+
+.panel {
+  box-shadow: none;
+}

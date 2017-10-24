@@ -1,0 +1,19 @@
+.modal-dialog {
+    width: 50%;
+}
+
+.modal-header {
+    padding: 0 15px;
+}
+
+.modal-header .error {
+    color: red;
+}
+
+.modal-header .success {
+    color: green;
+}
+
+.modal-header .close {
+    margin-top: 15px;
+}

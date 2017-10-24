@@ -1,0 +1,12 @@
+<div class="modal-dialog loadding-modal">
+    <div class="modal-content">
+        <div class="modal-body text-center">
+            <i class="fa fa-refresh fa-spin"></i>
+            <p>{{status}}</p>
+            <div *ngIf="progress.progress>0">
+                <progress-bar [value]="progress.progress" [max]="100"
+                              title="{{progress.progress}}%"></progress-bar>
+            </div>
+        </div>
+    </div>
+</div>
