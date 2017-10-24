@@ -1,94 +1,166 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-7">
-            <h3>Campaign Info</h3>
-            <form #form="ngForm">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input [(ngModel)]="Campaign.title" [app-debounce]="800" (onDebounce)="suggestion()" name="title"
-                           id="title"
-                           class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <quill-editor [(ngModel)]="Campaign.desc" [modules]="quillOption" name="desc"
-                                  [placeholder]="placeholder"></quill-editor>
-                </div>
-                <div class="form-group">
-                    <label for="uri">URL</label>
-                    <div class="input-group"
-                         [ngClass]="((!uri.available)||(uriVali.touched && !uriVali.valid))? 'has-error': ''">
-                        <span data-toggle="dropdown" class="input-group-addon">{{url}}<i style="margin-left: 8px;"
-                                                                                         class="fa fa-caret-down"
-                                                                                         aria-hidden="true"></i></span>
-                        <ul class="dropdown-menu">
-                            <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm)"
-                                                                     href="javascript:void(0)">{{itemDm.name}}</a>
-                            </li>
-                        </ul>
-                        <input [(ngModel)]="Campaign.url" [app-debounce]="800" (onDebounce)="checkSuggestion()"
-                               type="text" #uriVali="ngModel"
-                               class="form-control" name="uri" id="uri" required>
-                    </div>
-                    <div [hidden]="uri.available && (uriVali.valid || uriVali.untouched)">
+<div class="container conten-page">
+  <div class="row">
+    <div class="col-sm-7">
+      <h1 class="heading-level-1">{{ 'LAUNCHING_PAGE.CAMPAIGN_INFO' | translate }}</h1>
+      <form novalidate #form="ngForm">
+        <div class="form-group" [ngClass]="(titleVali.touched && !titleVali.valid)? 'has-error': ''">
+          <label for="title">{{ 'LAUNCHING_PAGE.TITLE' | translate }}<span
+            class="reddish">*</span></label>
+          <input type="text" [(ngModel)]="Campaign.title" [appDebounce]="800" (onDebounce)="suggestion()"
+                 #titleVali="ngModel"
+                 name="title" id="title"
+                 [niCharLeft]="50"
+                 [labelClass]="'node-right'"
+                 [maxLength]="50"
+                 pattern="^[\w\d _.-]+$" required
+                 class="form-control">
+          <div [hidden]="titleVali.valid || titleVali.untouched">
+                                            <span *ngIf="titleVali.errors && titleVali.errors.required"
+                                                  class="help-block alert-warning">
+                                                <i class="fa fa-exclamation-triangle"
+                                                   aria-hidden="true"></i> required!!!
+                                            </span>
+            <span *ngIf="titleVali.errors && titleVali.errors.pattern" class="help-block alert-warning">
+                                                <i class="fa fa-exclamation-triangle"
+                                                   aria-hidden="true"></i> pattern!!!
+                                            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>{{ 'LAUNCHING_PAGE.DESCRIPTION' | translate }}</label>
+          <quill-editor #editor [(ngModel)]="Campaign.desc" [modules]="quillOption"
+                        [maxLength]="2000"
+                        [niCharLeft]="2000"
+                        [labelClass]="'node-right'"
+                        (onEditorCreated)="seDescription()" name="desc"
+                        [placeholder]="placeholder">
+          </quill-editor>
+        </div>
+        <div class="form-group"
+             [ngClass]="((!uri.available)||(uriVali.touched && !uriVali.valid))? 'has-error': ''">
+          <label for="uri">{{ 'LAUNCHING_PAGE.URL' | translate }}<span class="reddish">*</span></label>
+          <div class="input-group select-ctr select-text-ctr">
+            <span data-toggle="dropdown" class="input-group-addon">{{url}}<i class="ion-ios-arrow-down"></i></span>
+            <ul class="dropdown-menu">
+              <li *ngFor='let itemDm of arrDomains'><a (click)="setDomain(itemDm)"
+                                                       href="javascript:void(0)">{{itemDm.name}}</a>
+              </li>
+            </ul>
+            <input [(ngModel)]="Campaign.url" [appDebounce]="800" (onDebounce)="checkSuggestion()"
+                   type="text" #uriVali="ngModel"
+                   class="form-control" name="uri" id="uri" required>
+          </div>
+          <div [hidden]="uri.available && (uriVali.valid || uriVali.untouched)">
                                 <span *ngIf="uriVali.errors && uriVali.errors.required"
                                       class="help-block alert-warning"><i class="fa fa-exclamation-triangle"
                                                                           aria-hidden="true"></i>
                                     Please select a uri!</span>
-                        <span *ngIf="!uri.available"
-                              class="help-block alert-warning"><i class="fa fa-exclamation-triangle"
-                                                                  aria-hidden="true"></i>
+            <span *ngIf="!uri.available"
+                  class="help-block alert-warning"><i class="fa fa-exclamation-triangle"
+                                                      aria-hidden="true"></i>
                                     Uri duplicates!</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Storefront</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>Categories </label>
-                    <div>
-                        <select2 [data]="arrCategories" [options]="options"
-                                 [value]="arrCatValue"
-                                 (valueChanged)="categoriesSelect($event)"></select2>
-                    </div>
-                </div>
-                <hr>
-                <h4>Conversion tracking</h4>
-                <div class="form-group">
-                    <label>Facebook pixel for this campaign </label>
-                    <input [(ngModel)]="Campaign.fb_pixel" name="fb_pixel" type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>Google pixel for this campaign </label>
-                    <input [(ngModel)]="Campaign.gg_pixel" name="gg_pixel" type="text" class="form-control">
-                </div>
-                <hr>
-                <h4>Visibility</h4>
-                <div class="row">
-                    <div class="col-sm-6">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>{{ 'LAUNCHING_PAGE.STOREFRONT' | translate }} <i class="fa fa-question-circle-o" [tooltip]="myTooltip"
+                                                                  aria-hidden="true"></i></label>
+          <tooltip-content #myTooltip [animation]="true" placement="left">
+            <p style="margin: 0">Only when logged in.</p>
+          </tooltip-content>
+          <div>
+            <input [(ngModel)]="Campaign.stores"
+                   #sel_stores="ngModel"
+                   name="sel_stores"
+                   value=""
+                   type="hidden">
+            <select2 [data]="DesignService.arrStores" [options]="options"
+                     (click)="touchedStores()"
+                     (valueChanged)="storesSelect($event)"></select2>
+          </div>
+        </div>
+        <div class="form-group {{(sel_categories.touched && (!sel_categories.valid))? 'has-error': ''}}">
+          <label>{{ 'LAUNCHING_PAGE.CATEGORIES' | translate }}<span
+            class="reddish">*</span></label>
+          <div>
+            <input [(ngModel)]="Campaign.categories"
+                   #sel_categories="ngModel"
+                   name="sel_categories"
+                   value=""
+                   type="hidden" required>
+            <select2 [data]="arrCategories" [options]="options"
+                     (click)="touchedCat()"
+                     (valueChanged)="categoriesSelect($event)"></select2>
+          </div>
+          <div [hidden]="sel_categories.valid || sel_categories.untouched">
+                                <span *ngIf="sel_categories.errors && sel_categories.errors.required"
+                                      class="help-block alert-warning"><i class="fa fa-exclamation-triangle"
+                                                                          aria-hidden="true"></i>
+                                    Please select categories!</span>
+          </div>
+        </div>
+        <hr>
+        <h2 class="heading-level-2">{{ 'LAUNCHING_PAGE.CONVERSION_TRACKING' | translate }}</h2>
+        <div class="form-group">
+          <label>Facebook pixel for this campaign </label>
+          <input title="Facebook pixel" [(ngModel)]="Campaign.fb_pixel" name="fb_pixel" type="text"
+                 class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Google tag manager for this campaign </label>
+          <input title="Google tag" [(ngModel)]="Campaign.gg_pixel" name="gg_pixel" type="text" class="form-control">
+        </div>
+        <hr>
+        <h2 class="heading-level-2">{{ 'LAUNCHING_PAGE.TIME_LENGTH' | translate }}</h2>
+        <div class="form-group">
+          <div class="input-group select-ctr">
+            <span data-toggle="dropdown" class="input-group-addon">{{timeEnd.number}} days - {{timeEnd.view}}</span>
+            <ul class="dropdown-menu">
+              <li *ngFor='let itemTime of timeLength'
+                  [ngClass]="(timeEnd&&timeEnd.number === itemTime.number)? 'active': ''"><a
+                (click)="setTimeLength(itemTime)"
+                href="javascript:void(0)">{{itemTime.number}}
+                days - {{itemTime.view}}</a>
+              </li>
+            </ul>
+            <span class="input-group-addon" data-toggle="dropdown">
+              <i class="ion-ios-arrow-down"></i>
+            </span>
+          </div>
+        </div>
+        <h2 class="heading-level-2">{{ 'LAUNCHING_PAGE.VISIBILITY' | translate }}</h2>
+        <div class="row">
+          <div class="col-sm-6">
                         <span>Public campaigns will be visible on marketplace and searchable on the web.
                             Public
                             Private
                         </span>
-                    </div>
-                    <div class="col-sm-6 text-right">
-                        <div class="btn-group">
-                            <button type="button" (click)="setVisibility(false)"
-                                    class="btn {{!Campaign.private? 'btn-primary': 'btn-default'}}">Public
-                            </button>
-                            <button type="button" (click)="setVisibility(true)"
-                                    class="btn {{Campaign.private? 'btn-primary': 'btn-default'}}">Private
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+          </div>
+          <div class="col-sm-6 text-right">
+            <div class="btn-group visibility-btn">
+              <button type="button" (click)="setVisibility(false)"
+                      class="la-btn sm-bnt {{!Campaign.private? 'mask-btn': 'blank-btn'}}">{{
+                'LAUNCHING_PAGE.PUBLIC' | translate }}
+              </button>
+              <button type="button" (click)="setVisibility(true)"
+                      class="la-btn sm-bnt {{Campaign.private? 'mask-btn': 'blank-btn'}}">{{
+                'LAUNCHING_PAGE.PRIVATE' | translate }}
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="col-sm-5 text-center" style="position: relative;">
-            <div id="drawingLaunching"></div>
-            <div (click)="changeProduct()" class="change-product-button">
-                <span>Change default product or side</span></div>
+        <div class="form-group">
+          <button type="button" (click)="clickContinue()"
+                  class="la-btn mask-btn launching-btn"
+                  [disabled]="!form.form.valid">{{ 'LAUNCHING_PAGE.LAUNCH' | translate }}
+          </button>
         </div>
+      </form>
     </div>
+    <div class="col-sm-5 text-center">
+      <div *ngIf="product" appProduct [product]="product" [face]="face" [mainopt]="getOldOpt(product)"
+           [color]="color"></div>
+      <div (click)="changeProduct()" class="la-btn blank-btn">
+        <span>{{ 'LAUNCHING_PAGE.CHANGE_DEFAULT_PRODUCT_OR_SIDE' | translate }}</span></div>
+    </div>
+  </div>
 </div>

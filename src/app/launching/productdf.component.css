@@ -1,51 +1,53 @@
 .modal-dialog {
-    height: 95%;
-    width: 80%;
+  height: 80%;
+  width: 60%;
 }
 
 .modal-content {
-    height: 95%;
+  height: 98%;
 }
 
 .modal-body {
-    height: 70%;
+  height: 85%;
 }
 
 .prod-list {
-    max-height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    min-height: calc(100% - 120px);
-    cursor: pointer;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: calc(100% - 120px);
+  cursor: pointer;
 }
 
 .prod-list img {
-    max-width: 80px;
-    height: 100px;
+  max-width: 80px;
+  height: 100px;
 }
 
 input {
-    width: 80px;
-    display: inline-block;
-    margin-left: 10px;
+  width: 80px;
+  display: inline-block;
+  margin-left: 10px;
 }
 
 .color {
-    display: inline-block;
-    margin-right: 5px;
-    margin-top: 5px;
-}
-
-.e-color {
-    height: 24px;
-    width: 24px;
-    border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+  margin-top: 5px;
 }
 
 .middle {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .table tr:first-child td {
-    border-top: none;
+  border-top: none;
+}
+
+.la-btn {
+  margin-left: 15px;
+}
+
+.visibility-btn button {
+  margin-left: 0;
 }

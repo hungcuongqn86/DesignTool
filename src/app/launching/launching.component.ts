@@ -1,345 +1,307 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
-import {Campaign, Product, DesignService} from '../design.service';
+import {Campaign, DesignService} from '../design.service';
+import {AppService} from '../services/app.service';
 import {Select2OptionData} from 'ng2-select2';
 import {DialogService} from 'ng2-bootstrap-modal';
 import {ProductdfComponent} from './productdf.component';
 import {Observable} from 'rxjs/Rx';
+import {Ds} from '../lib/ds';
 import {DsLib} from '../lib/lib';
-
-declare const SVG: any;
-const colors: any = {
-    white: {
-        value: '#ffffff'
-    }
-};
+import {QuillEditorComponent} from 'ngx-quill/src/quill-editor.component';
 
 @Component({
-    selector: 'app-launching',
-    templateUrl: './launching.component.html',
-    styleUrls: ['./launching.component.css']
+  selector: 'app-launching',
+  templateUrl: './launching.component.html',
+  styleUrls: ['./launching.component.css']
 })
 export class LaunchingComponent implements OnInit {
-    Product: Product;
-    quillOption = {
-        toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            [{'size': ['small', false, 'large', 'huge']}],
-            [{'color': []}, {'background': []}],
-            [{'align': []}],
-            ['link', 'image']
-        ]
+  @ViewChild('form') form: any;
+  @ViewChild('editor') editor: QuillEditorComponent;
+
+  quillOption = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{'size': ['small', false, 'large', 'huge']}],
+      [{'color': []}, {'background': []}],
+      [{'align': []}],
+      ['link', 'image']
+    ]
+  };
+  placeholder = '...';
+  options: Select2Options;
+  arrDomains: any = [];
+  public arrCategories: Array<Select2OptionData> = [];
+  public arrCatValue: string[];
+  uri: any = JSON.parse('{"uri":"","available": true}');
+  url: string;
+
+  timeLength: Array<any>;
+  timeEnd: any = [];
+
+  arrBaseTypes: any = [];
+  public product: any;
+  public face = 'front';
+  public color: any = null;
+
+  constructor(private router: Router, private DesignService: DesignService,
+              private AppService: AppService,
+              public Campaign: Campaign, private dialogService: DialogService) {
+    this.DesignService.canActive = ['', 'design', 'pricing'];
+    this.Campaign.step = 3;
+    this.Campaign.id = DsLib.getCampaignId();
+    if (this.Campaign.id === '') {
+      this.router.navigate(['/design']);
+    }
+  }
+
+  ngOnInit() {
+    this.getBaseTypes();
+    this.getCampaign();
+    this.timeLength = DsLib.getTimeLength();
+    if (!this.timeEnd.number) {
+      this.setTimeLength(this.timeLength[0]);
+    }
+    this.options = {
+      multiple: true
     };
-    placeholder = '...';
-    options: Select2Options;
-    arrDomains: any = [];
-    arrCategories: Array<Select2OptionData> = [];
-    arrCatValue: string[];
-    uri: any = JSON.parse('{"uri":"","available": true}');
-    url: string;
+  }
 
-    draw: any;
-    productColor: any;
-    productImg: any;
-    nested: any;
-    arrBase: any = [];
-    face = 'front';
-    color: any = [];
+  private getProductDefault(): any {
+    const check = this.Campaign.products.findIndex(x => x.default === true) >= 0 ?
+      this.Campaign.products.findIndex(x => x.default === true) : 0;
+    const prod: any = [];
+    Object.keys(this.Campaign.products[check]).map((index) => {
+      prod[index] = this.Campaign.products[check][index];
+    });
+    return prod;
+  }
 
-    constructor(private DsLib: DsLib, private router: Router, private DesignService: DesignService,
-                public Campaign: Campaign, private dialogService: DialogService) {
-        this.Campaign.step = 3;
-        this.Product = new Product();
-        this.Campaign.id = this.DsLib.getCampaignId();
-        if (this.Campaign.id === '') {
-            this.DsLib.removeCampaign();
-            this.router.navigate(['/design']);
+  public getOldOpt = (product) => Ds._getMainOpt(product.base.type.id, 'front', this.arrBaseTypes, this.Campaign);
+
+  private getBaseTypes() {
+    const sub = this.DesignService.getBaseTypes().subscribe(
+      data => {
+        this.arrBaseTypes = data;
+        sub.unsubscribe();
+      },
+      error => {
+        sub.unsubscribe();
+        console.error(error.json().message);
+        return Observable.throw(error);
+      }
+    );
+  }
+
+  public seDescription() {
+    const toolbar = this.editor.quillEditor.getModule('toolbar');
+    const objTooltip = this.editor.quillEditor.theme.tooltip;
+    objTooltip.save = function () {
+      const value = this.textbox.value;
+      switch (this.root.getAttribute('data-mode')) {
+        case 'link': {
+          const scrollTop = this.quill.root.scrollTop;
+          if (this.linkRange) {
+            this.quill.formatText(this.linkRange, 'link', value);
+            delete this.linkRange;
+          } else {
+            this.restoreFocus();
+            this.quill.format('link', value);
+          }
+          this.quill.root.scrollTop = scrollTop;
+          break;
         }
-        this.getCampaign();
-    }
-
-    ngOnInit() {
-        this.draw = SVG('drawingLaunching');
-        this.productColor = this.draw.rect().fill(colors.white.value);
-        this.productImg = this.draw.image();
-        this.nested = this.draw.nested();
-
-        this.options = {
-            multiple: true
-        };
-    }
-
-    private getCampaign() {
-        this.DesignService.getCampaign(this.Campaign.id).subscribe(
-            res => {
-                if (res.state === 'launching') {
-                    this.DsLib.removeCampaign();
-                    this.router.navigate(['/design']);
-                }
-                Object.keys(res).map((index) => {
-                    this.Campaign[index] = res[index];
-                });
-                this.Campaign.desc = decodeURIComponent(decodeURIComponent(this.Campaign.desc));
-                if (this.Campaign.products.length) {
-                    const checkExit = this.Campaign.products.findIndex(x => x.default === true);
-                    if (checkExit >= 0) {
-                        Object.keys(this.Campaign.products[checkExit]).map((index) => {
-                            this.Product[index] = this.Campaign.products[checkExit][index];
-                        });
-                    }
-                }
-                if (this.Product.back_view) {
-                    this.face = 'back';
-                }
-                this.color = this.getColor(this.Product.colors);
-                this.getDomains();
-                this.getBases();
-                this.getCategories();
-            },
-            error => {
-                console.error(error.json().message);
-                return Observable.throw(error);
-            }
-        );
-    }
-
-    private getColor(arrcolors: any) {
-        const index = arrcolors.findIndex(x => x.default === true);
-        if (index < 0) {
-            return null;
-        } else {
-            return arrcolors[index];
+        case 'image': {
+          this.quill.format('image', value);
+          break;
         }
-    }
+        default:
+      }
+      this.textbox.value = '';
+      this.hide();
+    };
+    toolbar.addHandler('image', function (value) {
+      if (value) {
+        this.quill.theme.tooltip.edit('image', '');
+      } else {
+        this.quill.format('image', '');
+      }
+    });
+  }
 
-    public setVisibility(val) {
-        this.Campaign.private = val;
-    }
-
-    private getDomains() {
-        this.DesignService.getDomains().subscribe(
-            res => {
-                this.arrDomains = res.domains;
-                if (this.arrDomains.length) {
-                    if (this.Campaign.domain_id === '') {
-                        this.setDomain(this.arrDomains[0]);
-                    } else {
-                        Object.keys(this.arrDomains).map((index) => {
-                            if (this.arrDomains[index].id = this.Campaign.domain_id) {
-                                this.setDomain(this.arrDomains[index]);
-                            }
-                        });
-                    }
-                }
-            },
-            error => {
-                console.error(error.json().message);
-                return Observable.throw(error);
-            }
-        );
-    }
-
-    public setDomain(domail) {
-        this.Campaign.domain_id = domail.id;
-        this.url = domail.name;
-    }
-
-    public suggestion() {
-        if (this.Campaign.title !== '') {
-            this.DesignService.suggestion(this.Campaign.title).subscribe(
-                res => {
-                    this.uri = res;
-                    this.Campaign.url = this.uri.uri;
-                },
-                error => {
-                    console.error(error.json().message);
-                    return Observable.throw(error);
-                }
-            );
-        } else {
-            this.uri = JSON.parse('{"uri":"","available": true}');
+  private getCampaign() {
+    this.DesignService.startLoad();
+    this.DesignService.getCampaign(this.Campaign.id).subscribe(
+      res => {
+        if (res.state === 'launching') {
+          DsLib.removeCampaign(this.AppService.svConfig['system.ecomerce.domain.name']);
+          this.router.navigate(['/design']);
         }
-    }
-
-    public checkSuggestion() {
-        if (this.Campaign.url !== '') {
-            this.DesignService.checkSuggestion(this.Campaign.url, this.Campaign.id).subscribe(
-                res => {
-                    this.uri = res;
-                },
-                error => {
-                    console.error(error.json().message);
-                    return Observable.throw(error);
-                }
-            );
-        } else {
-            this.uri = JSON.parse('{"uri":"","available": true}');
-        }
-    }
-
-    private getCategories() {
-        this.DesignService.getCategories(1).subscribe(
-            res => {
-                this.arrCategories = this.convertCat(res.categories);
-                if (this.Campaign && this.Campaign.categories) {
-                    this.arrCatValue = this.Campaign.categories.split(',');
-                }
-            },
-            error => {
-                console.error(error.json().message);
-                return Observable.throw(error);
-            }
-        );
-    }
-
-    private convertCat(arrCat) {
-        Object.keys(arrCat).map((index) => {
-            arrCat[index]['text'] = arrCat[index].name;
+        Object.keys(res).map((index) => {
+          this.Campaign[index] = res[index];
         });
-        return arrCat;
-    }
+        this.Campaign.desc = decodeURIComponent(decodeURIComponent(this.Campaign.desc));
+        this.getDomains();
+        this.getCategories();
+        this.getStores();
+        this.product = this.getProductDefault();
+        this.face = Ds.getFace(this.Campaign);
+        this.DesignService.endLoad();
+      },
+      error => {
+        console.error(error.json().message);
+        return Observable.throw(error);
+      }
+    );
+  }
 
-    public categoriesSelect(data: { value: string[] }) {
-        this.Campaign.categories = data.value.join(',');
-    }
+  public setVisibility = (val) => this.Campaign.private = val;
 
-    public changeProduct() {
-        this.dialogService.addDialog(ProductdfComponent, {
-            title: 'Select product'
-        })
-            .subscribe((product) => {
-                this.mergProduct(product);
+  private getDomains() {
+    this.DesignService.getDomains().subscribe(
+      res => {
+        this.arrDomains = res.domains;
+        if (this.arrDomains.length) {
+          if (this.Campaign.domain_id === '') {
+            this.setDomain(this.arrDomains[0]);
+          } else {
+            Object.keys(this.arrDomains).map((index) => {
+              if (this.arrDomains[index].id = this.Campaign.domain_id) {
+                this.setDomain(this.arrDomains[index]);
+              }
             });
-    }
-
-    private mergProduct(product: any) {
-        if (product) {
-            Object.keys(this.Campaign.products).map((index) => {
-                if (this.Campaign.products[index].id === product.id) {
-                    this.Campaign.products[index].default = true;
-                    this.Campaign.products[index].back_view = product.back_view;
-                    this.Campaign.products[index].colors = product.colors;
-                    Object.keys(this.Campaign.products[index]).map((key) => {
-                        this.Product[key] = this.Campaign.products[index][key];
-                    });
-                } else {
-                    this.Campaign.products[index].default = false;
-                }
-            });
-            if (this.Product.back_view) {
-                this.face = 'back';
-            } else {
-                this.face = 'front';
-            }
-            this.color = this.getColor(this.Product.colors);
-            this.getBases();
+          }
         }
-    }
+      },
+      error => {
+        console.error(error.json().message);
+        return Observable.throw(error);
+      }
+    );
+  }
 
-    private getBases() {
-        this.DesignService.getBases(this.Product.base.type_id).subscribe(
-            data => {
-                this.arrBase = data;
-                this.selectBase(this.Product.base.id);
-            },
-            error => {
-                console.error(error.json().message);
-                return Observable.throw(error);
-            }
-        );
-    }
+  public setDomain(domail) {
+    this.Campaign.domain_id = domail.id;
+    this.url = domail.name;
+  }
 
-    private selectBase(id) {
-        for (let i = 0; i < this.arrBase.length; i++) {
-            const value = this.arrBase[i].id;
-            if (value === id) {
-                this._selectBase(this.arrBase[i]);
-            }
+  public suggestion() {
+    if (this.Campaign.title !== '') {
+      this.DesignService.suggestion(this.Campaign.title).subscribe(
+        res => {
+          this.uri = res;
+          this.Campaign.url = this.uri.uri;
+        },
+        error => {
+          console.error(error.json().message);
+          return Observable.throw(error);
         }
+      );
+    } else {
+      this.uri = JSON.parse('{"uri":"","available": true}');
     }
+  }
 
-    private _selectBase(base: any) {
-        this.Product.base = base;
-        this.setView();
-    }
-
-    public setView() {
-        const myjs = this;
-        const maxH = 500;
-        const maxW = 400;
-        this.productImg.load(this.DsLib.getBaseImgUrl(this.face, this.Product.base.id)).loaded(function (loader) {
-            const tl: number = (loader.width / loader.height);
-            let rsW: number = loader.width;
-            let rsH: number = loader.height;
-            if (rsH > maxH) {
-                rsH = maxH;
-                rsW = rsH * tl;
-                if (rsW > maxW) {
-                    rsW = maxW;
-                    rsH = rsW / tl;
-                }
-            }
-            myjs.draw.size(rsW, rsH);
-            myjs.productImg.size(rsW, rsH);
-            myjs.productColor.size(rsW, rsH);
-            const zoom = (rsW / myjs.Product.base.image.width);
-            myjs.genDesign(zoom);
-        });
-        if (this.color) {
-            this.productColor.fill(this.color.value);
+  public checkSuggestion() {
+    if (this.Campaign.url !== '') {
+      this.DesignService.checkSuggestion(this.Campaign.url, this.Campaign.id).subscribe(
+        res => {
+          this.uri = res;
+        },
+        error => {
+          console.error(error.json().message);
+          return Observable.throw(error);
         }
+      );
+    } else {
+      this.uri = JSON.parse('{"uri":"","available": true}');
     }
+  }
 
-    private genDesign(zoom) {
-        this.nested.clear();
-        Object.keys(this.Product.designs).map((index) => {
-            if (this.Product.designs[index].type === this.face) {
-                this.addImg(this.Product.designs[index], zoom);
-            }
-        });
-    }
+  private getCategories() {
+    this.DesignService.getCategories(1).subscribe(
+      res => {
+        this.arrCategories = DsLib.convert2select(res.categories, 'name');
+        if (this.Campaign && this.Campaign.categories) {
+          this.arrCatValue = this.Campaign.categories.split(',');
+        }
+      },
+      error => {
+        console.error(error.json().message);
+        return Observable.throw(error);
+      }
+    );
+  }
 
-    public addImg(dsrs: any, zoom) {
-        const myobj = this;
-        this.nested.image(dsrs.image.url)
-            .loaded(function () {
-                this.id = dsrs.id;
-                myobj.resizeImg(this, dsrs, zoom);
-            });
-    }
+  private getStores() {
+    this.DesignService.getStorefronts({title: '', page_size: 1000, page: 1}).subscribe(
+      res => {
+        this.DesignService.arrStores = DsLib.convert2select(res.stores, 'title');
+      }
+    );
+  }
 
-    private resizeImg(img: any, dsrs: any, zoom) {
-        const optnew = this.Product.getOpt(this.face);
-        const optold = this.getOldOpt();
-        const tlX: number = (optnew.maxX - optnew.minX) / (optold.maxX - optold.minX);
-        const tlY: number = (optnew.maxY - optnew.minY) / (optold.maxY - optold.minY);
-        const mx: number = dsrs.image.printable_left * tlX;
-        const my: number = dsrs.image.printable_top * tlY;
-        let mW = dsrs.image.printable_width * tlX;
-        let mH = 0;
-        if (optnew.minX + mx + mW <= optnew.maxX) {
-            mH = mW * dsrs.image.height / dsrs.image.width;
+  public touchedCat = () => this.form.form.controls.sel_categories.markAsTouched();
+  public touchedStores = () => this.form.form.controls.sel_stores.markAsTouched();
+  public categoriesSelect = (data: { value: string[] }) => this.Campaign.categories = data.value.join(',');
+  public storesSelect = (data: { value: string[] }) => this.Campaign.stores = data.value.join(',');
+
+  public changeProduct() {
+    this.dialogService.addDialog(ProductdfComponent, {
+      title: 'Select product',
+      campaign: this.Campaign,
+      arrbasetypes: this.arrBaseTypes
+    })
+      .subscribe((product) => {
+        this.mergProduct(product);
+      });
+  }
+
+  private mergProduct(product: any) {
+    if (product) {
+      Object.keys(this.Campaign.products).map((index) => {
+        if (this.Campaign.products[index].id === product.id) {
+          this.Campaign.products[index].default = true;
+          this.Campaign.products[index].back_view = product.back_view;
+          this.Campaign.products[index].colors = product.colors;
         } else {
-            mW = optnew.maxX - (optnew.minX + mx);
-            mH = mW * dsrs.image.height / dsrs.image.width;
+          this.Campaign.products[index].default = false;
         }
-
-        if (optnew.minY + my + mH > optnew.maxY) {
-            mH = optnew.maxY - (optnew.minY + my);
-            mW = mH * dsrs.image.width / dsrs.image.height;
-        }
-        img.move((optnew.minX + mx) * zoom, (optnew.minY + my) * zoom).size(mW * zoom, mH * zoom);
+      });
+      this.face = product.back_view ? 'back' : 'front';
+      this.product = this.getProductDefault();
+      const indexColor = this.product.colors.findIndex(x => x.default === true) >= 0 ?
+        this.product.colors.findIndex(x => x.default === true) : 0;
+      this.color = this.product.colors[indexColor];
     }
+  }
 
-    private getOldOpt(): any {
-        for (let index = 0; index < this.Campaign.products.length; index++) {
-            const check = this.Campaign.products[index].designs.findIndex(x => x.main === true);
-            if (check >= 0) {
-                const product = new Product();
-                product.base = this.Campaign.products[index].base;
-                return product.getOpt(this.face);
-            }
-        }
-        return [];
-    }
+  public setTimeLength(timeItem: any) {
+    this.timeEnd = timeItem;
+    this.Campaign.length = this.timeEnd.number;
+  }
+
+  public clickContinue = () => this.updateCampaign();
+
+  private updateCampaign() {
+    this.DesignService.startLoad();
+    this.Campaign.state = 'launching';
+    const cpU = new Campaign();
+    Object.keys(this.Campaign).map((index) => {
+      cpU[index] = this.Campaign[index];
+    });
+    cpU.desc = encodeURIComponent(cpU.desc);
+    this.DesignService.updateCampaign(cpU).subscribe(
+      () => {
+        DsLib.removeCampaign(this.AppService.svConfig['system.ecomerce.domain.name']);
+        const rout = 'http://' + this.AppService.svConfig['system.ecomerce.domain.name']
+          + this.AppService.svConfig['campaign.detail.uri.prefix']
+          + '/' + this.Campaign.url.split('/').join('');
+        window.location.replace(rout);
+      },
+      error => {
+        this.DesignService.endLoad();
+      }
+    );
+  }
 }

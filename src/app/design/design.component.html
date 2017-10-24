@@ -1,163 +1,173 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#home">Img-Art</a></li>
-                        <li><a data-toggle="tab" href="#menu1">Text</a></li>
-                        <li><a data-toggle="tab" href="#menu2">Layers</a></li>
-                    </ul>
+<div class="container conten-page">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="tab-panel">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#home">{{ 'DESIGN_PAGE.DESIGN' | translate }}</a></li>
+          <li><a data-toggle="tab" href="#menu2">{{ 'DESIGN_PAGE.LAYERS' | translate }}</a></li>
+        </ul>
 
-                    <div class="tab-content">
-                        <div id="home" class="tab-pane fade in active">
-                            <div class="text-center bottom-margin">
-                                <form #form1="ngForm">
-                                    <input *ngIf="Product.base&&(Campaign.hasBase(Product.base.id) >=0)"
-                                           [(ngModel)]="fDesign.file" #filePicker="ngModel" style="display: none;"
-                                           type="file" id="filePicker" name="filePicker"
-                                           class="form-control"
-                                           (change)="handleFileSelect($event)">
-                                    <label class="btn {{Product.base&&(Campaign.hasBase(Product.base.id) >=0)? 'btn-danger': 'btn-default disabled'}}"
-                                           style='cursor: pointer' for="filePicker">
-                                        Import Img
-                                    </label>
-                                </form>
-                            </div>
-                            <div class="text-center bottom-margin">
-                                <button type="button" class="btn btn-danger"> Browse Art</button>
-                            </div>
-                        </div>
-                        <div id="menu1" class="tab-pane fade">
-                            <h3>Text</h3>
-                            <p>Developing</p>
-                        </div>
-                        <div id="menu2" class="tab-pane fade">
-                            <ul class="layers">
-                                <template ngFor let-itemNested [ngForOf]="nested.children()">
-                                    <li *ngIf="itemNested.type==='image'"
-                                        class="layer {{selectItem && (itemNested.attr('id')==selectItem.attr('id'))? 'active': ''}}">
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active">
+            <div class="text-center">
+              <form #form1="ngForm">
+                <input *ngIf="Product.base&&(Campaign.hasBase(Product.base.id) >=0)"
+                       [(ngModel)]="fDesign.file" #filePicker="ngModel" style="display: none;"
+                       type="file" id="filePicker" name="filePicker"
+                       class="form-control"
+                       (change)="handleFileSelect($event)">
+                <label
+                  class="la-btn sm-bnt {{Product.base&&(Campaign.hasBase(Product.base.id) >=0)? 'mask-btn': 'disabled-btn'}}"
+                  for="filePicker">
+                  {{ 'DESIGN_PAGE.UPLOAD' | translate }}
+                </label>
+              </form>
+            </div>
+          </div>
+          <div id="menu2" class="tab-pane fade">
+            <ul class="layers">
+              <template ngFor let-itemNested [ngForOf]="nested.children()">
+                <li *ngIf="itemNested.type==='image'"
+                    class="layer {{selectItem && (itemNested.attr('id')==selectItem.attr('id'))? 'active': ''}}">
                                         <span (click)="selectLayer(itemNested)"><img alt=""
                                                                                      src="{{itemNested.src}}">{{itemNested.attr('id')}}</span>
-                                        <div class="layer-action pull-right">
-                                            <a class="layer-action-item" (click)="deleteLayer(itemNested)"
-                                               title="Press `delete` on keyboard">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </template>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div *ngFor='let productItem of Campaign.products' class="panel panel-default produc-box">
-                <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
-                     class="panel-body {{Product.id==productItem.id? 'active': ''}}">
-                    <span (click)="selectProduct(productItem)">{{productItem.base.name}}</span>
-                    <a (click)="deleteProduct(productItem.base.id)" class="producs-action-item pull-right"
-                       title="delete">
-                        <i class="fa fa-times" aria-hidden="true"></i>
+                  <div class="layer-action pull-right">
+                    <a class="layer-action-item" (click)="deleteLayer(itemNested)"
+                       title="{{ 'DESIGN_PAGE.LAYERS_TITLE_DELETE' | translate }}">
+                      <i class="ion-ios-close-empty"></i>
                     </a>
-                    <div class="row producs-list" (click)="selectProduct(productItem)">
-                        <div class="col-sm-4">
-                            <img alt="" src="{{DsLib.getBaseImgUrl('front',productItem.base.id)}}">
-                        </div>
-                        <div class="col-sm-8 prod-inf">
-                            <div class="colors">
-                                <div class="ColorPicker interactive">
-                                    <div *ngFor='let itemColor of productItem.colors' class="color">
-                                        <div (click)="changeColor(itemColor)" class="ui small circular label"
-                                             [ngStyle]="{ 'background-color': itemColor.value }"><span>&nbsp;</span>
-                                        </div>
-                                    </div>
-                                    <div class="color">
-                                        <a (click)="addColor(productItem)" class="add-color-icon"><i
-                                                style="bottom: 0;position: absolute;"
-                                                class="fa fa-plus-circle fa-2"
-                                                aria-hidden="true"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-            <div class="add-product-button text-center" (click)="addProduct()"><i class="fa fa-plus"
-                                                                                  aria-hidden="true"></i>
-                <span>Add product</span></div>
-        </div>
-        <div class="col-sm-6">
-            <div class="row">
-                <div class="svg-surface text-center">
-                    <button *ngIf="Product.base&&(Campaign.hasBase(Product.base.id) < 0)" type="button"
-                            (click)="_addProduct()"
-                            class="btn btn-danger pull-right btn-add"> Add
-                    </button>
-                    <div id="drawing"></div>
-                </div>
+      <div *ngFor='let productItem of Campaign.products' class="panel panel-default produc-box">
+       <!--  <pre>
+        {{ productItem.base | json }}
+      </pre> -->
+        <a (click)="deleteProduct(productItem.base.id)" class="producs-action-item pull-right"
+           title="delete">
+          <i class="ion-ios-close-empty" aria-hidden="true"></i>
+        </a>
+        <div *ngIf="productItem.base&&productItem.base.id&&productItem.base.id!=''"
+             class="panel-body {{Product.id==productItem.id? 'active': ''}}">
+          <span (click)="selectProduct(productItem)">{{productItem.base.name}}</span>
+          <div class="row producs-list" (click)="selectProduct(productItem)">
+            <div class="col-sm-4">
+              <div appProduct [product]="productItem" [mainopt]="getOldOpt(productItem)"></div>
             </div>
-            <div class="row text-center" style="margin-bottom: 20px;">
-                <div class="btn-group">
-                    <button type="button" (click)="setFace('front')"
-                            class="btn {{face==='front'? 'btn-primary': 'btn-default'}}">Front
-                    </button>
-                    <button type="button" (click)="setFace('back')"
-                            class="btn {{face==='back'? 'btn-primary': 'btn-default'}}">Back
-                    </button>
-                </div>
+            <div class="col-sm-8 prod-inf">
+              <div class="colors">
+                <template ngFor let-itemColor [ngForOf]="productItem.colors">
+                  <ni-color [color]="itemColor.value" (click)="changeColor(itemColor)"></ni-color>
+                </template>
+                <ni-color [color]="'#fa9918'" [textcolor]="'#ffffff'" [faclass]="'fa-plus'"
+                          (click)="addColor(productItem)"></ni-color>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <form #form="ngForm">
-                        <div class="form-group">
-                            <select [(ngModel)]="fDesign.sBaseType" (change)="selectBaseType()" class="form-control"
-                                    id="sBaseType"
-                                    name="sBaseType" title="Select base type" required>
-                                <optgroup *ngFor='let itemGroup of arrBaseTypes' label="{{itemGroup.name}}">
-                                    <option *ngFor='let item of itemGroup.base_types' value="{{item.id}}">
-                                        {{item.name}}
-                                    </option>
-                                </optgroup>
-                            </select>
-                        </div>
-                    </form>
+      </div>
 
-                    <div class="product-selector">
-                        <ul class="options item-options active nav">
-                            <template ngFor let-itemBase [ngForOf]="arrBase">
-                                <li class="item-option {{itemBase.id===Product.base.id? 'active': ''}}">
-                                    <p (click)="_selectBase(itemBase)" class="item-name">{{itemBase.name}}</p>
-                                    <div (click)="_selectBase(itemBase)" class="item-overview">
-                                        <div class="item-thumb-container item-thumb-loaded">
-                                            <img class="item-thumb" src="{{itemBase.image.front}}"></div>
-                                        <p class="item-qualities">{{itemBase.desc}}</p>
-                                        <div class="sizes-label">S – XL</div>
-                                    </div>
-                                    <div *ngIf="itemBase.colors&&itemBase.id===Product.base.id" class="product-colors">
-                                        <div class="tool_tip__container">
-                                            <div class="tool_tip__definition">
-                                                <ul class="color-column quick-colors">
-                                                    <li *ngFor='let itemColor of itemBase.colors'
-                                                        (click)="setColor(itemColor)"
-                                                        class="shirt-color-sample js-color"
-                                                        title="{{itemColor.name}}"
-                                                        [ngStyle]="{ 'background-color': itemColor.value }"></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="la-btn mask-btn add-product-button" (click)="addProduct()"><i class="fa fa-plus"
+                                                                                aria-hidden="true"></i>
+        <span>{{ 'DESIGN_PAGE.ADD_PRODUCT' | translate }}</span></div>
     </div>
+
+    <div class="col-sm-6">
+      <div class="text-center">
+        <div *ngIf="Product.base&&Product.base.id!==''&&(Campaign.hasBase(Product.base.id) < 0)"
+             class="flex">
+          <a (click)="_addProduct()" class="bttn">{{ 'COMMON.ADD' | translate }}</a>
+        </div>
+        <div id="drawing"></div>
+      </div>
+      <div class="text-center">
+        <div class="btn-group visibility-btn">
+          <button type="button" (click)="setFace('back')"
+                  class="la-btn sm-bnt {{face==='back'? 'mask-btn': 'blank-btn'}}">{{ 'COMMON.BACK' | translate }}
+          </button>
+          <button type="button" (click)="setFace('front')"
+                  class="la-btn sm-bnt {{face==='front'? 'mask-btn': 'blank-btn'}}">{{ 'COMMON.FRONT' | translate
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3">
+      <div class="panel panel-default">
+        <div class="panel-body" style="padding:0;">
+          <form #form="ngForm">
+            <div class="form-group">
+              <div class="input-group select-ctr">
+                                <span data-toggle="dropdown"
+                                      class="input-group-addon">{{fDesign.sBaseTypeName}}</span>
+                <ul class="dropdown-menu">
+                  <li class="menu-group" *ngFor='let itemGroup of arrBaseTypes'><a class="item-group"
+                                                                                   href="javascript:void(0)">{{itemGroup.name}}</a>
+                    <ul class="dropdown-subs">
+                      <li *ngFor='let item of itemGroup.base_types'
+                          [ngClass]="(item.id === fDesign.sBaseType)? 'active': ''" (click)="selectBaseType(item.id)">
+                        <a href="javascript:void(0)">{{item.name}}</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                <span class="input-group-addon" data-toggle="dropdown"><i class="ion-ios-arrow-down"></i></span>
+              </div>
+            </div>
+          </form>
+
+          <div class="product-selector">
+            <ul class="options item-options active nav">
+              <template ngFor let-itemBase [ngForOf]="arrBase">
+                <li class="item-option {{itemBase.id===Product.base.id? 'active': ''}}">
+                  <p (click)="_selectBase(itemBase)" class="item-name">{{itemBase.name}}</p>
+                  <div (click)="_selectBase(itemBase)" class="item-overview">
+                    <div class="item-thumb-container">
+                      <img class="item-thumb" src="{{itemBase.image.front}}">
+                    </div>
+                    <p class="item-qualities">{{itemBase.desc}}</p>
+                  </div>
+
+                  <div *ngIf="itemBase.colors&&itemBase.id===Product.base.id"
+                       (mouseleave)="expColors(false)"
+                       class="product-colors">
+                    <ul *ngFor='let itemColors of genColumnColor(Product.base.colors, moreColor)'
+                        class="color-column">
+                      <template ngFor let-itemColor
+                                [ngForOf]="itemColors">
+                        <li *ngIf="itemColor!=='more'" title="{{itemColor.name}}"
+                            (click)="setColor(itemColor)">
+                          <ni-color [color]="itemColor.value"></ni-color>
+                        </li>
+                        <li *ngIf="itemColor==='more'">
+                          <ni-color [color]="'#fa9918'" [textcolor]="'#ffffff'" [faclass]="'fa-plus'"
+                                    (mouseover)="expColors(true)"></ni-color>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                </li>
+              </template>
+            </ul>
+          </div>
+          <div class="price-box">
+            <p class="price-des">Base cost, with current pricing discounts</p>
+            <p class="price-base price-show-ci" [appViewprice]="basecost"></p>
+            <div class="form-group text-center">
+              <button type="button" [disabled]="!DesignService.validate1 || !sellShow" (click)="clickContinue()"
+                      class="la-btn sm-bnt mask-btn">
+                {{ 'DESIGN_PAGE.SELL_THIS' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

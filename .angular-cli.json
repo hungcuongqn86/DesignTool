@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "public/dist",
+      "outDir": "dist",
       "assets": [
         "assets",
         "favicon.ico"
@@ -21,9 +21,9 @@
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "../node_modules/font-awesome/css/font-awesome.css",
-        "../node_modules/svg.select.js/dist/svg.min.css",
-        "../ext/quill/quill.bubble.css",
-        "../ext/quill/quill.snow.css",
+        "../node_modules/svg.select.js/dist/svg.select.min.css",
+        "../node_modules/quill/dist/quill.snow.css",
+        "../node_modules/ionicons201/css/ionicons.min.css",
         "styles.css"
       ],
       "scripts": [
@@ -33,7 +33,11 @@
         "../node_modules/svg.draggable.js/dist/svg.draggable.min.js",
         "../ext/svg.select.js/dist/svg.select.js",
         "../ext/svg.resize.js/dist/svg.resize.js",
-        "../node_modules/select2/dist/js/select2.full.js"
+        "../node_modules/select2/dist/js/select2.full.js",
+        "../node_modules/moment/min/moment.min.js",
+        "../node_modules/moment-timezone/builds/moment-timezone-with-data.min.js",
+        "../node_modules/crypto-js/crypto-js.js",
+        "../node_modules/tinycolor2/dist/tinycolor-min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

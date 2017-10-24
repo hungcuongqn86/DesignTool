@@ -1,45 +1,18 @@
+.la-btn {
+  margin-left: 15px;
+}
+
 .modal-dialog {
-    width: 50%;
-}
-
-.producs-list {
-    margin-top: 8px;
-}
-
-.background-color {
-    position: relative;
-}
-
-.producs-list img {
-    position: absolute;
-    top: 0;
-    border: 1px solid #ddd;
-    width: 100%;
-}
-
-.prod-inf {
-    line-height: 30px;
-}
-
-.colors {
-    margin: 10px;
+  width: 50%;
 }
 
 .ColorPicker .color {
-    display: inline-block;
-    margin: 5px;
-    width: 30px;
+  display: inline-block;
+  margin: 5px;
+  width: 30px;
+  cursor: pointer;
 }
 
-.ui.circular.label, .ui.circular.labels .label {
-    display: block;
-    padding: 5px;
-}
-
-.ColorPicker.interactive .color > .ui.circular.label {
-    cursor: pointer;
-}
-
-.ColorPicker .color > .ui.circular.label span {
-    margin: 5px;
+.produc-box {
+  margin-bottom: 0;
 }

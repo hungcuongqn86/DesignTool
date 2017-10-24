@@ -1,12 +1,17 @@
-var gulp = require('gulp');
+var gulp = require('gulp'), versionAppend = require('gulp-version-append');
 
-gulp.task('build', copyFunction);
+/*
+ gulp.task('version', function () {
+ return gulp.src('./index.html')
+ .pipe(versionAppend(['html', 'js', 'css'], {appendType: 'version', versionFile: './version.json'}))
+ .pipe(gulp.dest('./dist/'));
+ });
+ */
 
-function copyFunction ()
-{
-    return gulp
-        .src(['./public/dist/*', './public/dist/**/*', './public/dist/**/**/*'])
-        .pipe(gulp.dest('public'));
-}
+gulp.task('timestamp', function () {
+    return gulp.src('./index.html')
+        .pipe(versionAppend(['html', 'js', 'css'], {appendType: 'timestamp'}))
+        .pipe(gulp.dest('./dist/'));
+});
 
-gulp.task('default', ['build']);
+gulp.task('default', ['timestamp']);

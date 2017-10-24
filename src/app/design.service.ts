@@ -1,260 +1,289 @@
 import {Injectable} from '@angular/core';
 import {Response, URLSearchParams} from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import {HttpClient} from './http-client';
-
-const apiUrl = './psp/api/v1/';  // URL to web api
-const aspApiUrl = './asp/api/v1/';  // URL to web api
-const sFaceDf = 'front';
+import {HttpClient} from './lib/http';
+import {DialogService} from 'ng2-bootstrap-modal';
+import {LoadingxComponent} from './public/loading.component';
+import {apiUrl, sFaceDf} from './lib/const';
+import {Observable} from 'rxjs/Rx';
+import {DsLib} from './lib/lib';
 
 @Injectable()
 export class Design {
-    public id;
-    public campaign_id;
-    public product_id;
-    public type = sFaceDf;
-    public img: any;
-    public image: any = JSON.parse('{"position":"","mime_type":"","data":""}');
+  public id;
+  public campaign_id;
+  public product_id;
+  public type = sFaceDf;
+  public img: any;
+  public image: any = {'position': '', 'url': '', 'width': '', 'height': ''};
 
-    constructor() {
-    }
+  constructor() {
+  }
 }
 
 @Injectable()
 export class Product {
-    public id;
-    public position;
-    public base: any = JSON.parse('{"id":""}');
-    public colors: Array<any> = [];
-    public designs: Array<any> = [];
-    public default = false;
-    public back_view = false;
+  public id;
+  public position;
+  public base: any = {'id': ''};
+  public colors: any = [];
+  public designs: Array<any> = [];
+  public default = false;
+  public back_view = false;
+  public price: number;
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    public getOpt(sFace) {
-        if (sFace === sFaceDf) {
-            return {
-                minX: Number(this.base.printable.front_left)
-                , minY: Number(this.base.printable.front_top)
-                , maxX: Number(this.base.printable.front_left) + Number(this.base.printable.front_width)
-                , maxY: Number(this.base.printable.front_top) + Number(this.base.printable.front_height)
-            };
-        } else {
-            return {
-                minX: Number(this.base.printable.back_left)
-                , minY: Number(this.base.printable.back_top)
-                , maxX: Number(this.base.printable.back_left) + Number(this.base.printable.back_width)
-                , maxY: Number(this.base.printable.back_top) + Number(this.base.printable.back_height)
-            };
-        }
+  public getHeight(sFace) {
+    if (sFace === sFaceDf) {
+      return this.base.printable.front_height;
+    } else {
+      return this.base.printable.back_height;
     }
+  }
 
-    public getHeight(sFace) {
-        if (sFace === sFaceDf) {
-            return this.base.printable.front_height;
-        } else {
-            return this.base.printable.back_height;
-        }
+  public getWidth(sFace) {
+    if (sFace === sFaceDf) {
+      return this.base.printable.front_width;
+    } else {
+      return this.base.printable.back_width;
     }
+  }
 
-    public getWidth(sFace) {
-        if (sFace === sFaceDf) {
-            return this.base.printable.front_width;
-        } else {
-            return this.base.printable.back_width;
-        }
+  public getPrintablePoint(sFace) {
+    if (sFace === sFaceDf) {
+      return [[Number(this.base.printable.front_left), Number(this.base.printable.front_top)],
+        [Number(this.base.printable.front_left), Number(this.base.printable.front_top) + Number(this.base.printable.front_height)],
+        [Number(this.base.printable.front_left) + Number(this.base.printable.front_width),
+          Number(this.base.printable.front_top) + Number(this.base.printable.front_height)],
+        [Number(this.base.printable.front_left) + Number(this.base.printable.front_width)
+          , Number(this.base.printable.front_top)],
+        [Number(this.base.printable.front_left), Number(this.base.printable.front_top)]
+      ];
+    } else {
+      return [[Number(this.base.printable.back_left), Number(this.base.printable.back_top)],
+        [Number(this.base.printable.back_left), Number(this.base.printable.back_top) + Number(this.base.printable.back_height)],
+        [Number(this.base.printable.back_left) + Number(this.base.printable.back_width),
+          Number(this.base.printable.back_top) + Number(this.base.printable.back_height)],
+        [Number(this.base.printable.back_left) + Number(this.base.printable.back_width)
+          , Number(this.base.printable.back_top)],
+        [Number(this.base.printable.back_left), Number(this.base.printable.back_top)]
+      ];
     }
-
-    public getTop(sFace) {
-        if (sFace === sFaceDf) {
-            return this.base.printable.front_top;
-        } else {
-            return this.base.printable.back_top;
-        }
-    }
-
-    public getLeft(sFace) {
-        if (sFace === sFaceDf) {
-            return this.base.printable.front_left;
-        } else {
-            return this.base.printable.back_left;
-        }
-    }
-
-    public getPrintablePoint(sFace) {
-        if (sFace === sFaceDf) {
-            return [[Number(this.base.printable.front_left), Number(this.base.printable.front_top)],
-                [Number(this.base.printable.front_left), Number(this.base.printable.front_top) + Number(this.base.printable.front_height)],
-                [Number(this.base.printable.front_left) + Number(this.base.printable.front_width),
-                    Number(this.base.printable.front_top) + Number(this.base.printable.front_height)],
-                [Number(this.base.printable.front_left) + Number(this.base.printable.front_width)
-                    , Number(this.base.printable.front_top)],
-                [Number(this.base.printable.front_left), Number(this.base.printable.front_top)]
-            ];
-        } else {
-            return [[Number(this.base.printable.back_left), Number(this.base.printable.back_top)],
-                [Number(this.base.printable.back_left), Number(this.base.printable.back_top) + Number(this.base.printable.back_height)],
-                [Number(this.base.printable.back_left) + Number(this.base.printable.back_width),
-                    Number(this.base.printable.back_top) + Number(this.base.printable.back_height)],
-                [Number(this.base.printable.back_left) + Number(this.base.printable.back_width)
-                    , Number(this.base.printable.back_top)],
-                [Number(this.base.printable.back_left), Number(this.base.printable.back_top)]
-            ];
-        }
-    }
+  }
 }
 
 @Injectable()
 export class Campaign {
-    public id;
-    public title;
-    public desc;
-    public step = 1;
-    public private;
-    public domain_id;
-    public url;
-    public fb_pixel;
-    public categories;
-    public products: Array<Product> = [];
-    public state;
-    public user_id
+  public id;
+  public title;
+  public desc;
+  public step = 1;
+  public private;
+  public domain_id;
+  public url;
+  public fb_pixel;
+  public categories;
+  public stores;
+  public products: Array<Product> = [];
+  public state;
+  public user_id;
+  public length;
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    public add(Product: Product) {
-        this.products.push(Product);
-    }
+  public add(Product: Product) {
+    this.products.push(Product);
+  }
 
-    public deletePro(id) {
-        for (let index = 0; index < this.products.length; index++) {
-            if (this.products[index].base.id === id) {
-                this.products.splice(index, 1);
-                return true;
-            }
-        }
-        return false;
+  public deletePro(id) {
+    if (this.products.length <= 1) {
+      return false;
     }
+    for (let index = 0; index < this.products.length; index++) {
+      if (this.products[index].base.id === id) {
+        this.products.splice(index, 1);
+        return true;
+      }
+    }
+    return false;
+  }
 
-    public hasBase(id) {
-        for (let index = 0; index < this.products.length; index++) {
-            if (this.products[index].base.id === id) {
-                return index;
-            }
-        }
-        return -1;
+  public hasBase(id) {
+    for (let index = 0; index < this.products.length; index++) {
+      if (this.products[index].base.id === id) {
+        return index;
+      }
     }
+    return -1;
+  }
 }
 
 @Injectable()
 export class DesignService {
-    constructor(private http: HttpClient) {
-    }
+  public canActive: Array<string> = ['', 'design'];
+  private loadingStatus = false;
+  private dlLoad;
+  public validate1 = false;
+  public validate2 = true;
+  public locations = [];
+  public arrStores: Array<any>;
 
-    initCampaign(id, userid): any {
-        if (id !== '') {
-            return this.getCampaign(id);
-        } else {
-            return this.createCampaign(userid);
-        }
-    }
+  constructor(public http: HttpClient, public dialogService: DialogService) {
+  }
 
-    updateCampaign(campaign: Campaign) {
-        const url = apiUrl + `campaigns/` + campaign.id;
-        const body = JSON.stringify(campaign);
-        return this.http.put(url, body).map((res: Response) => res.json());
+  public checkAccess(fallback: any, passback: any, tk: string, checkRoute, checkLogin) {
+    if (checkRoute) {
+      if (checkLogin) {
+        passback();
+        return Observable.of(true);
+      } else {
+        const url = apiUrl + `sessions`;
+        const body = JSON.stringify({token: tk});
+        return this.http.post(url, body)
+          .map((res: Response) => {
+            passback();
+            return true;
+          }).catch(() => {
+            fallback();
+            return Observable.of(false);
+          });
+      }
+    } else {
+      return Observable.of(false);
     }
+  }
 
-    private createCampaign(userid): any {
-        const url = apiUrl + `campaigns`;
-        const body = JSON.stringify({user_id: userid});
-        return this.http.post(url, body).map((res: Response) => res.json());
-    }
+  public loginCallback() {
+    this.getStores();
+  }
 
-    getCampaign(id): any {
-        const url = apiUrl + `campaigns/` + id;
-        return this.http.get(url).map((res: Response) => res.json());
-    }
+  private getStores() {
+    this.getStorefronts({title: '', page_size: 1000, page: 1}).subscribe(
+      res => {
+        this.arrStores = DsLib.convert2select(res.stores, 'title');
+      }
+    );
+  }
 
-    getBaseTypes(): any {
-        const url = apiUrl + `base_groups`;
-        return this.http.get(url).map((res: Response) => res.json().base_groups);
+  public startLoad(title = 'Loading...') {
+    if (this.loadingStatus) {
+      return false;
     }
+    this.loadingStatus = true;
+    this.dlLoad = this.dialogService.addDialog(LoadingxComponent, {
+      status: title
+    }).subscribe(() => {
+    });
+  }
 
-    getBases(type_id): any {
-        const url = apiUrl + `bases`;
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('type_id', type_id);
-        return this.http.get(url, {search: params}).map((res: Response) => res.json().bases);
-    }
+  public endLoad() {
+    this.dlLoad.unsubscribe();
+    this.loadingStatus = false;
+  }
 
-    addDesign(Design: Design) {
-        const url = apiUrl + `designs`;
-        const body = JSON.stringify({product_id: Design.product_id, type: Design.type, image: Design.image});
-        return this.http.post(url, body).map((res: Response) => res.json());
+  initCampaign(id, userid): any {
+    if (id !== '') {
+      return this.getCampaign(id);
+    } else {
+      return this.createCampaign(userid);
     }
+  }
 
-    updateDesign(Design: Design) {
-        const url = apiUrl + `designs/` + Design.id;
-        const body = JSON.stringify(Design);
-        return this.http.put(url, body).map((res: Response) => res.json());
-    }
+  updateCampaign(campaign: Campaign) {
+    const url = apiUrl + `campaigns/` + campaign.id;
+    const body = JSON.stringify(campaign);
+    return this.http.put(url, body).map((res: Response) => res.json());
+  }
 
-    deleteDesign(Design: Design, cpId) {
-        const url = apiUrl + `designs/` + Design.id + '?campaign_id=' + cpId;
-        return this.http.delete(url).map((res: Response) => res.json());
-    }
+  private createCampaign(userid): any {
+    const url = apiUrl + `campaigns`;
+    const body = JSON.stringify({user_id: userid});
+    return this.http.post(url, body).map((res: Response) => res.json());
+  }
 
-    getDomains(): any {
-        const url = apiUrl + `domains`;
-        return this.http.get(url).map((res: Response) => res.json());
-    }
+  getCampaign(id): any {
+    const url = apiUrl + `campaigns/` + id;
+    return this.http.get(url).map((res: Response) => res.json());
+  }
 
-    getCategories(visible) {
-        const url = apiUrl + `categories`;
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('visible', visible);
-        return this.http.get(url).map((res: Response) => res.json());
-    }
+  getBaseTypes(): any {
+    const url = apiUrl + `base_groups`;
+    return this.http.get(url).map((res: Response) => res.json().base_groups);
+  }
 
-    suggestion(suggestion: string): any {
-        const url = apiUrl + `uri`;
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('suggestion', suggestion);
-        return this.http.get(url, {search: params}).map((res: Response) => res.json());
-    }
+  getBases(type_id): any {
+    const url = apiUrl + `bases`;
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('type_id', type_id);
+    return this.http.get(url, {search: params}).map((res: Response) => res.json().bases);
+  }
 
-    checkSuggestion(uri: string, id): any {
-        const url = apiUrl + `uri`;
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('check', uri);
-        params.set('campaign_id', id);
-        return this.http.get(url, {search: params}).map((res: Response) => res.json());
-    }
+  addDesign(Design: Design) {
+    const url = apiUrl + `designs`;
+    const body = JSON.stringify(Design);
+    return this.http.post(url, body).map((res: Response) => res.json());
+  }
 
-    accRegister(acc: any) {
-        const url = aspApiUrl + `users`;
-        const body = JSON.stringify(acc);
-        return this.http.post(url, body).map((res: Response) => res.json());
-    }
+  updateDesign(Design: Design) {
+    const url = apiUrl + `designs/` + Design.id;
+    const body = JSON.stringify(Design);
+    return this.http.put(url, body).map((res: Response) => res.json());
+  }
 
-    accLogin(acc: any) {
-        const url = aspApiUrl + `tokens`;
-        const body = JSON.stringify(acc);
-        return this.http.post(url, body).map((res: Response) => res.json());
-    }
+  deleteDesign(Design: Design, prodId) {
+    const url = apiUrl + `designs/` + Design.id;
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('product_id', prodId);
+    return this.http.deletex(url, {search: params}).map((res: Response) => res.json());
+  }
 
-    getProfile(tk: any) {
-        const url = aspApiUrl + `tokens/${tk.id}`;
-        const params: URLSearchParams = new URLSearchParams();
-        params.set('scope', 'profile');
-        return this.http.get(url, {search: params}).map((res: Response) => res.json());
-    }
+  getDomains(): any {
+    const url = apiUrl + `domains`;
+    return this.http.get(url).map((res: Response) => res.json());
+  }
 
-    accLogout(tk: any) {
-        const url = aspApiUrl + `tokens/${tk.id}`;
-        return this.http.delete(url).map((res: Response) => res.json());
-    }
+  getCategories(visible) {
+    const url = apiUrl + `categories`;
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('visible', visible);
+    return this.http.get(url).map((res: Response) => res.json());
+  }
+
+  public getStorefronts(sparams) {
+    const url = apiUrl + 'stores';
+    const params: URLSearchParams = new URLSearchParams();
+    Object.keys(sparams).map((key) => {
+      params.set(key, sparams[key]);
+    });
+    return this.http.get(url, {search: params}).map((res: Response) => res.json());
+  }
+
+  suggestion(suggestion: string): any {
+    const url = apiUrl + `uri`;
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('suggestion', suggestion);
+    return this.http.get(url, {search: params}).map((res: Response) => res.json());
+  }
+
+  checkSuggestion(uri: string, id): any {
+    const url = apiUrl + `uri`;
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('check', uri);
+    params.set('reference', id);
+    return this.http.get(url, {search: params}).map((res: Response) => res.json());
+  }
+
+  removeSession(id) {
+    const url = apiUrl + `sessions/${id}`;
+    return this.http.deletex(url).map((res: Response) => res.json());
+  }
+
+  getConfig(key) {
+    const url = apiUrl + 'preferences';
+    const params: URLSearchParams = new URLSearchParams();
+    params.set('key', key);
+    return this.http.get(url, {search: params}).map((res: Response) => res.json().value);
+  }
 }

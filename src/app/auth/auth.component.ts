@@ -1,92 +1,74 @@
-import {Component, OnInit, AfterViewInit} from '@angular/core';
-import {DesignService} from '../design.service';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {DialogComponent, DialogService} from 'ng2-bootstrap-modal';
-import {DsLib} from '../lib/lib';
-import {Observable} from 'rxjs/Rx';
+import {captcha_key} from '../lib/const';
 
 export interface PromptModel {
-    title;
+  type;
+  rSuccess;
+  rError;
+  alert;
 }
 
 declare const $: any;
 
 @Component({
-    templateUrl: './auth.component.html',
-    styleUrls: ['./auth.component.css']
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css']
 })
 export class AuthComponent extends DialogComponent<PromptModel, string> implements PromptModel, OnInit, AfterViewInit {
-    title;
-    rSuccess = false;
-    rError = false;
-    fRegiter: any = JSON.parse('{"source": "general","email":"","password":"","confirm_password":""}');
-    fLogin: any = JSON.parse('{"source": "general","email": "","password":""}');
+  type;
+  rSuccess;
+  rError;
+  alert;
+  fRegiter: any = JSON.parse('{"source": "general","email":"","password":"","confirm_password":"","action":"regiter"}');
+  fLogin: any = {source: 'general', email: '', password: '', captcha: '', action: 'login'};
+  captcha_key = captcha_key;
 
-    constructor(private DsLib: DsLib, dialogService: DialogService, private DesignService: DesignService) {
-        super(dialogService);
+  constructor(dialogService: DialogService) {
+    super(dialogService);
+  }
+
+  ngOnInit() {
+
+  }
+
+  public handleCorrectCaptcha = (data) => this.fLogin.captcha = data;
+
+  public actionRegister() {
+    this.result = this.fRegiter;
+    this.close();
+  }
+
+  public actionLogin() {
+    this.result = this.fLogin;
+    this.close();
+  }
+
+  public clearAlert() {
+    this.rSuccess = false;
+    this.rError = false;
+  }
+
+  ngAfterViewInit() {
+    $('#login-form-link').click(function (e) {
+      $('#login-form').delay(100).fadeIn(100);
+      $('#register-form').fadeOut(100);
+      $('#register-form-link').removeClass('active');
+      $(this).addClass('active');
+      e.preventDefault();
+    });
+    $('#register-form-link').click(function (e) {
+      $('#register-form').delay(100).fadeIn(100);
+      $('#login-form').fadeOut(100);
+      $('#login-form-link').removeClass('active');
+      $(this).addClass('active');
+      e.preventDefault();
+    });
+    if (this.type === 'l') {
+      $('#login-form-link').trigger('click');
     }
-
-    ngOnInit() {
-
+    if (this.type === 'r') {
+      $('#register-form-link').trigger('click');
     }
-
-    public actionRegister() {
-        this.DesignService.accRegister(this.fRegiter).subscribe(
-            res => {
-                if (res) {
-                    this.rSuccess = true;
-                }
-            },
-            error => {
-                console.error(error.json().message);
-                return Observable.throw(error);
-            }
-        );
-    }
-
-    public actionLogin() {
-        this.DesignService.accLogin(this.fLogin).subscribe(
-            res => {
-                this.DsLib.setToken(res);
-                this.getProfile();
-            },
-            error => {
-                console.error(error.json().message);
-                return Observable.throw(error);
-            }
-        );
-    }
-
-    private getProfile() {
-        this.DesignService.getProfile(this.DsLib.getToken()).subscribe(
-            res => {
-                this.confirm(res);
-            },
-            error => {
-                console.error(error.json().message);
-                return Observable.throw(error);
-            }
-        );
-    }
-
-    public confirm(profile) {
-        this.result = profile;
-        this.close();
-    }
-
-    ngAfterViewInit() {
-        $('#login-form-link').click(function (e) {
-            $('#login-form').delay(100).fadeIn(100);
-            $('#register-form').fadeOut(100);
-            $('#register-form-link').removeClass('active');
-            $(this).addClass('active');
-            e.preventDefault();
-        });
-        $('#register-form-link').click(function (e) {
-            $('#register-form').delay(100).fadeIn(100);
-            $('#login-form').fadeOut(100);
-            $('#login-form-link').removeClass('active');
-            $(this).addClass('active');
-            e.preventDefault();
-        });
-    }
+  }
 }

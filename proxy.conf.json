@@ -8,5 +8,10 @@
     "target": "http://api.30usd.com",
     "secure": false,
     "logLevel": "debug"
+  },
+  "/isp/api/v1/*": {
+    "target": "http://api.30usd.com",
+    "secure": false,
+    "logLevel": "debug"
   }
 }

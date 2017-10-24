@@ -1,51 +1,74 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6">
-            <h3>Pricing</h3>
-        </div>
-        <div class="col-sm-6 text-right">
-            <p>Estimated total profit</p>
-            <h3 *ngIf="total">${{total}}</h3>
-        </div>
+<div class="container conten-page">
+  <div class="row">
+    <div class="col-sm-6">
+      <h1 class="heading-level-1">{{ 'PRICING_PAGE.PRICING' | translate }}</h1>
     </div>
+    <div class="col-sm-6 text-right">
+      <p>{{ 'PRICING_PAGE.ESTIMATED_TOTAL_PROFIT' | translate }}</p>
+      <h3 class="price-show-ci" *ngIf="total" [appViewprice]="total"></h3>
+    </div>
+  </div>
+  <form novalidate #form="ngForm">
     <table class="table">
-        <thead>
-        <tr>
-            <th style="width: 10%;">Product</th>
-            <th style="width: 40%;"></th>
-            <th>Base cost</th>
-            <th>Sale price</th>
-            <th>Expected sales</th>
-            <th>Profit / Unit</th>
-            <th>Profit</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let prod of Campaign.products">
-            <td>
-                <div>
-                    <img alt="" src="{{DsLib.getBaseImgUrl('front',prod.base.id)}}">
-                </div>
-            </td>
-            <td class="middle">{{prod.base.name}}
-                <div class="colors">
-                    <div *ngFor='let itemColor of prod.colors' class="color">
-                        <div class="e-color"
-                             [ngStyle]="{ 'background-color': itemColor.value }">
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td class="middle">${{prod.base.cost}}</td>
-            <td class="middle">$<input title="price" (change)="caculater()" type="number" class="form-control"
-                                       [(ngModel)]="prod.price"
-                                       id="price" name="price"></td>
-            <td class="middle">$<input title="sale expected" (change)="caculater()" type="number" class="form-control"
-                                       [(ngModel)]="prod.sale_expected" id="sale_expected"
-                                       name="sale_expected"></td>
-            <td class="middle">${{prod.Profit}}</td>
-            <td class="middle">${{prod.tProfit}}</td>
-        </tr>
-        </tbody>
+      <thead>
+      <tr>
+        <th style="width: 8%;">{{ 'COMMON.PRODUCT' | translate }}</th>
+        <th style="width: 30%;"></th>
+        <th>{{ 'PRICING_PAGE.BASE_COST' | translate }}</th>
+        <th>{{ 'PRICING_PAGE.SALE_PRICE' | translate }}</th>
+        <th>{{ 'PRICING_PAGE.EXPECTED_SALES' | translate }}</th>
+        <th>{{ 'PRICING_PAGE.PROFIT_UNIT' | translate }}</th>
+        <th>{{ 'PRICING_PAGE.PROFIT' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let prod of Campaign.products">
+        <td>
+          <div class="product-view" appProduct [product]="prod" [mainopt]="getOldOpt(prod)"></div>
+        </td>
+        <td class="middle">{{prod.base.name}}
+          <div class="colors">
+            <div *ngFor='let itemColor of prod.colors' class="color">
+              <ni-color [color]="itemColor.value"></ni-color>
+            </div>
+          </div>
+        </td>
+        <td class="middle">${{prod.base.cost}}</td>
+        <td class="middle">
+          $<input title="{{ 'PRICING_PAGE.SALE_PRICE' | translate }}" (change)="caculater()" type="number"
+                  class="form-control"
+                  [(ngModel)]="prod.price"
+                  (blur)="setValidate()"
+                  (keyup)="setValidate()"
+                  min="{{prod.base.cost}}"
+                  name="price{{prod.id}}" id="price{{prod.id}}" required>
+        </td>
+        <td class="middle">
+          <input title="{{ 'PRICING_PAGE.EXPECTED_SALES' | translate }}"
+                  (change)="caculater()" type="number"
+                  class="form-control"
+                  (blur)="setValidate()"
+                  (keyup)="setValidate()"
+                  [(ngModel)]="prod.sale_expected"
+                  name="sale_expected{{prod.id}}"
+                  id="sale_expected{{prod.id}}" required>
+        </td>
+        <td class="middle">${{prod.Profit}}</td>
+        <td class="middle">${{prod.tProfit}}</td>
+      </tr>
+      </tbody>
     </table>
+  </form>
+  <div class="row">
+    <div class="col-sm-10"></div>
+    <div class="col-sm-2">
+      <div class="form-group">
+        <button type="button" (click)="clickContinue()"
+                class="la-btn sm-bnt mask-btn pull-right"
+                [disabled]="!DesignService.validate2">
+          {{ 'COMMON.NEXT' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

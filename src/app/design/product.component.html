@@ -5,7 +5,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a (click)="getBaseTypes()" href="javascript:void(0)"><i class="fa fa-home"
                                                                                                      aria-hidden="true"></i>
-                    Base</a>
+                    {{ 'COMMON.BASE' | translate }}</a>
                 </li>
                 <!--<li class="breadcrumb-item"><a href="#">Library</a></li>-->
                 <li *ngIf="baseType.name && baseType.name !=''" class="breadcrumb-item active">{{baseType.name}}</li>

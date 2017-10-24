@@ -1,80 +1,112 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpModule, Http} from '@angular/http';
-import {AppService} from './app.service';
-import {HttpClient} from './http-client';
+import {Http, HttpModule} from '@angular/http';
+import {HttpClient} from './lib/http';
 
 import {AppComponent} from './app.component';
+import {HeaderComponent} from './layouts/header.component';
+import {FooterComponent} from './layouts/footer.component';
 import {DesignComponent} from './design/design.component';
 import {PricingComponent} from './pricing/pricing.component';
 import {LaunchingComponent} from './launching/launching.component';
-import {DebounceDirective} from './app.debounce.directive';
+import {DebounceDirective} from './public/debounce.directive';
+import {ProductDirective} from './public/product.directive';
+import {ViewpriceDirective} from './public/viewprice.directive';
 
-import {Design, Product, Campaign, DesignService} from './design.service';
+import {Campaign, Design, DesignService, Product} from './design.service';
+import {AppService} from './services/app.service';
+import {UploadService} from './services/upload.service';
+import {AppGuard} from './app.guard.service';
+import {Ds} from './lib/ds';
 import {DsLib} from './lib/lib';
+import {Auth} from './lib/auth';
 
-import {Ng2UploaderModule} from 'ng2-uploader';
-import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+import {TranslateLoader, TranslateModule, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 import {QuillModule} from 'ngx-quill';
+import {ReCaptchaModule} from 'angular2-recaptcha';
 import {Select2Module} from 'ng2-select2';
+import {TooltipModule} from 'ng2-tooltip';
 import {BootstrapModalModule} from 'ng2-bootstrap-modal';
+import {ProgressBarModule} from 'ngx-progress-bar';
+import {LgcolorModule} from 'ngx-selectcolor';
+import {CharLeftDirective} from 'ngx-charleft';
 import {ProductComponent} from './design/product.component';
 import {ProductdfComponent} from './launching/productdf.component';
 import {ColorComponent} from './design/color.component';
+import {AlertComponent} from './public/alert.component';
+import {ConfirmComponent} from './public/confirm.component';
+import {LoadingxComponent} from './public/loading.component';
 import {AuthComponent} from './auth/auth.component';
-
 /* Routing Module */
-import {routing, appRoutingProviders} from './app-routing.module';
+import {appRoutingProviders, routing} from './app-routing.module';
 
 export function createTranslateLoader(http: Http) {
-    return new TranslateStaticLoader(http, '/assets/i18n', '.json');
+  return new TranslateStaticLoader(http, '/assets/i18n', '.json?v=1.0.1');
 }
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        DesignComponent,
-        PricingComponent,
-        LaunchingComponent,
-        ProductComponent,
-        ProductdfComponent,
-        ColorComponent,
-        AuthComponent,
-        DebounceDirective
-    ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        Ng2UploaderModule,
-        TranslateModule.forRoot({
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [Http]
-        }),
-        BootstrapModalModule,
-        QuillModule,
-        Select2Module,
-        routing
-    ],
-    providers: [
-        appRoutingProviders,
-        HttpClient,
-        AppService,
-        DesignService,
-        Design,
-        Product,
-        Campaign,
-        DsLib
-    ],
-    entryComponents: [
-        ProductComponent,
-        ProductdfComponent,
-        ColorComponent,
-        AuthComponent
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent,
+    DesignComponent,
+    PricingComponent,
+    LaunchingComponent,
+    ProductComponent,
+    ProductdfComponent,
+    ColorComponent,
+    AlertComponent,
+    ConfirmComponent,
+    LoadingxComponent,
+    AuthComponent,
+    DebounceDirective,
+    CharLeftDirective,
+    ProductDirective,
+    ViewpriceDirective
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    TranslateModule.forRoot({
+      provide: TranslateLoader,
+      useFactory: (createTranslateLoader),
+      deps: [Http]
+    }),
+    BootstrapModalModule,
+    ProgressBarModule,
+    QuillModule,
+    Select2Module,
+    ReCaptchaModule,
+    TooltipModule,
+    LgcolorModule,
+    routing
+  ],
+  providers: [
+    appRoutingProviders,
+    HttpClient,
+    AppService,
+    DesignService,
+    UploadService,
+    Design,
+    Product,
+    Campaign,
+    AppGuard,
+    Ds,
+    DsLib,
+    Auth
+  ],
+  entryComponents: [
+    ProductComponent,
+    ProductdfComponent,
+    ColorComponent,
+    AlertComponent,
+    ConfirmComponent,
+    LoadingxComponent,
+    AuthComponent
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

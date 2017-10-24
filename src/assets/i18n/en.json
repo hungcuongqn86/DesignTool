@@ -1,15 +1,84 @@
 {
   "COMMON": {
+    "CAMPAIGN": "Campaign",
+    "CAMPAIGNS": "Campaigns",
+    "PRODUCT": "Product",
+    "PROMOTIONS": "Promotions",
+    "STOREFRONTS": "Storefronts",
     "SIGN_OUT": "Logout",
     "DETAL_LABLE": "Detail",
     "ADD_LABLE": "Add",
     "EDIT_LABLE": "Edit",
-    "SAVE": "Save"
+    "SAVE": "Save",
+    "ADD": "Add",
+    "FRONT": "Front",
+    "BACK": "Back",
+    "BASE": "Base",
+    "CONFIRM": "Confirm",
+    "CLOSE": "Close",
+    "NEXT": "Next"
+  },
+  "HEADER": {
+    "REGISTER": "Register",
+    "SIGN_IN": "Sign in"
+  },
+  "FOOTER": {
+    "MARKETPLACE": "Marketplace",
+    "SHOP": "Shop",
+    "OPEN_A_SHOP": "Open a shop",
+    "HOW_IT_WORKS": "How it works",
+    "GETTINGS_STARTED": "Gettings Started",
+    "NEW_CLOTH_ACADENY": "New Cloth Acadeny",
+    "HELP": "Help",
+    "TRACK_ORDER": "Track order",
+    "HELP_CENTER": "Help center",
+    "FAQ": "FAQ",
+    "RETURNS": "Returns",
+    "CONTACT_US": "Contact us",
+    "COMPANY": "Company",
+    "ABOUT_US": "About us",
+    "PRIVACY": "Privacy",
+    "TERMS": "Terms",
+    "CARRERS": "Carrers",
+    "PARTNERS": "Partners",
+    "FOLLOW_US": "Follow us"
   },
   "NAVIGATOR": {
     "DESIGN": "Products & Designs",
     "PRICING": "Pricing",
     "LAUNCHING": "Launching",
-    "FULFILLMENT_LOCATION":"Fulfillment location"
+    "FULFILLMENT_LOCATION": "Fulfillment location"
+  },
+  "DESIGN_PAGE": {
+    "DESIGN": "Design",
+    "LAYERS": "Layers",
+    "UPLOAD": "Upload",
+    "LAYERS_TITLE_DELETE": "Press `delete` on keyboard",
+    "ADD_PRODUCT": "Add product",
+    "SELL_THIS": "Sell this"
+  },
+  "PRICING_PAGE": {
+    "PRICING": "Pricing",
+    "ESTIMATED_TOTAL_PROFIT": "Estimated total profit",
+    "BASE_COST": "Base cost",
+    "SALE_PRICE": "Sale price",
+    "EXPECTED_SALES": "Expected sales",
+    "PROFIT_UNIT": "Profit / Unit",
+    "PROFIT": "Profit"
+  },
+  "LAUNCHING_PAGE": {
+    "CAMPAIGN_INFO": "Campaign Info",
+    "TITLE": "Title",
+    "DESCRIPTION": "Description",
+    "URL": "URL",
+    "STOREFRONT": "Storefront",
+    "CATEGORIES": "Categories",
+    "CONVERSION_TRACKING": "Conversion tracking",
+    "TIME_LENGTH": "Time length",
+    "VISIBILITY": "Visibility",
+    "PUBLIC": "Public",
+    "PRIVATE": "Private",
+    "LAUNCH": "Launch",
+    "CHANGE_DEFAULT_PRODUCT_OR_SIDE": "Change default product or side"
   }
 }
